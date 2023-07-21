@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="cl"></html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Bitacora Quantica</title>
+    <link rel="icon" type="image/png" href="./IMG/editar.png">
+    <link rel="stylesheet" href="./CSS/index.css">
+</head>
+<body>
+    <div>
+        <form class="formularioBitacora">
+            <div class="encabezados">
+                <!-- <h1 id="tituloBit">NOTAS DE CAMPO</h1> -->
+                <p id="textoDelDia"></p>
+            </div>
+            <div class="tempo">
+                <input type="date" id="fechaBit" name="fechaBit" value="" class="form-field date"><br><br>
+                <p><span id="horaBit"></span></p>
+                <button id="btnCel" class="noBoton" type="button" onclick="abrirVentana('./formatoCelular.html')">Q</button>
+            </div>
+            <div class="presentaHoraRec">
+                <p><span id="horaGrabaBit"></span></p>
+            </div>
+            <section class="botonera">
+                <section class="botonesGraban">
+                    <button id="btnGrabaL" type="button" onclick="guardarNota()">Guarda L.</button>
+                    <button id="btnGuardar" onclick="guardarBitacora()">Guardar J.</button>
+                    <button id="btnGrabaT" type="button" onclick="guardar('todo')">Guarda B</button>
+                </section>
+                <section class="seccionJson">
+                    <button id="btnLeeJson" onclick="leerJSON()">Lee J.</button>
+                    <input type="file" id="archivoJSON" placeholder="No seleccionado">
+                </section>   
+            </section>
+            <section class="piedeNota">
+                <textarea id="nota" name="nota" rows="5" cols="50"></textarea><br><br>
+                <P id="textoTeclas">Fecha= F3 Grabar= F2</P>
+            </section>
+	    </form>
+        <!-- NUEVOS ASUNTOS  -->
+        <section class="admiAsunto">
+            <div class="botones inputAsuntos">
+                <select id="listaAsuntos" onchange="mostrarDetalleAsunto()"></select>
+                <button id="btnSetAsunto">Set</button>
+                <input type="text" id="nuevoAsunto" placeholder="Nuevo Asunto" oninput="limpiaDetalle()"><br><br>
+            </div>
+        </section>
+        <!-- DETALLE ASUNTO -->
+        <div class="botones">
+            <div>
+                <textarea oninput="autoResize(this)" placeholder="Asunto" id="detalleAsunto"></textarea><br><br>
+            </div>
+        </div>
+         <!-- ASUNTO -->
+        <section class="botones botoneraAsuntos">
+            <!-- BOTONES PARA NUEVOS ASUNTOS -->
+            <button onclick="editaAsunto()">Ed</button>
+            <button onclick="agregarAsunto()">Grb</button>
+            <button onclick="eliminarAsunto()">Eli</button>
+            <button onclick="grabarDetalle()">Gr.Det</button>
+            <button onclick="ordenaAsuntos()">Ord</button>
+            <button onclick="presentaAsunto()">Pre</button>
+            <!-- GUARDA Y LEE JSON -->
+            <section class="seccionAsuntosJson">
+                <button onclick="guardarEnArchivoAsunto()">G.Js</button>
+                <button onclick="cargarDesdeJSONAsuntos()">L.Js</button>
+                <input type="file" id="archivoAsuntoJson">
+            </section>
+        </section>
+        <!-- TRATANDO EL ASUNTO -->
+        <div>
+        <textarea oninput="autoResize(this)" id="asunto" name="asunto" placeholder="Asunto" tabindex="16"></textarea>
+        <div class="botones botoneraTrata">
+                <button class='boton-copiar' onclick="traspasa('asunto')">T</button>
+                <button class='boton-copiar' onclick="copiar('asunto')">C</button>
+                <button class='delete' onclick="borrar('asunto')">B</button>
+                <button class="uppercase-btn" onclick="mayusculas('asunto')">
+                     MY 
+                </button>
+                <button class="lowercase-btn" onclick="minusculas('asunto')">
+                     mn 
+                </button>
+        </div>
+        </div>
+        <!-- PRESENTA U CULTA CUENTAS -->
+        <section class="seccionBtnQ">
+        <button id="btnQuenta" disabled="true" onclick="presentaQuenta(true)" >+Q</button>
+        <button id="btnQuentaHiden" onclick="presentaQuenta(false)"">-q</button>
+        <input type="password" id="clave">
+        <button id="btnVer" onclick="quanticoVal()"">Ver</button>
+        </section>
+        <!-- CUENTAS -->
+        </div>
+        <form id="formularioCuentaQ">
+        <!-- ESTADO DE LA CUENTA -->
+        <section class="seccionEstadoCuenta">
+            <div>
+                <select class="selector" id="cuenta" onchange="cargarDatosCuenta()" placeholder="Cuenta"></select>
+                <button class='btnSelectores' id="btnCta" onclick="cargarPag('./cuentas.html')">+</button>
+            </div>
+            <section class="seccionTotales">
+                <div>
+                    <p class="estadoQ"><span id="saldoActual"></span></p>
+                    <p class="estadoQ"><span id="saldoTotal"></span></p>
+                </div>
+            </section>
+        </section>
+        <!-- TRANSACCION -->
+        <section class="seccionTransaccion">
+            <div>
+                <select class="selector" id="motivo" name="motivo" placeholder="Motivo"></select>
+                <button class="btnSelectores"   onclick="cargarPag('./motivos.html')">+</button>
+            </div>
+            <input type="text" id="elemento" name="elemento" placeholder="Elemento" >
+            <div class="montos">
+                    <input type="number" id="cantidad" name="cantidad" placeholder="Cant" onchange="calcularTotal()">
+                    <!-- <input type="number" id="valor" name="valor" placeholder="Valor" oninput="formatoSeparador()"> -->
+                    <input type="text" id="valor" oninput="formatoSeparador(this)" pattern="[0-9]*" onchange="calcularTotal()">
+            </div>
+            <div>
+                <button id="btnSim" onclick="presentaSimula()">Simula</button>
+                <button id="btnReset" onclick="resetSimula()">Reset</button>
+           
+            </div>
+            <section class="seccionSimulaMontos">
+                    <!-- TOTAL -->
+                    <div>
+                        <input class="simula2"  onchange="" type="text" pattern="[0-9]*" id="total" name="total" placeholder="Total" onblur="formatoSeparador(this)">
+                    </div>
+                    <!-- SALDO SIMULADO IMGRESO -->
+                    <div>
+                        <input class="simula2" type="numer" id="simulaIngreso" name="simulaIngreso" placeholder="Simula Ing.">
+                    </div>
+                    <!-- SALDO SIMULADO EGRESO -->
+                    <div>
+                        <input class="simula2" type="numer" id="simulaEgreso" name="simulaEgreso" placeholder="Simula Egr.">
+                    </div>
+            </section>
+        </section>
+        <!-- BOTONERA -->
+        <section class="seccionBotonera" >
+                <button id="btnMas" onclick="guardarTransaccion('ingreso')">+</button>
+                <button id="btnMen" onclick="guardarTransaccion('egreso')">-</button>
+                <button id="btnBD" onclick="cargarPagina('./localstorage.html') ">B.D.</button>
+                <!-- <button id="btnBit" onclick="cargarPagina('./bitacora.html')">Bit</button> -->
+                <button id="btnGra" onclick="guardar('todo')">Graba</button>
+        </section>
+        <!-- DETALLE CUENTAS  -->
+        <h2 id="tituloCuentas" >Cuentas</h2>
+        <table id="tablaCuentas">
+	    	<thead>
+	    		<tr>
+	    			<th>Fecha</th>
+	    			<th>Nombre de Cuenta</th>
+	    			<th>Monto</th>
+	    		</tr>
+	    	</thead>
+	    	<tbody>
+	    	</tbody>
+	    </table>
+        <!-- DETALLE TRANSACCIONES EN TABLA-->
+        <h2 id="tituloTransaccionesTodas" onclick="cargarPag('./editaElementoTRansa.html')">Transacciones</h2>
+	    <table id="tablaTransacciones">
+	    	<thead>
+	    		<tr>
+	    			<th>Fecha</th>
+	    			<th>Hora</th>
+	    			<th>Motivo</th>
+	    			<th>Cuenta</th>
+	    			<th>Saldo</th>
+	    			<th>Cant</th>
+	    			<th>Elem</th>
+	    			<th>Valor</th>
+	    			<th>Total</th>
+	    			<th>Suma</th>
+	    			<th>Resta</th>
+	    		</tr>
+	    	</thead>
+	    	<tbody id="cuerpoTabla">
+	    	</tbody>
+	    </table>
+
+        <!-- DETALLE DE TRANSACCIONES DE CUENTA ESPECIFICA -->
+        <h2 id="tituloTransacciones" onclick="actualizarTablaCuenta()">Transacciones Cuenta</h2>
+        <!-- <button onclick="actualizarTablaCuenta()">Actualiza</button> -->
+	    <table id="tablaTransaccionesCuenta">
+	    	<thead>
+	    		<tr>
+	    			<th>Fecha</th>
+	    			<th>Hora</th>
+	    			<th>Motivo</th>
+	    			<th>Cuenta</th>
+	    			<th>Saldo Fin</th>
+	    			<th>Cant</th>
+	    			<th>Elem</th>
+	    			<th>Valor</th>
+	    			<th>Total</th>
+	    			<th>Suma</th>
+	    			<th>Resta</th>
+	    		</tr>
+	    	</thead>
+	    	<tbody id="cuerpoTablaCuenta">
+	    	</tbody>
+	    </table>
+        </form>
+    </div>
+        <script src="./JS/libreria.js"></script>
+        <script src="./JS/index.js"></script>
+        <!-- <script src="./js/numeral.js"></script> -->
+        <script src="./js/localstorage.js"></script>
+        <script src="./JS/bitacora.js"></script>
+        <script src="./js/cuentaQ.js"></script>
+        <script>
+        window.onload = function() {
+            // var ancho = 500; // Ancho deseado en píxeles
+            // var altura = window.innerHeight;
+            // var contenedor = document.getElementById('container'); // Cambia 'contenedor' por el ID del elemento que contiene el contenido de tu página
+            // contenedor.style.width = ancho + 'px';
+            // contenedor.style.height = altura + 'px';
+            
+            let cuentas = JSON.parse(localStorage.getItem("cuentas")); // Obtener la lista de cuentas de Local Storage
+            if(!cuentas){
+                return
+            }
+            cargarCuentas();
+            cargarMotivos();
+            cargarDatosCuenta();
+            actualizarTabla();
+            presentarTablaCuentas() //cuentas
+            presentaTotalTotal() //total acumulado
+            simulateClick('cuenta')
+            posiciona()
+            presentaQuenta(false)
+        };
+        </script>
+</body>
+</html>
+

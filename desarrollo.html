@@ -1,0 +1,85 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>Guardar desarrollo</title>
+</head>
+<body>
+    <textarea name="desarrollo" id="desarrollo" cols="30" rows="10"></textarea>
+    <button id="btnGrabaDes" onclick="grabaDesarrollo()">Graba el Desarrollo</button>
+    <button id="btnGrabaJsonDesarrollo" onclick="grabaJsonDesarrollo()">Graba en JSON</button>
+
+    <script>
+        // Al cargar la página, se carga el desarrollo desde el localStorage si existe
+        window.onload = function() {
+            var desarrollo = localStorage.getItem('desarrollo');
+            if (desarrollo) {
+                document.getElementById('desarrollo').value = JSON.parse(desarrollo)[0].textoDes;
+            }
+        };
+
+        // Función para grabar el desarrollo en el localStorage
+        function grabaDesarrollo() {
+            var textoDes = document.getElementById('desarrollo').value;
+            var desarrollo = [{ textoDes: textoDes }];
+            localStorage.setItem('desarrollo', JSON.stringify(desarrollo));
+        }
+
+        // Función para grabar el desarrollo en un archivo JSON
+        function grabaJsonDesarrollo() {
+            var textoDes = document.getElementById('desarrollo').value;
+            var desarrollo = [{ textoDes: textoDes }];
+            var json = JSON.stringify(desarrollo);
+
+            // Crear un enlace de descarga
+            var link = document.createElement('a');
+            link.href = 'data:text/json;charset=utf-8,' + encodeURIComponent(json);
+            link.download = 'desarrollo.json';
+            link.click();
+        }
+    </script>
+</body>
+</html> -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cargar desarrollo desde LocalStorage</title>
+</head>
+<body>
+    <textarea name="desarrollo" id="desarrollo" cols="30" rows="10"></textarea>
+    <button id="btnGrabaDes" onclick="grabaDesarrollo()">Graba el Desarrollo</button>
+    <button id="btnGrabaJsonDesarrollo" onclick="grabaJsonDesarrollo()">Graba en JSON</button>
+
+    <script>
+        // Al cargar la página, se carga el desarrollo desde el localStorage si existe
+        window.onload = function() {
+            var desarrollo = localStorage.getItem('desarrollo');
+            if (desarrollo) {
+                var desarrolloObj = JSON.parse(desarrollo);
+                if (desarrolloObj.length > 0) {
+                    document.getElementById('desarrollo').value = desarrolloObj[0].textoDes;
+                }
+            }
+        };
+
+        // Función para grabar el desarrollo en el localStorage
+        function grabaDesarrollo() {
+            var textoDes = document.getElementById('desarrollo').value;
+            var desarrollo = [{ textoDes: textoDes }];
+            localStorage.setItem('desarrollo', JSON.stringify(desarrollo));
+        }
+
+        // Función para grabar el desarrollo en un archivo JSON
+        function grabaJsonDesarrollo() {
+            var textoDes = document.getElementById('desarrollo').value;
+            var desarrollo = [{ textoDes: textoDes }];
+            var json = JSON.stringify(desarrollo);
+
+            // Crear un enlace de descarga
+            var link = document.createElement('a');
+            link.href = 'data:text/json;charset=utf-8,' + encodeURIComponent(json);
+            link.download = 'desarrollo.json';
+            link.click();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Tabla de Transacciones</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+		table, th, td {
+			border: 1px solid black;
+			border-collapse: collapse;
+			padding: 5px;
+		}
+	</style>
+</head>
+<body>
+	<h1>Tabla de Transacciones</h1>
+	<button onclick="actualizarTabla()">Actualizar</button>
+	<table id="tablaTransacciones">
+		<thead>
+			<tr>
+				<th>Fecha</th>
+				<th>Hora</th>
+				<th>ID Transacción</th>
+				<th>ID Cuenta</th>
+				<th>Nombre Cuenta</th>
+				<th>Saldo Inicial</th>
+				<th>Saldo Actual</th>
+				<th>Saldo Final</th>
+				<th>Motivo</th>
+				<th>Cantidad</th>
+				<th>Elemento</th>
+				<th>Valor</th>
+				<th>Total</th>
+				<th>Suma</th>
+				<th>Resta</th>
+			</tr>
+		</thead>
+		<tbody id="cuerpoTabla">
+		</tbody>
+	</table>
+	<script>
+		function actualizarTabla() {
+			var transacciones = JSON.parse(localStorage.getItem('transacciones')) || [];
+			var cuerpoTabla = document.getElementById('cuerpoTabla');
+			cuerpoTabla.innerHTML = '';
+			transacciones.forEach(function (transaccion) {
+				var fila = document.createElement('tr');
+				fila.innerHTML = '<td>' + transaccion.fecha + '</td>' +
+					'<td>' + transaccion.hora + '</td>' +
+					'<td>' + transaccion.idTrans + '</td>' +
+					'<td>' + transaccion.idCuenta + '</td>' +
+					'<td>' + transaccion.nombreCuenta + '</td>' +
+					'<td>' + transaccion.saldoInicial + '</td>' +
+					'<td>' + transaccion.saldoActual + '</td>' +
+					'<td>' + transaccion.saldoFinal + '</td>' +
+					'<td>' + transaccion.motivo + '</td>' +
+					'<td>' + transaccion.cantidad + '</td>' +
+					'<td>' + transaccion.elemento + '</td>' +
+					'<td>' + transaccion.valor + '</td>' +
+					'<td>' + transaccion.total + '</td>' +
+					'<td>' + transaccion.suma + '</td>' +
+					'<td>' + transaccion.resta + '</td>';
+				cuerpoTabla.appendChild(fila);
+			});
+		}
+		// llamamos a la funcion de actualizar al cargar la pagina
+		window.onload = actualizarTabla;
+	</script>
+</body>
+</html>

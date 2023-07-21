@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tabla de transacciones</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: arial;
+    }
+  
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 1vw;
+      table-layout: fixed;
+    }
+  
+    th, td {
+      border: 1px solid black;
+      padding: 1px;
+      text-align: left;
+      width: auto;
+      overflow: hidden;
+    }
+  
+    tr:nth-child(even) {
+      background-color: #cabfbf;
+    }
+    th:nth-child(n+9), td:nth-child(n+9) {
+        text-align: right;
+    }
+    td:nth-child(5) {
+        background-color: rgb(172, 146, 146);
+    }
+    td:nth-child(6) {
+        background-color: rgb(128, 123, 128);
+    }
+    td:nth-child(7) {
+        background-color: rgb(160, 107, 210);
+    }
+    td:nth-child(8) {
+        background-color: rgb(17, 201, 66);
+    }
+    td:nth-child(9) {
+        background-color: rgb(233, 136, 104);
+    }
+    td:nth-child(13), td:nth-child(13) {
+        background-color: rgb(96, 119, 245);
+    }
+    button {
+      width: auto;
+      background-color: orange;
+      color: white;
+      font-size: 1vw;
+    }
+  </style>
+</head>
+<body>
+  <table id="tabla-transacciones">
+    <tr>
+      <th>Cant</th>
+      <th>Elemento</th>
+      <th>Fecha</th>
+      <th>Hora</th>
+      <th>ID Cuenta</th>
+      <th>ID Trans</th>
+      <th>Motivo</th>
+      <th>Cuenta</th>
+      <th>Resta</th>
+      <th>Saldo A</th>
+      <th>Saldo F</th>
+      <th>Saldo I</th>
+      <th>Suma</th>
+      <th>Total</th>
+      <th>Valor</th>
+      <th>Acción</th>
+    </tr>
+  </table>
+  <script src="./js/libreria.js"></script>
+  <script>
+    let transacciones = JSON.parse(localStorage.getItem('transacciones')) || [];
+    let tabla = document.getElementById('tabla-transacciones');
+    let datos=[];
+    for (let i = 0; i < transacciones.length; i++) {
+      let transaccion = transacciones[i];
+      let fila = document.createElement('tr');
+      let saldoActual=transaccion.saldoActual
+      let saldoActualPeso=formatoPeso(saldoActual)
+      datos = [
+        transaccion.cantidad,
+        transaccion.elemento,
+        transaccion.fecha,
+        transaccion.hora,
+        transaccion.idCuenta,
+        transaccion.idTrans,
+        transaccion.motivo,
+        transaccion.nombreCuenta,
+        formatoPeso(transaccion.resta),
+        saldoActualPeso,
+        formatoPeso(transaccion.saldoFinal),
+        formatoPeso(transaccion.saldoInicial),
+        formatoPeso(transaccion.suma),
+        formatoPeso(transaccion.total),
+        formatoPeso(transaccion.valor)
+      ];
+      for (let j = 0; j < datos.length; j++) {
+        let celda = document.createElement('td');
+        celda.textContent = datos[j];
+        fila.appendChild(celda);
+      }
+      let botonEliminar = document.createElement('button');
+      botonEliminar.textContent = 'Eliminar';
+      botonEliminar.setAttribute('data-indice', i);
+      botonEliminar.addEventListener('click', function(event) {
+        // Obtener el índice de la transacción a eliminar
+        let indice = parseInt(event.target.getAttribute('data-indice'));
+        // Eliminar la transacción del array
+        transacciones.splice(indice, 1);
+        // Actualizar localStorage
+        localStorage.setItem('transacciones', JSON.stringify(transacciones));
+        // Recargar la página
+        location.reload();
+      });
+
+      let celdaBoton = document.createElement('td');
+      celdaBoton.appendChild(botonEliminar);
+      fila.appendChild(celdaBoton);
+
+      tabla.appendChild(fila);
+    }
+ 
+  </script>
+</body>
+</html>

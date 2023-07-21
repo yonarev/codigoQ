@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ingreso y Edición de Cuentas</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        select {
+          width: 80vw;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 5px;
+        }
+
+        .form-group button {
+            padding: 2px 4px;
+        }
+
+        h2 {
+            margin-top: 20px;
+        }
+
+        ul {
+            padding: 0;
+        }
+
+        li {
+            list-style: none;
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            padding: 1px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            font-size: 4vw;
+        }
+        .btnVerde{
+          background-color: green;
+          color: white;
+        }
+        .alaDerecha{
+          text-align: right;
+        }
+    </style>
+    <script src="./js/libreria.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h3>Ingreso de Cuentas</h3>
+        <div class="form-group">
+            <label for="nombre">Nombre de la cuenta:</label>
+            <input type="text" id="nombre" placeholder="Ingrese el nombre de la cuenta">
+        </div>
+        <div class="form-group">
+            <label for="valor">Valor de la cuenta:</label>
+            <input type="text" id="valor" placeholder="Ingrese el valor de la cuenta">
+        </div>
+        <div class="form-group">
+            <button class='btnVerde'onclick="agregarEditarCuenta()">Agrega cuentaR</button>
+            <button class="btnVerde" onclick="cargarPagina('./editaCuentaRetenida.html')">Edita CuentasR</button>
+          </div>
+        <table id="cuentasTable">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Valor</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                </tr>
+            </thead>
+            <tbody id="cuentasBody"></tbody>
+        </table>
+    </div>
+
+    <script>
+        let cuentasRetenidas = [];
+        // Verificar si hay datos en el localStorage
+        const cuentasRetenidasData = localStorage.getItem('cuentasRetenidas');
+        if (cuentasRetenidasData) {
+            cuentasRetenidas = JSON.parse(cuentasRetenidasData);
+            mostrarCuentas();
+        }
+        document.getElementById('nombre').select()
+        function mostrarCuentas() {
+          const cuentasRetenidasData = localStorage.getItem('cuentasRetenidas');
+            let cuentasRetenidas = JSON.parse(cuentasRetenidasData)
+            // Verificar si hay datos en el localStorage
+            const cuentasBody = document.getElementById('cuentasBody');
+            cuentasBody.innerHTML = '';
+            let valorR;
+            cuentasRetenidas.forEach(cuenta => {
+                const row = document.createElement('tr');
+                valorR=formatoPeso(cuenta.valorR)
+                row.innerHTML = `<td>${cuenta.cuentaR}</td><td class='alaDerecha'>${valorR}</td><td>${cuenta.fecha}</td><td>${cuenta.hora}</td>`;
+                cuentasBody.appendChild(row);
+            });
+        }
+        function agregarEditarCuenta() {
+            const nombre = document.getElementById('nombre').value.trim();
+            const valor = document.getElementById('valor').value.trim();
+            if (!nombre || !valor) {
+                alert('Por favor complete todos los campos');
+                return;
+            }
+            // Validar si el valor es un número
+            if (!esNumero(valor)) {
+                alert('El valor de la cuenta debe ser un número');
+                document.getElementById('valor').select()
+                return;
+            }
+            const fechaActual = obtenerFechaActual();
+            const horaActual = obtenerHoraActual();
+            const idCuentaR = obtenerIdCuentaR(fechaActual, horaActual);
+            const cuentaExistente = cuentasRetenidas.find(cuenta => cuenta.cuentaR === nombre);
+            if (cuentaExistente) {
+                cuentaExistente.valorR = valor;
+                cuentaExistente.fecha = fechaActual;
+                cuentaExistente.hora = horaActual;
+                mostrarCuentas();
+                document.getElementById('selectCuentas').value = cuentaExistente.idCuentaR;
+            } else {
+                const nuevaCuenta = {
+                    fecha: fechaActual,
+                    hora: horaActual,
+                    idCuentaR: idCuentaR,
+                    cuentaR: nombre,
+                    valorR: valor
+                };
+                cuentasRetenidas.push(nuevaCuenta);
+              }
+              // Actualizar localStorage
+              localStorage.setItem('cuentasRetenidas', JSON.stringify(cuentasRetenidas));
+              // Limpiar los campos
+              document.getElementById('nombre').value = '';
+              document.getElementById('valor').value = '';
+              mostrarCuentas();
+        }
+        function obtenerFechaActual() {
+            const fechaActual = new Date();
+            const dia = fechaActual.getDate();
+            const mes = fechaActual.getMonth() + 1;
+            const anio = fechaActual.getFullYear();
+            return `${dia}/${mes}/${anio}`;
+        }
+        function obtenerHoraActual() {
+            const fechaActual = new Date();
+            const hora = fechaActual.getHours();
+            const minutos = fechaActual.getMinutes();
+            const segundos = fechaActual.getSeconds();
+            return `${hora}:${minutos}:${segundos}`;
+        }
+        function obtenerIdCuentaR(fecha, hora) {
+            return fecha.replace(/\//g, '') + hora.replace(/:/g, '');
+        }
+        function esNumero(valor) {
+            return !isNaN(parseFloat(valor)) && isFinite(valor);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edición de Cuentas Retenidas</title>
+    <style>
+      .container {
+        width: 80vw;
+        margin: 0 auto;
+        padding: 1vw;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      h1 {
+        text-align: center;
+      }
+      .cuenta-container {
+        margin-bottom: 20px;
+      }
+      .form-container {
+        margin-top: 1vw;
+      }
+      h2 {
+        margin-bottom: 1vw;
+      }
+      label {
+        display: block;
+        margin-bottom: 1vw;
+      }
+      .valorTabla{
+        text-align: right;
+        margin-right: 1vw;
+        padding-right: 1vw;
+      }
+
+      input[type="text"],
+      select {
+        width: 90%;
+        padding: 1vw;
+        margin-bottom: 1vw;
+        font-size: 7vw;
+      }
+      button {
+        width: 50vw;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .btnRed {
+        background-color: red;
+        color: white;
+      }
+
+      .btnGreen {
+        background-color: green;
+        color: white;
+        padding: 1vw;
+      }
+      .message {
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 5px;
+      }
+      .success-message {
+        background-color: #c9fbd8;
+        color: #26a65b;
+      }
+      .error-message {
+        background-color: #f8d7da;
+        color: #dc3545;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1vw;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      .cuenta-info-container{
+        margin: 0 auto;
+        text-align: center;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      th,
+      td {
+        font-size: 4vw;
+        padding: .1vw;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+    </style>
+    <script src="./js/libreria.js"></script>
+
+</head>
+<body>
+    <div class="container">
+        <div class="cuenta-container">
+            <h2>Cuentas Retenidas</h2>
+            <select id="selectCuentas" onchange="seleccionarCuenta()"></select>
+        </div>
+        <div class="form-container">
+            <label for="editarCuenta">Cuenta R:</label>
+            <input type="text" id="editarCuenta">
+            <br>
+            <label for="editarValor">Valor R:</label>
+            <input type="text" id="editarValor">
+            <br>
+            <button class="btnGreen" onclick="actualizarCuentaR()">Actualizar Cuenta R</button>
+            <br>
+            <button class="btnRed" onclick="eliminarCuentaR()">Eliminar Cuenta R</button>
+        </div>
+        <div class="cuenta-info-container">
+            <span id="fecha"></span>
+            <span id="hora"></span>
+        </div>
+        <table id="cuentasTable">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Valor</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                </tr>
+            </thead>
+            <tbody id="cuentasBody"></tbody>
+        </table>
+    </div>
+    <script>
+      let cuentasRetenidas = [];
+      // Verificar si hay datos en el localStorage
+      const cuentasRetenidasData = localStorage.getItem('cuentasRetenidas');
+      if (cuentasRetenidasData) {
+          cuentasRetenidas = JSON.parse(cuentasRetenidasData);
+      }
+      // Función para mostrar las cuentas en el select
+      function mostrarCuentas() {
+          const selectCuentas = document.getElementById('selectCuentas');
+          selectCuentas.innerHTML = '';
+          cuentasRetenidas.forEach(cuenta => {
+              const option = document.createElement('option');
+              option.value = cuenta.idCuentaR;
+              option.text = cuenta.cuentaR;
+              selectCuentas.appendChild(option);
+          });
+      }
+      // Función para mostrar las cuentas en la tabla
+      function mostrarCuentasEnTabla() {
+          const cuentasTableBody = document.getElementById('cuentasBody');
+          cuentasTableBody.innerHTML = '';
+          cuentasRetenidas.forEach(cuenta => {
+              let row = cuentasTableBody.insertRow();
+              let nombreCell = row.insertCell();
+              let valorCell = row.insertCell();
+              let fechaCell = row.insertCell();
+              let horaCell = row.insertCell();
+              nombreCell.innerHTML = cuenta.cuentaR;
+              valorCell.innerHTML = formatoPeso(cuenta.valorR);
+              valorCell.style.class='valorTabla'
+            //   debugger
+              valorCell.style= 'text-align: right; margin-right: 100px'
+              fechaCell.innerHTML = cuenta.fecha;
+              horaCell.innerHTML = cuenta.hora;
+          });
+      }
+      // Función para seleccionar una cuenta y mostrar sus campos
+      function seleccionarCuenta() {
+          const selectCuentas = document.getElementById('selectCuentas');
+          const cuentaSeleccionada = selectCuentas.options[selectCuentas.selectedIndex].value;
+          const cuenta = cuentasRetenidas.find(cuenta => cuenta.idCuentaR === cuentaSeleccionada);
+          if (cuenta) {
+              document.getElementById('editarCuenta').value = cuenta.cuentaR;
+              document.getElementById('editarValor').value = cuenta.valorR;
+              document.getElementById('fecha').textContent = cuenta.fecha;
+              document.getElementById('hora').textContent = cuenta.hora;
+          }
+      }
+      // Función para actualizar una cuenta en el almacenamiento local
+      function actualizarCuentaR() {
+          const selectCuentas = document.getElementById('selectCuentas');
+          const cuentaSeleccionada = selectCuentas.options[selectCuentas.selectedIndex].value;
+          const cuentaIndex = cuentasRetenidas.findIndex(cuenta => cuenta.idCuentaR === cuentaSeleccionada);
+          if (cuentaIndex !== -1) {
+              const nuevaCuentaR = document.getElementById('editarCuenta').value;
+              const nuevoValorR = document.getElementById('editarValor').value;
+              // Verificar si el nombre ya existe
+              const cuentaExistente = cuentasRetenidas.find(cuenta => cuenta.cuentaR === nuevaCuentaR);
+              if (cuentaExistente && cuentaExistente.idCuentaR !== cuentaSeleccionada) {
+                  alert('Ya existe una cuenta con ese nombre. Por favor, elige otro nombre.');
+                  return;
+              }
+              const cuenta = cuentasRetenidas[cuentaIndex];
+              cuenta.cuentaR = nuevaCuentaR;
+              cuenta.valorR = nuevoValorR;
+              // Actualizar localStorage
+              localStorage.setItem('cuentasRetenidas', JSON.stringify(cuentasRetenidas));
+              // Limpiar los campos
+              mostrarCuentas();
+              // Seleccionar la cuenta recién actualizada
+              selectCuentas.value = cuenta.idCuentaR;
+              // Mostrar cuentas en la tabla
+              mostrarCuentasEnTabla();
+          }
+      }
+      // Función para eliminar la cuenta seleccionada del almacenamiento local
+      function eliminarCuentaR() {
+          const selectCuentas = document.getElementById('selectCuentas');
+          const cuentaSeleccionada = selectCuentas.options[selectCuentas.selectedIndex].value;
+          cuentasRetenidas = cuentasRetenidas.filter(cuenta => cuenta.idCuentaR !== cuentaSeleccionada);
+          // Actualizar localStorage
+          localStorage.setItem('cuentasRetenidas', JSON.stringify(cuentasRetenidas));
+          // Limpiar los campos
+          document.getElementById('editarCuenta').value = '';
+          document.getElementById('editarValor').value = '';
+          document.getElementById('fecha').textContent = '';
+          document.getElementById('hora').textContent = '';
+          // Actualizar las cuentas mostradas
+          mostrarCuentas();
+          // Mostrar cuentas en la tabla
+          mostrarCuentasEnTabla();
+      }
+      // Inicializar la lista de cuentas en el select y mostrar la cuenta seleccionada
+      mostrarCuentas();
+      mostrarCuentasEnTabla();
+      seleccionarCuenta();
+    </script>
+</body>
+</html>

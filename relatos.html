@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Actualización de Relatos</title>
+    <style>
+        :root {
+            --fuenteBoton: 11vw;
+        }
+        *{
+            padding: 0;
+            font-size: 5vw;
+            text-align: center;
+            margin: 0 auto;
+        }
+        h1{
+            font-size: 13vw;
+        }
+        body{
+            font-family: arial;
+            background-color: rgb(174, 177, 177);
+            display: flex;
+            flex-direction: row;
+        }
+        #fecha{
+            font-size: 10vw;
+            width: 54vw;
+            background-color: black;
+            color:white;
+            margin: 0;
+            padding: 0;
+        }
+        #hora{
+            text-align: left;
+            font-size: 10vw;
+            width: 43vw;
+            background-color: black;
+            color:white;
+            margin: 0;
+            padding: 0;
+        }
+        #btnNuevo{
+            font-size: var(--fuenteBoton);
+            width: 14vw;
+            padding-left: 1vw;
+            padding-right: 1vw;
+            text-align: center;
+            background-color: rgb(120, 120, 230);
+        }
+        #btnEliminaRelato{
+            font-size: var(--fuenteBoton);
+            width: 14vw;
+            padding-left: 1vw;
+            padding-right: 1vw;
+            text-align: center;
+            background-color: rgb(243, 76, 68);
+        }
+        #btnCambiarNombre{
+            font-size: var(--fuenteBoton);
+            width: auto;
+            background-color: rgb(52, 205, 52);
+        }
+        #btnOraculo{
+            font-size: 9.5vw;
+            width: auto;
+            height: auto;
+            background-color: rgb(6, 6, 6);
+        }
+        #btnGrabaRelato{
+            font-size: var(--fuenteBoton);
+            width: auto;
+            background-color:gold
+        }
+        #btnGrabaJson{
+            /* font-size: 11vw; */
+            font-size: var(--fuenteBoton);
+            width: auto;
+            background-color: gray;
+        }
+        #btnleeJson{
+            font-size: var(--fuenteBoton);
+            background-color: rgb(83, 81, 81);
+        }
+        #seccionTemporal{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            margin: 0 auto;
+        }
+        .seccionCapitulos{
+            flex-wrap: wrap;
+            width: 95vw;
+            justify-content: center;
+            align-items: center;
+            align-content: center;
+        }
+        .seccionBotones{
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            justify-items: center;
+        }
+        #capitulo{
+            width: 84vw;
+            font-size: 7vw;
+            font-weight: bold;
+            margin-right: 0vw;
+            padding-right: 0vw;
+        }
+        button{
+            text-align: center;
+            padding-left: 1vw;
+            padding-right: 1vw;
+            width: auto;
+            border-radius: 2vw;
+            color: white;
+            cursor: pointer;
+        }
+        #setChapterButton{
+            font-size: 6vw;
+            font-weight: bold;
+            width: auto;
+            color: black;
+            border-radius: 3vw;
+        }
+        #seccionDataRec{
+            font-size: 12VW;
+            background-color: white;
+            color: black;
+            height: 5vw;
+        }
+        textarea {
+            text-align: center;
+            width: 95%;
+            height: 70vh;
+            font-size: 7vw;
+            resize: vertical;
+            background-color: black;
+            color: white;
+        }
+        #startButton{
+            font-size: var(--fuenteBoton);
+            background-color: rgb(251, 75, 6);
+        }
+        #stopButton{
+            font-size: var(--fuenteBoton);
+            background-color: rgb(57, 51, 51);
+        }
+        #playButton{
+            font-size: var(--fuenteBoton);
+            background-color: green;
+            color: black;
+        }
+        #reanudaButton{
+            font-size: var(--fuenteBoton);
+            background-color: rgb(132, 142, 132);
+        }
+        #pausaButton{
+            font-size: var(--fuenteBoton);
+            background-color: rgb(64, 84, 84);
+            font-size: calc(var(--fu    enteBoton)-1);
+            padding-left: 0;
+            padding-right: 0;
+            height: auto;
+        }
+        .seccionControlAudio{
+            display: flex;
+            background-color: rgb(23, 22, 22);
+            width: 93vw;
+            height: 18vw;
+            flex-direction: row;
+            align-content: center;
+            align-items: center;
+            justify-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <form id="relatoForm">
+        <!-- <h1>ORACULO ZEN</h1> -->
+        <section id="seccionDataRec">
+            <div id="myTextarea"></div>
+            <div id="lastModified"></div>
+        </section>
+        <section id="seccionTemporal">
+            <input type="text" id="fecha" required readonly>
+            <input type="text" id="hora" required readonly>
+        </section>
+        <section class="seccionBotones">
+            <button type="button" id="btnNuevo" onclick="agregarNuevoCapitulo()">+</button>
+            <button type="button" id="btnEliminaRelato">-</button>
+            <button type="button" id="btnCambiarNombre" onclick="cambiarNombreCapitulo()">Ed</button>
+            <button type="button" id="btnGrabaRelato">G</button>
+            <button type="button" id="btnGrabaJson" onclick="guardarDatos()">J</button>
+            <button type="button" id="btnleeJson" onclick="recuperarDatos()">J</button>
+            <button type="button" id="btnOraculo" onclick="mostrarRelatoAleatorio();convertirTextoAVoz(event)">&#x262f</button>
+        </section>
+        <section id="seccionCapitulos">
+            <select id="capitulo" onchange="cargarRelato()">
+            </select>
+            <button id="setChapterButton" onclick="guardarCapitulo(event)">&#x229a</button>
+        </section>
+        <section class="seccionControlAudio">
+            <button id="startButton">&#x25c9</button>
+            <button id="stopButton" onclick="detenerTextoAVoz(event)">&#x25fc</button>
+            <button id="playButton" onclick="convertirTextoAVoz(event)">&#x25ba</button>
+            <button id="pausaButton" onclick="pausarTextoAVoz(event)">&#x25ae&#x25ae</button>
+            <button id="reanudaButton" onclick="reanudarTextoAVoz(event)">&#x25b7</button>
+        </section>
+
+        <textarea id="txtRelato" rows="5" required></textarea>
+        <textarea id="jsonInput" placeholder="Datos en formato JSON" readonly style="display: none;"></textarea>
+    </form>
+    <script src="./js/libreria.js"></script>
+    <script>
+       if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+            // Crear un nuevo objeto de reconocimiento de voz
+            let recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            // letiable para controlar si el reconocimiento de voz está activo
+            let isRecognitionActive = false;
+            // Establecer el idioma del reconocimiento de voz (opcional)
+            recognition.lang = 'es-ES';
+            // Establecer el atributo 'continuous' para que el reconocimiento de voz no se detenga después de una pausa
+            recognition.continuous = true;
+            // Evento que se dispara cuando se detecta un resultado del reconocimiento de voz
+            recognition.onresult = function(event) {
+                let resultado = event.results[event.results.length - 1][0].transcript;
+                document.getElementById('txtRelato').value += resultado;
+            };
+            // Función para actilet el reconocimiento de voz
+            function startRecognition(event) {
+                event.preventDefault()
+                if (!isRecognitionActive) {
+                recognition.start();
+                isRecognitionActive = true;
+                let contenido=document.getElementById('txtRelato').value
+                document.getElementById('txtRelato').value=contenido +" "
+                document.getElementById('txtRelato').focus()
+                }
+            }
+            // Función para detener el reconocimiento de voz
+            function stopRecognition(event) {
+                event.preventDefault()
+                if (isRecognitionActive) {
+                recognition.stop();
+                isRecognitionActive = false;
+                }
+            }
+            // Asociar el evento clic al botón "Iniciar reconocimiento"
+            document.getElementById("startButton").addEventListener("click", startRecognition);
+            // Asociar el evento clic al botón "Detener reconocimiento"
+            document.getElementById("stopButton").addEventListener("click", stopRecognition);
+            } else {
+            alert('El reconocimiento de voz no es compatible con tu navegador.');
+        }  
+        var synthesis = window.speechSynthesis;
+        var utterance;
+        function convertirTextoAVoz(event) {
+            event.preventDefault()
+            var texto = document.getElementById("txtRelato").value;
+            // Verificar si el navegador es compatible con la síntesis de voz
+            if ('speechSynthesis' in window) {
+                var synthesis = window.speechSynthesis;
+                // Crear un nuevo objeto SpeechSynthesisUtterance
+                var utterance = new SpeechSynthesisUtterance(texto);
+
+                // Leer el texto en voz alta
+                synthesis.speak(utterance);
+            } else {
+                alert("Lo siento, tu navegador no soporta la síntesis de voz.");
+            }
+        }
+        function detenerTextoAVoz(event) {
+            event.preventDefault()
+            if (synthesis && synthesis.speaking) {
+                synthesis.cancel();
+            }
+        }
+        function pausarTextoAVoz(event) {
+            event.preventDefault()
+            if (synthesis && synthesis.speaking) {
+                synthesis.pause();
+            }
+        }
+        function reanudarTextoAVoz(event) {
+            event.preventDefault()
+            if (synthesis && synthesis.paused) {
+                synthesis.resume();
+            }
+        }
+        // Función para obtener la fecha actual en formato dd/mm/yyyy
+        function obtenerFechaActual() {
+            const fechaActual = new Date();
+            const dia = String(fechaActual.getDate()).padStart(2, '0');
+            const mes = String(fechaActual.getMonth() + 1).padStart(2, '0');
+            const anio = fechaActual.getFullYear();
+            return `${dia}/${mes}/${anio}`;
+        }
+        // Función para obtener la hora actual en formato hh:mm:ss
+        function obtenerHoraActual() {
+            const fechaActual = new Date();
+            const hora = String(fechaActual.getHours()).padStart(2, '0');
+            const minutos = String(fechaActual.getMinutes()).padStart(2, '0');
+            const segundos = String(fechaActual.getSeconds()).padStart(2, '0');
+            return `${hora}:${minutos}:${segundos}`;
+        }
+        // Función para guardar los relatos en localStorage
+        function guardarRelatos(relatos) {
+            localStorage.setItem('relatos', JSON.stringify(relatos));
+        }
+        // Función para obtener los relatos de localStorage
+        function obtenerRelatos() {
+            return JSON.parse(localStorage.getItem('relatos')) || [];
+        }
+        // Función para cargar los capítulos en el combo box
+        function cargarCapitulos() {
+            const relatos = obtenerRelatos();
+            const capituloSelect = document.getElementById('capitulo');
+            // Obtener el capítulo seleccionado actualmente
+            const capituloSeleccionado = capituloSelect.value;
+            // Limpiar opciones existentes
+            capituloSelect.innerHTML = '';
+            // Cargar opciones de capítulos
+            relatos.forEach((relato, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = relato.capitulo;
+                capituloSelect.appendChild(option);
+            });
+            // Seleccionar el capítulo previamente seleccionado o el primero si no hay selección
+            if (capituloSeleccionado !== '') {
+                capituloSelect.value = capituloSeleccionado;
+            } else {
+                capituloSelect.value = 0;
+            }
+            // Cargar el relato del capítulo seleccionado
+            cargarRelato();
+        }
+        // Función para cargar el relato en el textarea según el capítulo seleccionado
+        function cargarRelato() {
+            const capituloSelect = document.getElementById('capitulo');
+            const relatoTextarea = document.getElementById('txtRelato');
+            // Obtener el índice del capítulo seleccionado
+            const selectedIndex = capituloSelect.value;
+            // Obtener los relatos existentes en localStorage
+            const relatos = obtenerRelatos();
+            // Obtener el relato correspondiente al índice
+            const relato = relatos[selectedIndex];
+            // Mostrar el relato en el textarea
+            relatoTextarea.value = relato ? relato.relato : '';
+        }
+        // Función para grabar el relato en localStorage
+        function grabarRelato() {
+            const fecha = document.getElementById('fecha').value;
+            const hora = document.getElementById('hora').value;
+            const capituloSelect = document.getElementById('capitulo');
+            const capituloIndex = capituloSelect.value;
+            const capitulo = capituloSelect.options[capituloIndex].textContent;
+            const relato = document.getElementById('txtRelato').value;
+            // Generar un nuevo relato
+            const nuevoRelato = {
+                fecha: fecha,
+                hora: hora,
+                idRelato: generateID(),
+                capitulo: capitulo,
+                relato: relato
+            };
+            // Obtener los relatos existentes en localStorage
+            const relatos = obtenerRelatos();
+            // Actualizar o agregar el relato
+            const index = parseInt(capituloIndex);
+            if (index >= 0 && index < relatos.length) {
+                relatos[index] = nuevoRelato;
+            } else {
+                relatos.push(nuevoRelato);
+            }
+            // Guardar los relatos actualizados en localStorage
+            guardarRelatos(relatos);
+            // Actualizar la lista de capítulos
+            cargarCapitulos();
+            // Mostrar mensaje de actualización
+            // alert('Relato actualizado correctamente');
+        }
+        // Función para eliminar un relato de localStorage por su índice
+        function eliminarRelato() {
+            const capituloSelect = document.getElementById('capitulo');
+            const selectedIndex = capituloSelect.value;
+            let confirma=confirm('seguro de eliminar relato: '+capituloSelect[selectedIndex].selectedIndex)
+            // Obtener los relatos existentes en localStorage
+            const relatos = obtenerRelatos();
+            // Filtrar los relatos y eliminar el que tiene el índice correspondiente
+            const relatosFiltrados = relatos.filter((relato, index) => index !== parseInt(selectedIndex));
+            // Guardar los relatos actualizados en localStorage
+            guardarRelatos(relatosFiltrados);
+            // Limpiar el formulario y actualizar la lista de capítulos
+            capituloSelect.value = '';
+            document.getElementById('fecha').value = obtenerFechaActual();
+            document.getElementById('hora').value = obtenerHoraActual();
+            document.getElementById('txtRelato').value = '';
+            cargarCapitulos();
+        }
+        // Función para agregar un nuevo capítulo desde un prompt
+        function agregarNuevoCapitulo() {
+            const capitulo = prompt('Ingrese el nombre del nuevo capítulo:');
+            if (capitulo) {
+                const relatoTextarea = document.getElementById('txtRelato');
+                // Obtener los relatos existentes en localStorage
+                const relatos = obtenerRelatos();
+                // Generar un nuevo relato
+                const nuevoRelato = {
+                    fecha: obtenerFechaActual(),
+                    hora: obtenerHoraActual(),
+                    idRelato: generateID(),
+                    capitulo: capitulo,
+                    relato: ''
+                };
+                // Agregar el nuevo relato a la lista de relatos
+                relatos.push(nuevoRelato);
+                // Guardar los relatos actualizados en localStorage
+                guardarRelatos(relatos);
+                // Limpiar el formulario y actualizar la lista de capítulos
+                document.getElementById('fecha').value = nuevoRelato.fecha;
+                document.getElementById('hora').value = nuevoRelato.hora;
+                // Actualizar la lista de capítulos
+                cargarCapitulos();
+                // Mostrar mensaje de confirmación
+                alert('Se ha agregado un nuevo capítulo');
+                // Seleccionar el nuevo capítulo agregado
+                document.getElementById('capitulo').value = relatos.length - 1;
+                relatoTextarea.value = '';
+                // Poner el cursor dentro del textarea
+                relatoTextarea.focus();
+            }
+        }
+        // Función para cambiar el nombre del capítulo seleccionado en el combobox
+        function cambiarNombreCapitulo() {
+            const capituloSelect = document.getElementById('capitulo');
+            const selectedIndex = capituloSelect.value;
+            const nombreActual=capituloSelect.options[selectedIndex].textContent 
+            const relatos = obtenerRelatos();
+            if (selectedIndex >= 0 && selectedIndex < relatos.length) {
+                const nuevoNombre = prompt('Ingrese el nuevo nombre del capítulo:',nombreActual);
+                if (nuevoNombre) {
+                    // Actualizar el nombre del capítulo en el combobox y en el relato correspondiente
+                    capituloSelect.options[selectedIndex].textContent = nuevoNombre;
+                    relatos[selectedIndex].capitulo = nuevoNombre;
+
+                    // Guardar los relatos actualizados en localStorage
+                    guardarRelatos(relatos);
+
+                    // Actualizar la lista de capítulos
+                    cargarCapitulos();
+                }
+            }
+        }
+        // Función para actualizar la hora cada segundo
+        function actualizarReloj() {
+            const horaInput = document.getElementById('hora');
+            setInterval(() => {
+                horaInput.value = obtenerHoraActual();
+            }, 1000);
+        }
+        function mostrarRelatoAleatorio() {
+            const relatos = obtenerRelatos();
+            if (relatos.length > 0) {
+                const indiceAleatorio = Math.floor(Math.random() * relatos.length);
+                const relatoAleatorio = relatos[indiceAleatorio];
+                
+                const capituloSelect = document.getElementById('capitulo');
+                const relatoTextarea = document.getElementById('txtRelato');
+                
+                capituloSelect.value = indiceAleatorio;
+                relatoTextarea.value = relatoAleatorio.relato;
+            } else {
+                alert('No hay relatos disponibles');
+            }
+        }
+        // Función para guardar los datos de Local Storage en un archivo JSON
+        function guardarDatos() {
+            const relatos = obtenerRelatos();
+            if (relatos.length > 0) {
+                const data = JSON.stringify(relatos, null, 2);
+                const blob = new Blob([data], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const nombreArchivo='relatos'
+                const extencion=generateID()+'.json'
+                const archivo= nombreArchivo+ extencion
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = archivo;
+                a.click();
+                URL.revokeObjectURL(url);
+            } else {
+                alert('No hay datos para guardar');
+            }
+        }
+        // Función para recuperar los datos de un archivo JSON y guardarlos en Local Storage
+        function recuperarDatos() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'application/json';
+            input.onchange = function (event) {
+                const file = event.target.files[0];
+                const reader = new FileReader();
+                reader.onload = function () {
+                    const data = reader.result;
+                    const relatos = JSON.parse(data);
+                    if (Array.isArray(relatos)) {
+                        guardarRelatos(relatos);
+                        alert('Datos recuperados exitosamente');
+                    } else {
+                        alert('El archivo no contiene datos válidos');
+                    }
+                };
+                reader.readAsText(file);
+            };
+            input.click();
+        }
+        // Función para obtener los relatos de Local Storage
+        function obtenerRelatos() {
+            return JSON.parse(localStorage.getItem('relatos')) || [];
+        }
+        // Función para guardar los relatos en Local Storage
+        function guardarRelatos(relatos) {
+            localStorage.setItem('relatos', JSON.stringify(relatos));
+        }
+        function formatearFechaHora(fechaHora) {
+            let dia = fechaHora.getDate();
+            let mes = fechaHora.getMonth() + 1;
+            let anio = fechaHora.getFullYear();
+            let horas = fechaHora.getHours();
+            let minutos = fechaHora.getMinutes();
+            let segundos = fechaHora.getSeconds();
+            dia = (dia < 10) ? "0" + dia : dia;
+            mes = (mes < 10) ? "0" + mes : mes;
+            horas = (horas < 10) ? "0" + horas : horas;
+            minutos = (minutos < 10) ? "0" + minutos : minutos;
+            segundos = (segundos < 10) ? "0" + segundos : segundos;
+            return dia + "/" + mes + "/" + anio + " " + horas + ":" + minutos + ":" + segundos;
+        }
+        // Función para guardar los cambios en el Local Storage
+        function guardarCambios() {
+            let idTexto = "miTexto";
+            let texto = document.getElementById("myTextarea").value;
+            let fechaHora = new Date();
+            let datos = { idTexto: idTexto, texto: texto, lastModified: fechaHora };
+            localStorage.setItem(idTexto, JSON.stringify(datos));
+            grabarRelato()
+            mostrarUltimaGrabacion(fechaHora);
+        }
+        // Función para cargar los datos almacenados en el Local Storage
+        function cargarDatos() {
+            let idTexto = "miTexto";
+            let datos = localStorage.getItem(idTexto);
+            if (datos) {
+                datos = JSON.parse(datos);
+                document.getElementById("myTextarea").value = datos.texto;
+                mostrarUltimaGrabacion(new Date(datos.lastModified));
+            }
+        }
+        // Mostrar la fecha y hora de la última grabación
+        function mostrarUltimaGrabacion(lastModified) {
+            let mensaje = "Ultima grabaci0n: " + lastModified.toLocaleString();
+            document.getElementById("lastModified").textContent = mensaje;
+        }
+        // PARA FIJAR CAPITULO
+        function guardarCapitulo(event) {
+            // Función para guardar el capítulo seleccionado en el Local Storage
+            event.preventDefault();
+            let capituloSeleccionado = document.getElementById("capitulo").value;
+            localStorage.setItem("capituloSeleccionado", capituloSeleccionado);
+        }
+        // Función para cargar el capítulo seleccionado y los datos del capítulo en el textarea
+        function cargarCapitulo() {
+            let capituloSeleccionado = localStorage.getItem("capituloSeleccionado");
+            if (capituloSeleccionado) {
+                document.getElementById("capitulo").value = capituloSeleccionado;
+                mostrarDatosCapitulo(capituloSeleccionado);
+            }
+        }
+        // Función para mostrar los datos del capítulo en el textarea
+        function mostrarDatosCapitulo(capituloSeleccionado) {
+            // debugger
+            let relatos=JSON.parse(localStorage.getItem('relatos'))
+            let relato=relatos[capituloSeleccionado].relato
+            if (relato) {
+                document.getElementById("txtRelato").value = relato;
+            }
+        }
+        // Evento al cambiar la selección del combobox de capítulos
+        document.getElementById("capitulo").addEventListener("change", function() {
+            let capituloSeleccionado = this.value;
+            mostrarDatosCapitulo(capituloSeleccionado);
+        });
+        //INVOCACIONES
+        cargarCapitulos();
+        cargarCapitulo();
+        // Obtener la fecha y hora actual y asignar los valores a los campos correspondientes
+        document.getElementById('fecha').value = obtenerFechaActual();
+        document.getElementById('hora').value = obtenerHoraActual();
+        // Actualizar la hora como un reloj en tiempo real
+        actualizarReloj();
+        // Asignar el manejador de evento al botón Grabar Relato
+        document.getElementById('btnGrabaRelato').addEventListener('click', grabarRelato);
+        // Asignar el manejador de evento al botón Eliminar Relato
+        document.getElementById('btnEliminaRelato').addEventListener('click', eliminarRelato);
+        // GRABA AUTOMATICO
+        document.getElementById("txtRelato").addEventListener("input", guardarCambios);
+    </script>
+</body>
+</html>

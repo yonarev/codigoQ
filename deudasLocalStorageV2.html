@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registro de Deudas</title>
+</head>
+<body>
+    <h1>Registro de Deudas</h1>
+
+    <table id="deudasTable">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>ID Deuda</th>
+                <th>Deuda</th>
+                <th>Monto</th>
+                <th>Detalle</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Datos de deudas se agregarán aquí dinámicamente -->
+        </tbody>
+    </table>
+
+    <input type="file" id="fileInput" accept=".json">
+    <button id="loadButton">Cargar desde JSON</button>
+    <button id="saveButton">Guardar en JSON</button>
+
+    <script>
+        function displayDeudas(deudas) {
+            const tableBody = document.querySelector('#deudasTable tbody');
+            tableBody.innerHTML = '';
+
+            deudas.forEach(deuda => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${deuda.fecha}</td>
+                    <td>${deuda.hora}</td>
+                    <td>${deuda.idDeuda}</td>
+                    <td>${deuda.deuda}</td>
+                    <td>${deuda.monto}</td>
+                    <td>${deuda.detalle}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function saveToJSON() {
+            const deudas = JSON.parse(localStorage.getItem('deudas')) || [];
+
+            const jsonContent = JSON.stringify({ deudas }, null, 2);
+            const blob = new Blob([jsonContent], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'deudas.json';
+            link.click();
+
+            URL.revokeObjectURL(url);
+        }
+
+        function loadFromJSON(event) {
+            const file = event.target.files[0];
+
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const content = e.target.result;
+                const data = JSON.parse(content);
+
+                const deudas = data.deudas || [];
+
+                localStorage.setItem('deudas', JSON.stringify(deudas));
+                displayDeudas(deudas);
+            };
+
+            reader.readAsText(file);
+        }
+
+        document.getElementById('saveButton').addEventListener('click', saveToJSON);
+        document.getElementById('loadButton').addEventListener('click', function() {
+            document.getElementById('fileInput').click();
+        });
+        document.getElementById('fileInput').addEventListener('change', loadFromJSON);
+
+        const deudas = JSON.parse(localStorage.getItem('deudas')) || [];
+        displayDeudas(deudas);
+    </script>
+</body>
+</html>

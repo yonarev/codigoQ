@@ -1,0 +1,141 @@
+<!-- codigo en un solo archivo HTML
+que permita ingresar en local storage
+la estructura:
+transaccionInventario=[{
+    fecha:fecha,(es la fecha actual no se pregunta)
+    hora:hora, (es la hora atual no se pregunta)
+    idTrans:idTrans, (es el id a partir de la concatencacion de fecha y hora actual sin "/" ni ":")
+    inventario:inventario,(desde un combo box a partir del key "inventarios" en local storage)
+    tipo:tipo, (desde un combo box a partir del key "tiposArt" en local storage)
+    articulo:articulo (desde un combo box en base al tipo elejido a partir del key "articulos" en local storage)
+    cantidad: cantidad,
+    valor: valor,
+    valorTotal=valorTotal, (=cantidad * valor)
+    cantidadTotal=cantidadTotal, ( es la sumatoria de las cantidades de articulos en el inventario)
+    valorAcumulado=valorAcumulado( es la suma de los valores Totales en el inventario)
+}
+la lista inventarios se alimenta de la estructura en local storage
+    inventarios=[{
+        fecha:fecha,
+        hora:hora,
+        idInv:idInv,
+        inventario:inventario,
+        
+    }]
+la lista tipos  se alimenta de la estructura en local storage
+    tiposArt=[{
+        fecha:fecha, 
+        hora:hora, 
+        idTipo:IdTipo,)
+        tipo:tipo
+    }]
+en base a la selecion de tipos se despliega el combo box que se alimenta de la estructura en local storage
+con key articulos={
+    fecha: fecha,
+    hora: hora, 
+    idArticulo,
+    tipo:tipo
+}
+ -->
+ <!DOCTYPE html>
+ <html>
+ <head>
+     <title>Transacciones de Inventario</title>
+     <link rel="stylesheet" href="./css/transaInventario.css">
+     <script src="./js/transaInventario.js"></script>
+ </head>
+ <body>
+     <h1>Transacciones de Inventario</h1>
+     <form>
+         <label for="inventario">Inventario:</label>
+         <select id="inventario">
+             <!-- Opciones generadas desde el local storage -->
+             <script>
+                 let inventarios = JSON.parse(localStorage.getItem('inventarios')) || [];
+                 inventarios.forEach(function(inv) {
+                     document.write('<option value="' + inv.inventario + '">' + inv.inventario + '</option>');
+                 });
+             </script>
+         </select>
+         <button onclick="cargarPagina('./inventarios.html')" >+</button>
+         <br><br>
+         <label for="tipo">Tipo de Artículo:</label>
+         <select id="tipo" onchange="mostrarArticulos()">
+             <!-- Opciones generadas desde el local storage -->
+             <script>
+                 let tiposArt = JSON.parse(localStorage.getItem('tiposArt')) || [];
+                 tiposArt.forEach(function(tipo) {
+                     document.write('<option value="' + tipo.tipo + '">' + tipo.tipo + '</option>');
+                 });
+             </script>
+         </select>
+         <button onclick="cargarPagina('./tipos.html')" >+</button>
+         <br><br>
+         <label for="articulo">Artículo:</label>
+         <div>
+             <select id="articulo">
+                 <!-- Opciones generadas según el tipo seleccionado -->
+             </select>
+             <button onclick="cargarPagina('./articulo.html')" >+</button>
+         </div>
+         <br><br>
+         <label for="cantidad">Cantidad:</label>
+         <input type="number" id="cantidadI" required>
+         <br><br>
+         <label for="valor">Valor:</label>
+         <input type="number" id="valorI" step="0.01" required>
+         <br><br>
+         <button type="button" onclick="agregarTransaccion()">Agregar Transacción</button>
+     </form>
+     <br><br>
+     <table id="tablaTransaccionesInv" border="1">
+         <tr>
+             <th>Fecha</th>
+             <th>Hora</th>
+             <th>ID Trans</th>
+             <th>Inventario</th>
+             <th>Tipo</th>
+             <th>Artículo</th>
+             <th>Cant</th>
+             <th>Valor</th>
+             <th>Total</th>
+             <th>Cant Tot</th>
+             <th>Valor I</th>
+         </tr>
+         <!-- Filas generadas desde el local storage -->
+         <script src="./js/libreria.js"></script>
+         <script>
+            mostrarArticulos()
+            presentaInventario()
+            // let transaccionInventario = JSON.parse(localStorage.getItem('transaccionInventario')) || [];
+            //  transaccionInventario.forEach(function(trans) {
+            //      let table = document.getElementById('tablaTransacciones');
+            //      let row = table.insertRow(-1);
+            //      let cellFecha = row.insertCell(0);
+            //      let cellHora = row.insertCell(1);
+            //      let cellIdTrans = row.insertCell(2);
+            //      let cellInventario = row.insertCell(3);
+            //      let cellTipo = row.insertCell(4);
+            //      let cellArticulo = row.insertCell(5);
+            //      let cellCantidad = row.insertCell(6);
+            //      let cellValor = row.insertCell(7);
+            //      let cellValorTotal = row.insertCell(8);
+            //      let cellCantidadTotal = row.insertCell(9);
+            //      let cellValorAcumulado = row.insertCell(10);
+            //      cellFecha.innerHTML = trans.fecha;
+            //      cellHora.innerHTML = trans.hora;
+            //      cellIdTrans.innerHTML = trans.idTrans;
+            //      cellInventario.innerHTML = trans.inventario;
+            //      cellTipo.innerHTML = trans.tipo;
+            //      cellArticulo.innerHTML = trans.articulo;
+            //      cellCantidad.innerHTML = trans.cantidad;
+            //      cellValor.innerHTML = '$'+trans.valor;
+            //      cellValorTotal.innerHTML = '$'+trans.valorTotal;
+            //      cellCantidadTotal.innerHTML = trans.cantidadTotal;
+            //      cellValorAcumulado.innerHTML = '$'+trans.valorAcumulado;
+            //  });
+         </script>
+     </table>
+ </body>
+ </html>
+ 

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Interpretar voz en un textarea</title>
+</head>
+<body>
+  <textarea id="myTextarea"></textarea>
+  <button id="startButton">Iniciar reconocimiento</button>
+  <button id="stopButton">Detener reconocimiento</button>
+
+  <script>
+    // Verificar si el navegador admite el reconocimiento de voz
+    if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+      // Crear un nuevo objeto de reconocimiento de voz
+      var recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      
+      // Variable para controlar si el reconocimiento de voz está activo
+      var isRecognitionActive = false;
+
+      // Establecer el idioma del reconocimiento de voz (opcional)
+      recognition.lang = 'es-ES';
+
+      // Establecer el atributo 'continuous' para que el reconocimiento de voz no se detenga después de una pausa
+      recognition.continuous = true;
+
+      // Evento que se dispara cuando se detecta un resultado del reconocimiento de voz
+      recognition.onresult = function(event) {
+        var resultado = event.results[event.results.length - 1][0].transcript;
+        document.getElementById('myTextarea').value += resultado;
+      };
+
+      // Función para activar el reconocimiento de voz
+      function startRecognition() {
+        if (!isRecognitionActive) {
+          recognition.start();
+          isRecognitionActive = true;
+        }
+      }
+
+      // Función para detener el reconocimiento de voz
+      function stopRecognition() {
+        if (isRecognitionActive) {
+          recognition.stop();
+          isRecognitionActive = false;
+        }
+      }
+
+      // Asociar el evento clic al botón "Iniciar reconocimiento"
+      document.getElementById("startButton").addEventListener("click", startRecognition);
+
+      // Asociar el evento clic al botón "Detener reconocimiento"
+      document.getElementById("stopButton").addEventListener("click", stopRecognition);
+    } else {
+      alert('El reconocimiento de voz no es compatible con tu navegador.');
+    }
+  </script>
+</body>
+</html>

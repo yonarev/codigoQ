@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Administra Local Storage</title>
+  <link rel="stylesheet" type="text/css" href="./css/localstorage.css">
+  
+</head>
+<body>
+  <section>
+    <section class="seccionGraban">
+      <button class="btnGraba" onclick="guardar('bitacora')">Grabar Bitacora </button>
+      <button class="btnGraba" onclick="guardar('asuntos')">Grabar Asuntos </button>
+      <button class="btnGraba" onclick="guardar('desarrollo')">Grabar Desarrollo </button>
+      <button class="btnGraba" onclick="guardar('cuentas')">Grabar Cuentas </button>
+      <button class="btnGraba" onclick="guardar('motivos')">Grabar Motivos </button>
+      <button class="btnGraba" onclick="guardar('transacciones')">Grabar Transacciones</button>
+      <button class="btnGraba" onclick="guardar('todo')">Grabar Base de Datos</button>
+
+    </section>
+    <section class="seccionRecupera">
+      <input type="file" id="archivo" accept=".json">
+      <button class='btnRecupera' onclick="cargar()">Recuperar de archivo JSON</button>
+    </section>
+    <section class="seccionElimina">'
+      <button class="btnElimina" onclick="borrar('bitacora')">Borrar Bitacora Local'</button>
+      <button class="btnElimina" onclick="borrar('asuntos')">Borrar Asuntos Local'</button>
+      <button class="btnElimina" onclick="borrar('desarrollo')">Borrar desarrollo Local'</button>
+      
+      <button class="btnElimina" onclick="borrar('cuentas')">Borrar Cuentas Local'</button>
+      <button class="btnElimina" onclick="borrar('motivos')">Borrar Motivos Local</button>
+      <button class="btnElimina" onclick="borrar('transacciones')">Borrar Transacciones Local</button>
+      <button class="btnElimina" onclick="borrar('todo')">Borrar todo en Local</button>
+    </section>
+  </section>
+  <br>
+  <br>
+  <table>
+		<thead>
+			<tr>
+				<th>Clave</th>
+				<th>Valor</th>
+			</tr>
+		</thead>
+		<tbody id="table-body">
+		</tbody>
+	</table>
+
+<script src="./js/libreria.js"></script>
+<script src="./js/localstorage.js"></script>
+<script>
+  // Obtener los elementos del localStorage
+  let localStorageItems = Object.entries(localStorage);
+  // Crear las filas de la tabla
+  localStorageItems.forEach(item => {
+    let row = document.createElement("tr");
+    let keyCell = document.createElement("td");
+    let valueCell = document.createElement("td")
+    keyCell.textContent = item[0];
+    valueCell.textContent = item[1]
+    row.appendChild(keyCell);
+    row.appendChild(valueCell);
+    document.getElementById("table-body").appendChild(row);
+  })
+</script>
+</body>
+</html>

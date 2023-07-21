@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Transformación de punto y líneas curvadas</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: black;
+    }
+
+    canvas {
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+
+    #shape {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: white;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <div id="shape"></div>
+
+  <script>
+    // Configuración del lienzo
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+    var width = canvas.width = window.innerWidth;
+    var height = canvas.height = window.innerHeight;
+
+    // Crear un objeto para representar una línea curva
+    function CurvedLine(x, y, radius, startAngle, endAngle) {
+      this.x = x;
+      this.y = y;
+      this.radius = radius;
+      this.startAngle = startAngle;
+      this.endAngle = endAngle;
+      this.angle = startAngle;
+
+      this.update = function() {
+        this.angle += 0.02;
+      };
+
+      this.draw = function() {
+        ctx.strokeStyle = "#FFFFFF";
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, this.startAngle, this.angle);
+        ctx.stroke();
+      };
+    }
+
+    // Crear un array de líneas curvas
+    var curvedLines = [];
+    for (var i = 0; i < 10; i++) {
+      var radius = Math.random() * 100 + 50;
+      var curvedLine = new CurvedLine(width / 2, height / 2, radius, 0, Math.PI * 2);
+      curvedLines.push(curvedLine);
+    }
+
+    // Función de animación
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+
+      for (var i = 0; i < curvedLines.length; i++) {
+        var curvedLine = curvedLines[i];
+        curvedLine.update();
+        curvedLine.draw();
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    // Iniciar la animación
+    animate();
+
+    // Definir los diferentes estados de transformación del punto
+    var states = [
+      { width: "2px", height: "2px", borderRadius: "50%" },
+      { width: "150px", height: "2px", borderRadius: "0" },
+      { width: "150px", height: "150px", borderRadius: "50%" },
+      { width: "150px", height: "150px", borderRadius: "0", clipPath: "polygon(50% 0%, 0% 100%, 100% 100%)" },
+      { width: "150px", height: "150px", borderRadius: "50%", clipPath: "none" }
+    ];
+
+    // Obtener el elemento del punto
+    var shape = document.getElementById("shape");
+
+    // Animar la transformación del punto
+    gsap.to(shape, {
+      duration: 2,
+      repeat: -1,
+      yoyo: true,
+      keyframes: states
+    });
+  </script>
+</body>
+</html>

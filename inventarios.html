@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inventarios</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 1vw;
+    font-size: 4vw;
+        }
+        h1 {
+        margin-bottom: 20px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        table {
+        width: 100%;
+        border-collapse: collapse;
+        }
+        th,
+        td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+        }
+        th {
+        background-color: #f5f5f5;
+        }
+        button {
+        padding: 5px 10px;
+        font-size: 14px;
+        cursor: pointer;
+        }
+        .btnEliminar{
+            background-color: red;
+            color: white;
+        }
+        .btnEditar{
+            background-color: rgb(70, 237, 28);
+            color: rgb(0, 0, 0);
+            font-weight: bold;
+        }
+        input[type="text"] {
+        padding: 5px;
+        font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Inventarios</h1>
+    <form id="inventarioForm">
+        <label for="inventario">Inventario:</label>
+        <input type="text" id="inventario" required><br>
+        <button type="submit" id="btnGrabaInv">Agregar inventario</button>
+        <button  id="btnOrdInv" onclick="ordenarDatosInv();presentaTablaInv()">Ordena</button>
+    </form>
+    <table id="inventarioTable">
+        <thead>
+            <tr>
+                <th>ID de Inventario</th>
+                <th>Inventario</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="inventarioBody"></tbody>
+    </table>
+    <script src="./js/libreria.js"></script>
+    <script>
+        // Función para obtener la lista de inventarios almacenada en el Local Storage
+        function getInventarios() {
+            let inventarios = localStorage.getItem("inventarios");
+            return inventarios ? JSON.parse(inventarios) : [];
+        }
+        // Función para guardar la lista de inventarios en el Local Storage
+        function saveInventarios(inventarios) {
+            // alert('validar que no se ocupe el inventario en transacciones')
+            let confirma = confirm('?esta seguro de eliminar el inventario con sus transacciones')
+            alert('falta eliminar transacciones con este inventario')
+            if(!confirma){
+                return
+            }
+            localStorage.setItem("inventarios", JSON.stringify(inventarios));
+            alert('se grabo el Inventario')
+        }
+        // Función para generar un ID de inventario basado en la fecha y hora actual
+        function generateID() {
+            const now = new Date();
+            const fecha = now.toLocaleDateString("es-ES", { day: "2-digit", month: "2-digit", year: "numeric" }).replace(/\//g, "/");
+            const hora = now.toLocaleTimeString("es-ES", { hour12: false });
+            return fecha + hora;
+        }
+        // Función para agregar un inventario a la lista y actualizar la tabla
+        function agregarInventario(inventario) {
+            const inventarios = getInventarios();
+            const idInv = generateID();
+            const nuevoInventario = {
+                idInv: idInv.replace(/[/:\s]/g, ""),
+                inventario: inventario
+            };
+            inventarios.push(nuevoInventario);
+            actualizaTransInv(inventario)
+            ordenarDatosInv()
+            agregarFilaTabla(nuevoInventario);
+        }
+        // Función para eliminar un inventario de la lista y de la tabla
+        function actualizaTransInv(nuevoNombre){
+            // Actualizar nombre del inventario en las transacciones
+            let transacciones = JSON.parse(localStorage.getItem('transaccionInventario')) || [];
+            let inventarioEnUso = false;
+            for (let i = 0; i < transacciones.length; i++) {
+                if (transacciones[i].inventario === inventarioSeleccionado) {
+                    transacciones[i].inventario = nuevoNombre;
+                }
+            }
+            localStorage.setItem('transaccionInventario', JSON.stringify(transacciones));
+            alert('Se ha cambiado el nombre del inventario y actualizado las transacciones.');
+        }
+        // elimina inventario por su ID
+        function eliminarInventario(idInv) {
+            const inventarios = getInventarios();
+            const index = inventarios.findIndex(inventario => inventario.idInv === idInv);
+
+            if (index !== -1) {
+                inventarios.splice(index, 1);
+                saveInventarios(inventarios);
+                eliminarFilaTabla(idInv);
+            }
+        }
+        // Función para editar el inventario en la tabla
+        function editarInventario(idInv) {
+            const inventarios = getInventarios();
+            const index = inventarios.findIndex(inventario => inventario.idInv === idInv);
+
+            if (index !== -1) {
+                const inventarioRow = document.getElementById(idInv);
+                const inventarioCell = inventarioRow.cells[1];
+                const inventarioValue = inventarioCell.innerText;
+
+                const input = document.createElement("input");
+                input.type = "text";
+                input.value = inventarioValue;
+
+                const btnSave = document.createElement("button");
+                btnSave.innerHTML = "Guardar";
+                btnSave.addEventListener("click", function() {
+                    const nuevoInventario = input.value;
+                    if (validarInventario(nuevoInventario)) {
+                        inventarios[index].inventario = nuevoInventario;
+                        saveInventarios(inventarios);
+                        actualizaTransInv(nuevoNombre);//actualiza key transacc inv
+                        inventarioCell.innerHTML = nuevoInventario;
+                        inventarioRow.cells[2].innerHTML = `
+                            <button class="btnEditar" onclick="editarInventario('${idInv}')">Editar</button>
+                            <button class="btnEliminar" onclick="eliminarInventario('${idInv}')">Eliminar</button>
+                        `;
+                    } else {
+                        alert("El inventario ya existe en la tabla.");
+                    }
+                });
+
+                inventarioCell.innerHTML = "";
+                inventarioCell.appendChild(input);
+                inventarioRow.cells[2].innerHTML = "";
+                inventarioRow.cells[2].appendChild(btnSave);
+            }
+        }
+        // Función para agregar una fila a la tabla
+        function agregarFilaTabla(inventario) {
+            const table = document.getElementById("inventarioBody");
+            const row = table.insertRow();
+
+            row.id = inventario.idInv;
+            row.innerHTML = `
+                <td>${inventario.idInv}</td>
+                <td>${inventario.inventario}</td>
+                <td>
+                    <button class="btnEditar" onclick="editarInventario('${inventario.idInv}')">Editar</button>
+                    <button class="btnEliminar" onclick="eliminarInventario('${inventario.idInv}')">Eliminar</button>
+                </td>
+            `;
+        }
+        // Función para eliminar una fila de la tabla
+        function eliminarFilaTabla(idInv) {
+            const table = document.getElementById("inventarioBody");
+            const row = document.getElementById(idInv);
+            table.removeChild(row);
+        }
+        // Función para validar que no se repita el inventario en la tabla
+        function validarInventario(inventario) {
+            const table = document.getElementById("inventarioBody");
+            const inventarios = Array.from(table.querySelectorAll("tr"))
+                .map(row => row.cells[1].innerText);
+            return !inventarios.includes(inventario);
+        }
+        // Manejador de evento para el formulario de inventario
+        document.getElementById("inventarioForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const inventario = document.getElementById("inventario").value;
+            if (validarInventario(inventario)) {
+                agregarInventario(inventario);
+                this.reset();
+            } else {
+                alert("El inventario ya existe en la tabla.");
+            }
+        });
+        function ordenarDatosInv() {
+            // Obtener los datos del local storage
+            let inventarios = JSON.parse(localStorage.getItem('inventarios'));
+            // Ordenar los datos por inventario
+            inventarios.sort(function(a, b) {
+                return a.inventario.localeCompare(b.inventario);
+            });
+            // Almacenar los datos ordenados en el local storage
+            localStorage.setItem('inventarios', JSON.stringify(inventarios));
+            alert("los inventarios ya estan ordenados")
+        }
+        // Cargar inventarios existentes al iniciar la página
+        window.addEventListener("DOMContentLoaded", function() {
+            const inventarios = getInventarios();
+            inventarios.forEach(inventario => {
+                agregarFilaTabla(inventario);
+            });
+        });
+        function presentaTablaInv(){
+            borraTabla('inventarioTable');
+            let inventarios= JSON.parse(localStorage.getItem("inventarios")) || [];
+            inventarios.forEach(inventario => {
+                agregarFilaTabla(inventario);
+            });
+        }
+    </script>
+</body>
+</html>
+
+    
+
+    

@@ -1,0 +1,25 @@
+echo JS
+ren    agregaEliminaCorreosTipo.txt    agregaEliminaCorreosTipo.js  
+ren    bitacora.txt bitacora.js                  
+ren    cargaEmergencia.txt cargaEmergencia.js           
+ren    codDatAgrega.txt codDatAgrega.js              
+ren    codDatLista.txt codDatLista.js               
+ren    codlab.txt codlab.js                    
+ren    editaCorreosTipo.txt editaCorreosTipo.js          
+ren    editaLocalStorage.txt editaLocalStorage.js         
+ren    encuentraId.txt encuentraId.js               
+ren    grabaAlertaLocal.txt grabaAlertaLocal.js          
+ren    grabaNotas.txt grabaNotas.js                
+ren    grabaTmo.txt grabaTmo.js                  
+ren    index.txt index.js                     
+ren    leeBackup.txt leeBackup.js                 
+ren    leetmo.txt leetmo.js                    
+ren    libreria.txt libreria.js                  
+ren    listaCargaGrabaCorreosTipo.txt listaCargaGrabaCorreosTipo.js
+ren     listaXhora.txt   listaXhora.js                  
+ren  llamaAlerta.txt   llamaAlerta.js                 
+ren  promTMO.txt   promTMO.js                     
+ren  timer.txt   timer.js                       
+ren  turno.txt   turno.js                       
+ren  turnos.txt   turnos.js 
+ren  leeTotal.txt   leeTotal.js                        

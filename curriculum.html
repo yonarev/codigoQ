@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generador de Currículum</title>
+  <style>
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  margin: 0;
+  padding: 1vw;
+}
+h1 {
+  font-size: 24px;
+  margin-bottom: 1vw;
+}
+h2 {
+  font-size: 2vw;
+  margin-bottom: 1vw;
+}
+
+label {
+  display: block;
+  margin-top: 1vw;
+}
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+textarea {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+textarea {
+  height: 100vw;
+}
+button {
+  margin-top: 10px;
+  padding: 8px 16px;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+  background-color: #4caf50;
+  color: #fff;
+  cursor: pointer;
+}
+/* Estilos específicos */
+#educacion-basica-container,
+#educacion-profesional-container,
+#experiencia-laboral-container {
+  margin-bottom: 10px;
+}
+#educacion-basica-container,
+#educacion-profesional-container,
+#experiencia-laboral-container,
+#tabla-curriculum {
+  border-collapse: collapse;
+  width: 100%;
+}
+#educacion-basica-container input,
+#educacion-profesional-container input,
+#experiencia-laboral-container input,
+#educacion-basica-container textarea,
+#educacion-profesional-container textarea,
+#experiencia-laboral-container textarea,
+#tabla-curriculum th,
+#tabla-curriculum td {
+  padding: 8px;
+}
+#tabla-curriculum th {
+  background-color: #4caf50;
+  color: #fff;
+}
+#tabla-curriculum td {
+  border: 1px solid #ddd;
+}
+#generar-curriculum {
+  background-color: #008CBA;
+}
+#tabla-curriculum {
+  display: none;
+}
+  </style>
+  <script src="./js/libreria.js"></script>
+</head>
+<body>
+  <h1>Generador de Currículum</h1>
+  <h2>Información de Contacto</h2>
+  <label>Nombre Completo:</label>
+  <input type="text" id="nombre-completo">
+  <label>Correo Electrónico:</label>
+  <input type="email" id="correo-electronico">
+  <label>Teléfono:</label>
+  <input type="tel" id="telefono">
+  <label>Nacionalidad:</label>
+  <input type="text" id="nacionalidad">
+  <label>Estado Civil:</label>
+  <input type="text" id="estadoCivil">
+  <label>Dirección:</label>
+  <input type="text" id="direccion">
+  <h2>Educación Básica</h2>
+  <div id="educacion-basica-container">
+    <!-- Aquí se agregarán los campos de educación básica dinámicamente -->
+  </div>
+  <button id="agregar-educacion-basica">Agregar Educación Básica</button>
+  </h1>Educación Profesional</h1>
+  <div id="educacion-profesional-container">
+    <!-- Aquí se agregarán los campos de educación profesional dinámicamente -->
+  </div>
+  <button id="agregar-educacion-profesional">Agregar Educación Profesional</button>
+  <h1>Resumen Profesional</h1>
+  <label>Sistemas:</label>
+  <textarea id="sistemas"></textarea>
+  <label>Producciones:</label>
+  <textarea id="producciones"></textarea>
+  <label>Administraciones:</label>
+  <textarea id="administraciones"></textarea>
+  <h2>Experiencia Laboral</h2>
+  <div id="experiencia-laboral-container">
+    <!-- Aquí se agregarán los campos de experiencia laboral dinámicamente -->
+  </div>
+  <button id="agregar-experiencia">Agregar Experiencia Laboral</button>
+  <h2>Habilidades</h2>
+  <label>Habilidades Técnicas:</label>
+  <textarea id="habilidades-tecnicas"></textarea>
+  <label>Habilidades Blandas:</label>
+  <textarea id="habilidades-blandas"></textarea>
+  <button id="generar-curriculum">Generar Currículum</button>
+  <button id="Presentar-curriculum" onclick="cargarPagina('./presentaCurriculum.html')">Presentar Currículum</button>
+  <button id="btnRespaldoCur" onclick="cargarPagina('./localStorageCurriculum.html')">Respaldo JSON</button>
+  
+  <table id="tabla-curriculum" style="display: none;">
+    <thead>
+      <tr>
+        <th>Información de Contacto</th>
+        <th>Educación Básica</th>
+        <th>Educación Profesional</th>
+        <th>Resumen Profesional</th>
+        <th>Experiencia Laboral</th>
+        <th>Habilidades</th>
+      </tr>
+    </thead>
+    <tbody id="tabla-body">
+      <!-- Aquí se mostrará el currículum -->
+    </tbody>
+  </table>
+  <script>
+    // Obtener referencias a los elementos del DOM
+    const nombreCompletoInput = document.getElementById("nombre-completo");
+    const correoElectronicoInput = document.getElementById("correo-electronico");
+    const telefonoInput = document.getElementById("telefono");
+    const direccionInput = document.getElementById("direccion");
+    const nacionalidadInput = document.getElementById("nacionalidad");
+    const estadoCivilInput = document.getElementById("estadoCivil");
+    const educacionBasicaContainer = document.getElementById("educacion-basica-container");
+    const educacionProfesionalContainer = document.getElementById("educacion-profesional-container");
+    const sistemasTextarea = document.getElementById("sistemas");
+    const produccionesTextarea = document.getElementById("producciones");
+    const administracionesTextarea = document.getElementById("administraciones");
+    const experienciaLaboralContainer = document.getElementById("experiencia-laboral-container");
+    const habilidadesTecnicasTextarea = document.getElementById("habilidades-tecnicas");
+    const habilidadesBlandasTextarea = document.getElementById("habilidades-blandas");
+    const generarCurriculumButton = document.getElementById("generar-curriculum");
+    const tablaCurriculum = document.getElementById("tabla-curriculum");
+    const tablaBody = document.getElementById("tabla-body");
+    // Cargar currículum desde el Local Storage al cargar la página
+    document.addEventListener("DOMContentLoaded", cargarCurriculum);
+    // Agregar eventos a los botones
+    document.getElementById("agregar-educacion-basica").addEventListener("click", agregarEducacionBasica);
+    document.getElementById("agregar-educacion-profesional").addEventListener("click", agregarEducacionProfesional);
+    document.getElementById("agregar-experiencia").addEventListener("click", agregarExperienciaLaboral);
+    generarCurriculumButton.addEventListener("click", generarCurriculum);
+    // Función para cargar el currículum desde el Local Storage
+    function cargarCurriculum() {
+      const curriculum = JSON.parse(localStorage.getItem("curriculum"));
+
+      if (curriculum) {
+        nombreCompletoInput.value = curriculum.infoContacto.nombreCompleto;
+        correoElectronicoInput.value = curriculum.infoContacto.mail;
+        telefonoInput.value = curriculum.infoContacto.celular;
+        direccionInput.value = curriculum.infoContacto.direccion;
+        estadoCivilInput.value = curriculum.infoContacto.estadoCivil;
+        nacionalidadInput.value = curriculum.infoContacto.nacionalidad;
+
+        sistemasTextarea.value = curriculum.resumenProf.sistemas;
+        produccionesTextarea.value = curriculum.resumenProf.producciones;
+        administracionesTextarea.value = curriculum.resumenProf.administraciones;
+        habilidadesTecnicasTextarea.value = curriculum.habilidades.tecnicas;
+        habilidadesBlandasTextarea.value = curriculum.habilidades.blandas;
+
+        mostrarEducacionBasica(curriculum.educacionBasica);
+        mostrarEducacionProfesional(curriculum.educacionProfesional);
+        mostrarExperienciaLaboral(curriculum.experienciaLab);
+      }
+    }
+    // Función para agregar campos de educación básica
+    function agregarEducacionBasica() {
+      const educacionBasicaElement = document.createElement("div");
+      educacionBasicaElement.innerHTML = `
+        <label>Institución:</label>
+        <input type="text" class="institucion-educacion-basica">
+        <label>Curso:</label>
+        <input type="text" class="curso-educacion-basica">
+        <label>Tiempo:</label>
+        <input type="text" class="tiempo-educacion-basica">
+      `;
+      educacionBasicaContainer.appendChild(educacionBasicaElement);
+    }
+    // Función para agregar campos de educación profesional
+    function agregarEducacionProfesional() {
+      const educacionProfesionalElement = document.createElement("div");
+      educacionProfesionalElement.innerHTML = `
+        <label>Institución:</label>
+        <input type="text" class="institucion-educacion-profesional">
+        <label>Título:</label>
+        <input type="text" class="titulo-educacion-profesional">
+        <label>Tiempo:</label>
+        <input type="text" class="tiempo-educacion-profesional">
+      `;
+      educacionProfesionalContainer.appendChild(educacionProfesionalElement);
+    }
+    // Función para agregar campos de experiencia laboral
+    function agregarExperienciaLaboral() {
+      const experienciaLaboralElement = document.createElement("div");
+      experienciaLaboralElement.innerHTML = `
+        <label>Empresa:</label>
+        <input type="text" class="empresa-experiencia-laboral">
+        <label>Cargo:</label>
+        <input type="text" class="cargo-experiencia-laboral">
+        <label>Tiempo:</label>
+        <input type="text" class="tiempo-experiencia-laboral">
+        <label>Descripción:</label>
+        <textarea class="descripcion-experiencia-laboral"></textarea>
+      `;
+      experienciaLaboralContainer.appendChild(experienciaLaboralElement);
+    }
+    // Función para mostrar los campos de educación básica
+    function mostrarEducacionBasica(educacionBasica) {
+      educacionBasica.forEach((educacion) => {
+        const educacionBasicaElement = document.createElement("div");
+        educacionBasicaElement.innerHTML = `
+          <label>Institución:</label>
+          <input type="text" class="institucion-educacion-basica" value="${educacion.institucion}">
+          <label>Curso:</label>
+          <input type="text" class="curso-educacion-basica" value="${educacion.curso}">
+          <label>Tiempo:</label>
+          <input type="text" class="tiempo-educacion-basica" value="${educacion.tiempo}">
+        `;
+        educacionBasicaContainer.appendChild(educacionBasicaElement);
+      });
+    }
+  // Función para mostrar los campos de educación profesional
+    function mostrarEducacionProfesional(educacionProfesional) {
+      educacionProfesional.forEach((educacion) => {
+        const educacionProfesionalElement = document.createElement("div");
+        educacionProfesionalElement.innerHTML = `
+          <label>Institución:</label>
+          <input type="text" class="institucion-educacion-profesional" value="${educacion.institucion}">
+          <label>Título:</label>
+          <input type="text" class="titulo-educacion-profesional" value="${educacion.titulo}">
+          <label>Tiempo:</label>
+          <input type="text" class="tiempo-educacion-profesional" value="${educacion.tiempo}">
+        `;
+        educacionProfesionalContainer.appendChild(educacionProfesionalElement);
+      });
+    }
+    // Función para mostrar los campos de experiencia laboral
+    function mostrarExperienciaLaboral(experienciaLaboral) {
+      experienciaLaboral.forEach((experiencia) => {
+        const experienciaLaboralElement = document.createElement("div");
+        experienciaLaboralElement.innerHTML = `
+          <label>Empresa:</label>
+          <input type="text" class="empresa-experiencia-laboral" value="${experiencia.empresa}">
+          <label>Cargo:</label>
+          <input type="text" class="cargo-experiencia-laboral" value="${experiencia.cargo}">
+          <label>Tiempo:</label>
+          <input type="text" class="tiempo-experiencia-laboral" value="${experiencia.tiempo}">
+          <label>Descripción:</label>
+          <textarea class="descripcion-experiencia-laboral">${experiencia.descripcion}</textarea>
+        `;
+        experienciaLaboralContainer.appendChild(experienciaLaboralElement);
+      });
+    }
+    // Función para generar el currículum
+    function generarCurriculum() {
+      const curriculum = {
+        infoContacto: {
+          nombreCompleto: nombreCompletoInput.value,
+          mail: correoElectronicoInput.value,
+          celular: telefonoInput.value,
+          direccion: direccionInput.value,
+          estadoCivil: estadoCivilInput.value,
+          nacionalidad: nacionalidadInput.value
+        },
+        educacionBasica: obtenerEducacionBasica(),
+        educacionProfesional: obtenerEducacionProfesional(),
+        resumenProf: {
+          sistemas: sistemasTextarea.value,
+          producciones: produccionesTextarea.value,
+          administraciones: administracionesTextarea.value,
+        },
+        experienciaLab: obtenerExperienciaLaboral(),
+        habilidades: {
+          tecnicas: habilidadesTecnicasTextarea.value,
+          blandas: habilidadesBlandasTextarea.value,
+        },
+      };
+      
+      // Guardar el currículum en el Local Storage
+      localStorage.setItem("curriculum", JSON.stringify(curriculum));
+      // Mostrar el currículum en la tabla
+      mostrarCurriculum(curriculum);
+      alert('se genero el curriculum ya esta en local storage')
+    }
+    // Función para obtener los campos de educación básica
+    function obtenerEducacionBasica() {
+      const educacionBasicaInputs = document.getElementsByClassName("institucion-educacion-basica");
+      const cursoInputs = document.getElementsByClassName("curso-educacion-basica");
+      const tiempoInputs = document.getElementsByClassName("tiempo-educacion-basica");
+
+      const educacionBasica = [];
+
+      for (let i = 0; i < educacionBasicaInputs.length; i++) {
+        const institucion = educacionBasicaInputs[i].value;
+        const curso = cursoInputs[i].value;
+        const tiempo = tiempoInputs[i].value;
+
+        if (institucion && curso && tiempo) {
+          educacionBasica.push({ institucion, curso, tiempo });
+        }
+      }
+
+      return educacionBasica;
+    }
+    // Función para obtener los campos de educación profesional
+    function obtenerEducacionProfesional() {
+      const educacionProfesionalInputs = document.getElementsByClassName("institucion-educacion-profesional");
+      const tituloInputs = document.getElementsByClassName("titulo-educacion-profesional");
+      const tiempoInputs = document.getElementsByClassName("tiempo-educacion-profesional");
+
+      const educacionProfesional = [];
+
+      for (let i = 0; i < educacionProfesionalInputs.length; i++) {
+        const institucion = educacionProfesionalInputs[i].value;
+        const titulo = tituloInputs[i].value;
+        const tiempo = tiempoInputs[i].value;
+
+        if (institucion && titulo && tiempo) {
+          educacionProfesional.push({ institucion, titulo, tiempo });
+        }
+      }
+
+      return educacionProfesional;
+    }
+    // Función para obtener los campos de experiencia laboral
+    function obtenerExperienciaLaboral() {
+      const empresaInputs = document.getElementsByClassName("empresa-experiencia-laboral");
+      const cargoInputs = document.getElementsByClassName("cargo-experiencia-laboral");
+      const tiempoInputs = document.getElementsByClassName("tiempo-experiencia-laboral");
+      const descripcionInputs = document.getElementsByClassName("descripcion-experiencia-laboral");
+
+      const experienciaLaboral = [];
+
+      for (let i = 0; i < empresaInputs.length; i++) {
+        const empresa = empresaInputs[i].value;
+        const cargo = cargoInputs[i].value;
+        const tiempo = tiempoInputs[i].value;
+        const descripcion = descripcionInputs[i].value;
+
+        if (empresa && cargo && tiempo && descripcion) {
+          experienciaLaboral.push({ empresa, cargo, tiempo, descripcion });
+        }
+      }
+
+      return experienciaLaboral;
+    }
+    // Función para mostrar el currículum en la tabla
+    function mostrarCurriculum(curriculum) {
+      tablaBody.innerHTML = "";
+
+      const fila = document.createElement("tr");
+
+      // Información de contacto
+      const infoContactoTd = document.createElement("td");
+      infoContactoTd.textContent = `
+        Nombre: ${curriculum.infoContacto.nombreCompleto}
+        Correo: ${curriculum.infoContacto.mail}
+        Teléfono: ${curriculum.infoContacto.celular}
+        Dirección: ${curriculum.infoContacto.direccion}
+        Nacionalidad: ${curriculum.infoContacto.nacionalidad}
+        Estado Civil: ${curriculum.infoContacto.estadoCivil}
+      `;
+      fila.appendChild(infoContactoTd);
+
+      // Educación básica
+      const educacionBasicaTd = document.createElement("td");
+      curriculum.educacionBasica.forEach((educacion) => {
+        const educacionBasicaDiv = document.createElement("div");
+        educacionBasicaDiv.textContent = `
+          Institución: ${educacion.institucion}
+          Curso: ${educacion.curso}
+          Tiempo: ${educacion.tiempo}
+        `;
+        educacionBasicaTd.appendChild(educacionBasicaDiv);
+      });
+      fila.appendChild(educacionBasicaTd);
+
+      // Educación profesional
+      const educacionProfesionalTd = document.createElement("td");
+      curriculum.educacionProfesional.forEach((educacion) => {
+        const educacionProfesionalDiv = document.createElement("div");
+        educacionProfesionalDiv.textContent = `
+          Institución: ${educacion.institucion}
+          Título: ${educacion.titulo}
+          Tiempo: ${educacion.tiempo}
+        `;
+        educacionProfesionalTd.appendChild(educacionProfesionalDiv);
+      });
+      fila.appendChild(educacionProfesionalTd);
+
+      // Resumen profesional
+      const resumenProfesionalTd = document.createElement("td");
+      resumenProfesionalTd.textContent = `
+        Sistemas: ${curriculum.resumenProf.sistemas}
+        Producciones: ${curriculum.resumenProf.producciones}
+        Administraciones: ${curriculum.resumenProf.administraciones}
+      `;
+      fila.appendChild(resumenProfesionalTd);
+
+      // Experiencia laboral
+      const experienciaLaboralTd = document.createElement("td");
+      curriculum.experienciaLab.forEach((experiencia) => {
+        const experienciaLaboralDiv = document.createElement("div");
+        experienciaLaboralDiv.textContent = `
+          Empresa: ${experiencia.empresa}
+          Cargo: ${experiencia.cargo}
+          Tiempo: ${experiencia.tiempo}
+          Descripción: ${experiencia.descripcion}
+        `;
+        experienciaLaboralTd.appendChild(experienciaLaboralDiv);
+      });
+      fila.appendChild(experienciaLaboralTd);
+
+      // Habilidades
+      const habilidadesTd = document.createElement("td");
+      habilidadesTd.textContent = `
+        Habilidades Técnicas: ${curriculum.habilidades.tecnicas}
+        Habilidades Blandas: ${curriculum.habilidades.blandas}
+      `;
+      fila.appendChild(habilidadesTd);
+
+      tablaBody.appendChild(fila);
+      tablaCurriculum.style.display = "block";
+    }
+    // EDICION
+    let curriculum = JSON.parse(localStorage.getItem('curriculum'));
+    // Mostrar la información de contacto
+    document.getElementById('nombreCompleto').textContent = curriculum.infoContacto.nombreCompleto;
+    document.getElementById('mail').textContent = curriculum.infoContacto.mail;
+    document.getElementById('celular').textContent = curriculum.infoContacto.celular;
+    document.getElementById('nacionalidad').textContent = curriculum.infoContacto.nacionalidad;
+    document.getElementById('estadoCivil').textContent = curriculum.infoContacto.estadoCivil;
+    document.getElementById('direccion').textContent = curriculum.infoContacto.direccion;
+    // Mostrar la educación básica
+    let educacionBasicaHTML = '';
+    curriculum.educacionBasica.forEach(function (educacion) {
+      educacionBasicaHTML += '<li>';
+      educacionBasicaHTML += '<p><strong>Institución:</strong> ' + educacion.institucion + '</p>';
+      educacionBasicaHTML += '<p><strong>Curso:</strong> ' + educacion.curso + '</p>';
+      educacionBasicaHTML += '<p><strong>Periodo:</strong> ' + educacion.tiempo + '</p>';
+      educacionBasicaHTML += '</li>';
+    });
+    document.getElementById('educacionBasica').innerHTML = educacionBasicaHTML;
+    // Mostrar la educación profesional
+    let educacionProfesionalHTML = '';
+    curriculum.educacionProfesional.forEach(function (educacion) {
+      educacionProfesionalHTML += '<li>';
+      educacionProfesionalHTML += '<p><strong>Institución:</strong> ' + educacion.institucion + '</p>';
+      educacionProfesionalHTML += '<p><strong>Título:</strong> ' + educacion.titulo + '</p>';
+      educacionProfesionalHTML += '<p><strong>Periodo:</strong> ' + educacion.tiempo + '</p>';
+      educacionProfesionalHTML += '</li>';
+    });
+    document.getElementById('educacionProfesional').innerHTML = educacionProfesionalHTML;
+    // Mostrar el resumen profesional
+    document.getElementById('sistemas').textContent = curriculum.resumenProf.sistemas;
+    document.getElementById('producciones').textContent = curriculum.resumenProf.producciones;
+    document.getElementById('administraciones').textContent = curriculum.resumenProf.administraciones;
+    // Mostrar la experiencia laboral
+    let experienciaLabHTML = '';
+    curriculum.experienciaLab.forEach(function (experiencia) {
+      experienciaLabHTML += '<li>';
+      experienciaLabHTML += '<p><strong>Empresa:</strong> ' + experiencia.empresa + '</p>';
+      experienciaLabHTML += '<p><strong>Cargo:</strong> ' + experiencia.cargo + '</p>';
+      experienciaLabHTML += '<p><strong>Periodo:</strong> ' + experiencia.tiempo + '</p>';
+      experienciaLabHTML += '<p><strong>Descripción:</strong> ' + experiencia.descripcion + '</p>';
+      experienciaLabHTML += '</li>';
+    });
+    document.getElementById('experienciaLab').innerHTML = experienciaLabHTML;
+    // Mostrar las habilidades
+    document.getElementById('habilidadesTecnicas').textContent = curriculum.habilidades.tecnicas;
+    document.getElementById('habilidadesBlandas').textContent = curriculum.habilidades.blandas;
+    function convertToWord() {
+      let html = document.documentElement.innerHTML;
+      let blob = new Blob([html], { type: "application/msword" });
+      let link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "Curriculum.doc";
+      link.click();
+    }
+  </script>
+</body>
+</html>

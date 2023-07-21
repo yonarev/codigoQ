@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tipos de Artículos</title>
+    <style>
+        *{
+            font-size: 4vw;
+        }
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 1vw;
+            padding: 0;
+            
+            }
+
+            .container {
+            width: 100%;
+            height: 100%;
+            }
+            .edita{
+                background-color: green;
+            }
+            .elimina {
+                background-color: red;
+                color: white;
+            }
+    </style>
+    <script src="./js/libreria.js"></script>
+    <script>
+        function cargaTipos(){
+            document.getElementById('tiposTable').value="";
+            let tiposArt = JSON.parse(localStorage.getItem("tiposArt")) || [];
+            tiposArt.forEach(function(tipo) {
+                        addRowToTable(tipo);
+            });
+        }
+
+        function addTipo() {
+            let tipoInput = document.getElementById("tipoInput");
+            let nuevoTipo = tipoInput.value.trim();
+            
+            if (nuevoTipo === "") {
+                alert("Por favor, ingresa un tipo de artículo válido.");
+                return;
+            }
+            
+            let tiposArt = JSON.parse(localStorage.getItem("tiposArt")) || [];
+            let tipoExistente = tiposArt.find(function(tipo) {
+                return tipo.tipo.toLowerCase() === nuevoTipo.toLowerCase();
+            });
+            
+            if (tipoExistente) {
+                alert("El tipo de artículo ya existe.");
+                return;
+            }
+            let fecha = getCurrentDate();
+            let hora = getCurrentTime();
+            let idTipo =  generateID()
+            let tipoObj = {
+                fecha: fecha,
+                hora: hora,
+                idTipo: idTipo,
+                tipo: nuevoTipo
+            };
+            tiposArt.push(tipoObj);
+            localStorage.setItem("tiposArt", JSON.stringify(tiposArt));
+            ordenarDatosTipos()
+            addRowToTable(tipoObj);
+            alert('se grabo el nuevo tipo: '+nuevoTipo)
+            tipoInput.value = "";
+        }
+        function deleteTipo(idTipo) {
+            let tiposArt = JSON.parse(localStorage.getItem("tiposArt")) || [];
+            // VALIDA
+            let tipoEncontrado=tiposArt.filter(function(tipo){
+                return tipo.idTipo == idTipo;
+            });
+            let tipoElimina=tipoEncontrado[0].tipo
+            let confirma=confirm('? Seguro de eliminar el tipo: '+tipoElimina)
+            if (!confirma){
+                return
+            }
+            // FILTRO SIN EL TIPO
+            tiposArt = tiposArt.filter(function(tipo) {
+                return tipo.idTipo !== idTipo;
+            });
+            // ACTUALIZA
+            localStorage.setItem("tiposArt", JSON.stringify(tiposArt));
+            document.getElementById(idTipo).remove();
+        }
+        function editTipo(idTipo) {
+            let tipoRow = document.getElementById(idTipo);
+            
+            let tipoInput = document.createElement("input");
+            tipoInput.value = tipoRow.cells[1].innerText;
+            
+            let saveButton = document.createElement("button");
+            saveButton.innerHTML = "Guardar";
+            saveButton.addEventListener("click", function() {
+                updateTipo(idTipo, tipoInput.value);
+            });
+            
+            let cancelButton = document.createElement("button");
+            cancelButton.innerHTML = "Cancelar";
+            cancelButton.addEventListener("click", function() {
+                cancelEditTipo(idTipo, tipoRow.cells[1].innerText);
+            });
+            
+            tipoRow.cells[1].innerHTML = "";
+            tipoRow.cells[1].appendChild(tipoInput);
+            tipoRow.cells[2].innerHTML = "";
+            tipoRow.cells[2].appendChild(saveButton);
+            tipoRow.cells[2].appendChild(cancelButton);
+        }
+        function updateTipo(idTipo, nuevoTipo) {
+            let tiposArt = JSON.parse(localStorage.getItem("tiposArt")) || [];
+            let tipoExistente = tiposArt.find(function(tipo) {
+                return tipo.tipo.toLowerCase() === nuevoTipo.toLowerCase() && tipo.idTipo !== idTipo;
+            });
+            if (tipoExistente) {
+                alert("El tipo de artículo ya existe.");
+                return;
+            }
+            tiposArt.forEach(function(tipo) {
+                if (tipo.idTipo === idTipo) {
+                    tipo.tipo = nuevoTipo;
+                }
+            });
+            localStorage.setItem("tiposArt", JSON.stringify(tiposArt));
+            let tipoRow = document.getElementById(idTipo);
+            tipoRow.cells[1].innerHTML = nuevoTipo;
+            tipoRow.cells[2].innerHTML = '<button onclick="editTipo(\'' + idTipo + '\')">Editar</button> ' +
+            '<button onclick="deleteTipo(\'' + idTipo + '\')">Eliminar</button>';
+        }
+        function addRowToTable(tipo) {
+            let table = document.getElementById("tiposTable");
+            let row = table.insertRow(-1);
+            row.id = tipo.idTipo;
+            let idTipoCell = row.insertCell(0);
+            idTipoCell.innerHTML = tipo.idTipo;
+            let tipoCell = row.insertCell(1);
+            tipoCell.innerHTML = tipo.tipo;
+            let actionsCell = row.insertCell(2);
+            actionsCell.innerHTML = '<button class="edita" onclick="editTipo(\'' + tipo.idTipo + '\')">Editar</button> ' +
+                                    '<button class="elimina"  onclick="deleteTipo(\'' + tipo.idTipo + '\')">Eliminar</button>';
+        }
+        function borraDatosTabla(){
+                // Obtén el elemento de la tabla por su id
+                let table = document.getElementById("tiposTable");
+                // Obtén todas las filas de la tabla
+                let rows = table.getElementsByTagName("tr");
+                // Elimina todas las filas, excepto la primera (encabezado)
+                while (rows.length > 1) {
+                    table.deleteRow(1);
+                }
+            }
+        function presentaTipos(){
+            borraDatosTabla();
+            let tiposArt = JSON.parse(localStorage.getItem("tiposArt")) || [];
+            tiposArt.forEach(function(tipo) {
+                addRowToTable(tipo);
+            });
+        }
+        function ordenarDatosTipos() {
+            // Obtener los datos del local storage
+            let tiposArt = JSON.parse(localStorage.getItem('tiposArt'));
+            // Ordenar los datos por 'tipo'
+            tiposArt.sort(function(a, b) {
+                return a.tipo.localeCompare(b.tipo);
+            });
+            // Almacenar los datos ordenados en el local storage
+            localStorage.setItem('tiposArt', JSON.stringify(tiposArt));
+            alert('Los tipos estan ordenados')
+        }
+    </script>
+</head>
+<body>
+    <h1>Tipos de Artículos</h1>
+    <label for="tipoInput">Nuevo Tipo:</label>
+    <input type="text" id="tipoInput">
+    <button onclick="addTipo()">Agregar</button>
+    <button onclick="ordenarDatosTipos();presentaTipos()">Ordenar</button>
+    <br>
+    <table id="tiposTable">
+        <tr>
+            <th>IdTipo</th>
+            <th>Tipo</th>
+            <th>Acciones</th>
+        </tr>
+    </table>
+    <script>
+        cargaTipos()
+    </script>
+</body>
+</html>
+

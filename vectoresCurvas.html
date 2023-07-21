@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Líneas curvadas que se curvan longitudinalmente</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: black;
+    }
+
+    canvas {
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <script>
+    // Configuración del lienzo
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+    var width = canvas.width = window.innerWidth;
+    var height = canvas.height = window.innerHeight;
+
+    // Crear un objeto para representar una línea curvada
+    function CurvedLine(x, y, radius, startAngle, endAngle) {
+      this.x = x;
+      this.y = y;
+      this.radius = radius;
+      this.startAngle = startAngle;
+      this.endAngle = endAngle;
+      this.angle = startAngle;
+      this.curveAmount = 0;
+
+      this.update = function() {
+        this.angle += 0.02;
+        this.curveAmount = Math.sin(this.angle) * 50;
+      };
+
+      this.draw = function() {
+        ctx.strokeStyle = "#FFFFFF";
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, this.startAngle + this.curveAmount, this.endAngle - this.curveAmount);
+        ctx.stroke();
+      };
+    }
+
+    // Crear un array de líneas curvadas
+    var curvedLines = [];
+    for (var i = 0; i < 10; i++) {
+      var radius = Math.random() * 100 + 50;
+      var curvedLine = new CurvedLine(width / 2, height / 2, radius, 0, Math.PI * 2);
+      curvedLines.push(curvedLine);
+    }
+
+    // Función de animación
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+
+      for (var i = 0; i < curvedLines.length; i++) {
+        var curvedLine = curvedLines[i];
+        curvedLine.update();
+        curvedLine.draw();
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    // Iniciar la animación
+    animate();
+  </script>
+</body>
+</html>

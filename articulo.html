@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ingresando Artículos</title>
+    <style>
+       .containerArticulos {
+        width: 99vw;
+        max-width: 100vw;
+        margin: 0 auto;
+        padding: 1vw;
+        box-sizing: border-box;
+        }
+        #articuloInput,#tipoInput{
+            width: 60vw;
+            font-size: 6vw;
+            background-color: rgb(193, 184, 184);
+        }
+        #btnAddTipo{
+            font-size: 6vw;
+            border-radius: 2vw;
+            /* width: 12vw; */
+        }
+        table {
+            justify-content: center;
+            width: 96vw;
+            font-size: 2vw;
+        }
+        input,button{
+            font-size: 2vw;
+        }
+        #tipoInput{
+            background-color: darkslategray;
+            text-align: center;
+        }
+        .agrega{
+            background-color: green;
+            border-radius: 1vw;
+        }
+    </style>
+    <script src="./js/libreria.js"></script>
+    <script>
+        let tipoFiltro = ""; // letiable global para almacenar el tipo seleccionado
+        function cargaArticulos(){
+            cargarTiposArticulos();
+            cargarTablaArticulos();
+            document.getElementById('articuloInput').select();
+            document.getElementById('articuloInput').focus();
+        }
+        function presentaTabla(){
+            borraTabla('tablaArticulos');
+            cargaArticulos()
+        }
+        function agregarArticulo() {
+            let articulo = document.getElementById("articuloInput").value;
+            let tipo = document.getElementById("tipoInput").value;
+            // Validar si el artículo ya existe
+            let articulos = JSON.parse(localStorage.getItem("articulos")) || [];
+            if (articulos.some(item => item.articulo === articulo)) {
+                alert("El artículo ya existe. Introduce un nombre diferente.");
+                document.getElementById('articuloInput').select();
+                document.getElementById('articuloInput').focus();
+                return;
+            }
+            // Obtener la fecha y hora actual
+            let fechaActual = obtenerFechaActual();
+            let horaActual = obtenerHoraActual();
+            // Generar el ID del artículo
+            let idArticulo = generateID();
+            // Obtener los tipos de artículos
+            let tiposArt = JSON.parse(localStorage.getItem("tiposArt")) || [];
+
+            // Obtener el ID del tipo seleccionado
+            let idTipo = "";
+            let tipoSeleccionado = tiposArt.find(item => item.tipo === tipo);
+            if (tipoSeleccionado) {
+                idTipo = tipoSeleccionado.idTipo;
+            }
+            // Crear el nuevo artículo
+            let nuevoArticulo = {
+                fecha: fechaActual,
+                hora: horaActual,
+                idArticulo: idArticulo,
+                tipo: tipo,
+                idTipo: idTipo,
+                articulo: articulo
+            };
+            // Agregar el nuevo artículo a la lista
+            articulos.push(nuevoArticulo);
+            // Guardar la lista de artículos en el Local Storage
+            localStorage.setItem("articulos", JSON.stringify(articulos));
+            alert('se ingreso el articulo: '+articulo +' Tipo: '+tipo)
+            ordenarDatosArt()
+            // Actualizar la tabla
+            agregarFilaTabla(nuevoArticulo);
+            // Limpiar los campos de entrada
+            document.getElementById("articuloInput").value = "";
+            document.getElementById("articuloInput").select();
+            document.getElementById("articuloInput").focus();
+        }
+        function obtenerFechaActual() {
+            let fecha = new Date();
+            let dia = fecha.getDate().toString().padStart(2, "0");
+            let mes = (fecha.getMonth() + 1).toString().padStart(2, "0");
+            let anio = fecha.getFullYear();
+            return dia + "/" + mes + "/" + anio;
+        }
+        function obtenerHoraActual() {
+            let fecha = new Date();
+            let horas = fecha.getHours().toString().padStart(2, "0");
+            let minutos = fecha.getMinutes().toString().padStart(2, "0");
+            let segundos = fecha.getSeconds().toString().padStart(2, "0");
+            return horas + ":" + minutos + ":" + segundos;
+        }
+        function cargarTiposArticulos() {
+            let tiposArt = JSON.parse(localStorage.getItem("tiposArt")) || [];
+            let tipoSelect = document.getElementById("tipoInput");
+
+            tiposArt.forEach(function (tipo) {
+                let option = document.createElement("option");
+                option.text = tipo.tipo;
+                tipoSelect.add(option);
+            });
+
+            tipoSelect.addEventListener("change", function () {
+                tipoFiltro = tipoSelect.value;
+                filtrarArticulosPorTipo();
+            });
+        }
+        function cargarTablaArticulos() {
+            let articulos = JSON.parse(localStorage.getItem("articulos")) || [];
+            let tabla = document.getElementById("tablaArticulos");
+
+            articulos.forEach(function (articulo) {
+                agregarFilaTabla(articulo);
+            });
+        }
+        function agregarFilaTabla(articulo) {
+            let tabla = document.getElementById("tablaArticulos");
+            let fila = tabla.insertRow();
+
+            let columnaFecha = fila.insertCell();
+            columnaFecha.textContent = articulo.fecha;
+
+            let columnaHora = fila.insertCell();
+            columnaHora.textContent = articulo.hora;
+
+            let columnaIdArticulo = fila.insertCell();
+            columnaIdArticulo.textContent = articulo.idArticulo;
+            
+            let columnaIdTipo = fila.insertCell();
+            columnaIdTipo.textContent = articulo.idTipo;
+            
+            let columnaTipo = fila.insertCell();
+            columnaTipo.textContent = articulo.tipo;
+
+            let columnaNombreArticulo = fila.insertCell();
+            columnaNombreArticulo.textContent = articulo.articulo;
+
+            let columnaEliminar = fila.insertCell();
+            let botonEliminar = document.createElement("button");
+            botonEliminar.textContent = "Eliminar";
+            botonEliminar.style.backgroundColor ='red';
+            botonEliminar.style.color='white';
+            botonEliminar.style.borderRadius='1vw';
+            botonEliminar.style.fontSize='1.5vw'
+            botonEliminar.addEventListener("click", function () {
+                eliminarArticulo(tabla, articulo.idArticulo);
+            });
+            columnaEliminar.appendChild(botonEliminar);
+        }
+        function eliminarArticulo(tabla, idArticulo) {
+            // Eliminar el artículo de la tabla
+            for (let i = 0; i < tabla.rows.length; i++) {
+                let fila = tabla.rows[i];
+                let id = fila.cells[2].textContent; // Obtener el ID Artículo de la fila
+                if (id === idArticulo) {
+                    tabla.deleteRow(i);
+                    break;
+                }
+            }
+
+            // Eliminar el artículo del Local Storage
+            let articulos = JSON.parse(localStorage.getItem("articulos")) || [];
+            articulos = articulos.filter(function (articulo) {
+                return articulo.idArticulo !== idArticulo;
+            });
+            localStorage.setItem("articulos", JSON.stringify(articulos));
+        }
+        function filtrarArticulosPorTipo() {
+            let articulos = JSON.parse(localStorage.getItem("articulos")) || [];
+            let tabla = document.getElementById("tablaArticulos");
+
+            // Limpiar la tabla
+            tabla.innerHTML = "";
+
+            articulos.forEach(function (articulo) {
+                if (tipoFiltro === "" || articulo.tipo === tipoFiltro) {
+                    agregarFilaTabla(articulo);
+                }
+            });
+        }
+        function ordenarDatosArt() {
+            // Obtener los datos del local storage
+            let articulos = JSON.parse(localStorage.getItem('articulos'));
+            // Ordenar los datos por 'articulo' y 'tipo'
+            articulos.sort(function(a, b) {
+              // Ordenar por 'articulo'
+              if (a.articulo !== b.articulo) {
+                return a.articulo.localeCompare(b.articulo);
+              }
+              // Ordenar por 'tipo'
+              return a.tipo.localeCompare(b.tipo);
+            });
+            // Almacenar los datos ordenados en el local storage
+            localStorage.setItem('articulos', JSON.stringify(articulos));
+            alert('Los articulos ya estan ordenados')
+        }
+    </script>
+</head>
+<body onload="cargaArticulos()">
+<div class="containerArticulos">
+    <h1>Nuevo Articulo</h1>
+    <select id="tipoInput"></select>
+    <input type="text" id="articuloInput" placeholder="Ingrese nuevo articulo">
+    <button id="btnAddTipo" class="agrega" onclick="agregarArticulo()">Agregar</button>
+    <button id="btnOrdArt" class="Ordena" onclick="ordenarDatosArt();presentaTabla()">Ordenar</button>
+    <table id="tablaArticulos" border="1">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>ID </th>
+                <th>ID Tipo</th>
+                <th>Tipo</th>
+                <th>Artículo</th>
+                <th>Eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Las filas se agregarán dinámicamente aquí -->
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edición de Cuentas Retenidas</title>
+    <style>
+      .container {
+        width: 80vw;
+        margin: 0 auto;
+        padding: 1vw;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+
+      h1 {
+        text-align: center;
+      }
+
+      .cuenta-container {
+        margin-bottom: 20px;
+      }
+
+      .form-container {
+        margin-top: 1vw;
+      }
+
+      h2 {
+        margin-bottom: 1vw;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 1vw;
+      }
+
+      input[type="text"],
+      select {
+        width: 80%;
+        padding: 1vw;
+        margin-bottom: 1vw;
+      }
+
+      button {
+        width: 100%;
+        padding: 1vw;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .btnRed {
+        background-color: red;
+        color: white;
+      }
+
+      .btnGreen {
+        background-color: green;
+        color: white;
+      }
+
+      .message {
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 5px;
+      }
+
+      .success-message {
+        background-color: #c9fbd8;
+        color: #26a65b;
+      }
+
+      .error-message {
+        background-color: #f8d7da;
+        color: #dc3545;
+      }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="cuenta-container">
+            <h2>Cuentas Retenidas</h2>
+            <select id="selectCuentas" onchange="seleccionarCuenta()"></select>
+        </div>
+        <div class="form-container">
+            <label for="editarCuenta">Cuenta R:</label>
+            <input type="text" id="editarCuenta">
+            <br>
+            <label for="editarValor">Valor R:</label>
+            <input type="text" id="editarValor">
+            <br>
+            <button class="btnGreen" onclick="grabarCuentaR()">Grabar Cuenta R</button>
+            <br>
+            <button class="btnRed" onclick="eliminarCuentaR()">Eliminar Cuenta R</button>
+        </div>
+        <div class="cuenta-info-container">
+            <label for="fecha">Fecha:</label>
+            <span id="fecha"></span>
+            <br>
+            <label for="hora">Hora:</label>
+            <span id="hora"></span>
+        </div>
+    </div>
+    <script>
+        let cuentasRetenidas = [];
+        // Verificar si hay datos en el localStorage
+        const cuentasRetenidasData = localStorage.getItem('cuentasRetenidas');
+        if (cuentasRetenidasData) {
+            cuentasRetenidas = JSON.parse(cuentasRetenidasData);
+        }
+        // Función para mostrar las cuentas en el select
+        function mostrarCuentas() {
+            const selectCuentas = document.getElementById('selectCuentas');
+            selectCuentas.innerHTML = '';
+            cuentasRetenidas.forEach(cuenta => {
+                const option = document.createElement('option');
+                option.value = cuenta.idCuentaR;
+                option.text = cuenta.cuentaR;
+                selectCuentas.appendChild(option);
+            });
+        }
+        // Función para seleccionar una cuenta y mostrar sus campos
+        function seleccionarCuenta() {
+            const selectCuentas = document.getElementById('selectCuentas');
+            const cuentaSeleccionada = selectCuentas.options[selectCuentas.selectedIndex].value;
+            const cuenta = cuentasRetenidas.find(cuenta => cuenta.idCuentaR === cuentaSeleccionada);
+            if (cuenta) {
+                document.getElementById('editarCuenta').value = cuenta.cuentaR;
+                document.getElementById('editarValor').value = cuenta.valorR;
+                document.getElementById('fecha').textContent = cuenta.fecha;
+                document.getElementById('hora').textContent = cuenta.hora;
+            }
+        }
+        // Función para grabar una nueva cuenta en el almacenamiento local
+        function grabarCuentaR() {
+            const nuevaCuentaR = document.getElementById('editarCuenta').value;
+            const nuevoValorR = document.getElementById('editarValor').value;
+            const fechaActual = new Date();
+            const dia = ("0" + fechaActual.getDate()).slice(-2);
+            const mes = ("0" + (fechaActual.getMonth() + 1)).slice(-2);
+            const anio = fechaActual.getFullYear();
+            const hora = ("0" + fechaActual.getHours()).slice(-2);
+            const minutos = ("0" + fechaActual.getMinutes()).slice(-2);
+            const segundos = ("0" + fechaActual.getSeconds()).slice(-2);
+            const idCuentaR = dia + mes + anio + hora + minutos + segundos;
+            const nuevaCuenta = {
+                fecha: dia + '/' + mes + '/' + anio,
+                hora: hora + ':' + minutos + ':' + segundos,
+                idCuentaR,
+                cuentaR: nuevaCuentaR,
+                valorR: nuevoValorR
+            };
+            cuentasRetenidas.push(nuevaCuenta);
+            // Actualizar localStorage
+            localStorage.setItem('cuentasRetenidas', JSON.stringify(cuentasRetenidas));
+            // Limpiar los campos
+            document.getElementById('editarCuenta').value = '';
+            document.getElementById('editarValor').value = '';
+            // Actualizar las cuentas mostradas
+            mostrarCuentas();
+        }
+        // Función para eliminar la cuenta seleccionada del almacenamiento local
+        function eliminarCuentaR() {
+            const selectCuentas = document.getElementById('selectCuentas');
+            const cuentaSeleccionada = selectCuentas.options[selectCuentas.selectedIndex].value;
+            cuentasRetenidas = cuentasRetenidas.filter(cuenta => cuenta.idCuentaR !== cuentaSeleccionada);
+            // Actualizar localStorage
+            localStorage.setItem('cuentasRetenidas', JSON.stringify(cuentasRetenidas));
+            // Limpiar los campos
+            document.getElementById('editarCuenta').value = '';
+            document.getElementById('editarValor').value = '';
+            document.getElementById('fecha').textContent = '';
+            document.getElementById('hora').textContent = '';
+            // Actualizar las cuentas mostradas
+            mostrarCuentas();
+        }
+        // Inicializar la lista de cuentas en el select y mostrar la cuenta seleccionada
+        mostrarCuentas();
+        seleccionarCuenta();
+    </script>
+</body>
+</html>

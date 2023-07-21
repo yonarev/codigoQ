@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Texto a Voz</title>
+</head>
+<body>
+  <h1>Texto a Voz</h1>
+
+  <textarea id="texto" rows="4" cols="50"></textarea>
+  <br>
+  <button onclick="convertirTextoAVoz()">Convertir a Voz</button>
+  <button onclick="detenerTextoAVoz()">Detener</button>
+  <button onclick="pausarTextoAVoz()">█</button>
+
+  <script>
+    var synthesis = window.speechSynthesis;
+    var utterance;
+    function convertirTextoAVoz() {
+      var texto = document.getElementById("texto").value;
+
+      // Verificar si el navegador es compatible con la síntesis de voz
+      if ('speechSynthesis' in window) {
+
+        // Detener la síntesis de voz anterior, si la hay
+        detenerTextoAVoz();
+
+        // Crear un nuevo objeto SpeechSynthesisUtterance
+        utterance = new SpeechSynthesisUtterance(texto);
+
+        // Obtener las voces disponibles
+        var voces = synthesis.getVoices();
+
+        // Buscar una voz masculina
+        var vozMasculina = voces.find(function(voz) {
+          return voz.name === "Voz masculina"; // Cambiar por el nombre de la voz masculina deseada
+        });
+
+        if (vozMasculina) {
+          utterance.voice = vozMasculina;
+        } else {
+          console.warn("No se encontró una voz masculina.");
+        }
+
+        // Leer el texto en voz alta
+        synthesis.speak(utterance);
+      } else {
+        alert("Lo siento, tu navegador no soporta la síntesis de voz.");
+      }
+    }
+    function detenerTextoAVoz() {
+      if (synthesis && synthesis.speaking) {
+        synthesis.cancel();
+      }
+    }
+    function pausarTextoAVoz() {
+      if (synthesis && synthesis.speaking) {
+        synthesis.pause();
+      }
+    }
+  </script>
+</body>
+</html>

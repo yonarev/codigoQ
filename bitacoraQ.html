@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>BITACORA</title>
+    <link rel="icon" type="image/png" href="./IMG/editar.png">
+    <link rel="stylesheet" href="./CSS/bitacora.css">
+</head>
+<body>
+	<h1>BITACORA</h1>
+    <form class="formulario">
+        <p id="textoDelDia"></p>
+        <!-- CALENDARIO -->
+        <div class="tempo">
+            <input type="date" id="fechaBit" name="fechaBit" value="" class="form-field date"><br><br>
+            <p><span id="horaBit"></span></p>
+        </div>
+        <p><span id="horaGrabaBit"></span></p>
+        <!-- <p id="fechaBit"></p> -->
+        <section class="botonera">
+                <button type="button" onclick="guardarNota()">Guardar</button>
+                <div class="botonesJson">
+                    <button onclick="leerJSON()">Leer JSON</button>
+                    <button id="btnGuardar" onclick="guardarBitacora()">Guardar JSON</button>
+                    <input type="file" id="archivoJSON">
+                </div>
+                <div>
+                    <button id="btnQ" onclick="cargarPagina('./cuentaQ.html')">Q</button>
+                    <button id="btnB" onclick="cargarPagina('./localStorage.html')">BD</button>
+                </div>
+                <br>
+        </section>
+        <textarea id="nota" name="nota" rows="5" cols="50"></textarea><br><br>
+        <P>para fecha F3 Y para grabar F2</P>
+
+	</form>
+    <script src="./JS/libreria.js"></script>
+<script src="./js/localstorage.js"></script>
+  <script src="./JS/bitacora.js"></script>
+
+</body>
+</html>

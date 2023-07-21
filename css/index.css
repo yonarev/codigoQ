@@ -1,0 +1,591 @@
+*{
+   margin: 0 0 0;
+   padding: 0 0 0;
+   text-align: right;
+}
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to left, #3a3a8f, #87CEFA);
+}
+form {
+    display: flex;
+    flex-direction: column;
+    padding-top: 2vw;
+}
+.container {
+    height: auto;
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+}
+/* BOTON SET FECHA HOY */
+#btnSetHoy{
+    width: auto;
+    font-size: 15vw !important;
+}
+/*---------------------------- SECCION ENCABEZADOS */
+.encabezados{
+    margin: 0 auto;
+}
+#tituloBit{
+    font-size: 6vw;
+    margin: 0 auto;
+    justify-content: center;
+    align-content: center;
+    align-items:center;
+}
+#textoDelDia{
+    font-size: 5vw;
+    color: #595353;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+/* ---------------------------- SECCION FECHA HORA */
+.tempo{
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-items: baseline;
+    margin: 0 auto;
+    font-size: 5vw;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    height: 10vw;
+  }
+#fechaBit{
+    width: 36vw;
+    height:7.8vw;
+    font-size: 5vw;
+    font-weight: bold;
+    text-align: right;
+    background-color: #000000;
+    color: white;
+}
+#horaBit {
+    width: 20vw;
+    height:4vw;
+    background-color: #000000;
+    color: white;
+    padding: 1vw;
+    font-size: 5vw;
+}
+#horaGrabaBit{
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
+    color: #000000;
+    font-size: 4.2vw;
+}
+/* --------------------------------SECCION BOTONERA */
+.botonera{
+    margin: 0  auto;
+}
+.botonesGraban{
+    border-style: groove;
+    text-align: center;
+}
+#btnGrabaL,#btnGuardar, #btnGrabaT{
+    background-color: rgb(32, 190, 32);
+    width: 27vw !important;
+    height: 8vw !important;
+    text-align: center !important;
+}
+#btnGrabaL{
+    background-color: rgb(22, 247, 56);
+}
+#btnGrabaL:hover{
+    background-color: rgb(207, 255, 49);
+    color: #000000;
+    font-weight: bold;
+
+}
+#btnGuardar{
+    background-color: rgb(52, 75, 228);
+}
+#btnGuardar:hover{
+    background-color: rgb(109, 128, 249);
+    color: #000000;
+    font-weight: bold;
+}
+#btnGrabaT{
+    background-color: rgb(255, 255, 41);
+    color: #000000;
+    font-weight: bold;
+}
+#btnGrabaT:hover{
+    background-color: #f8fa77;
+    color: #000000;
+    font-weight: bold;
+}
+form button {
+  font-size: 5vw;
+  padding: vw 2vw;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 1vw;
+  border-style:groove;
+  cursor: pointer;
+}
+/* form button:hover {
+  background-color: #f0f6f0;
+} */
+.seccionJson{
+    display: flex;
+}
+#btnLeeJson{
+    width: 26vw !important;
+    height: 8vw !important;
+    text-align: center !important;
+}
+#btnLeeJson:hover{
+    background-color: #f68153;
+    color: black;
+    font-weight: bold;
+}
+#archivoJSON{
+    font-size: 2vw;
+    width: 4vw;
+}
+
+/*--------------------------- SECCION TEXTAREA */
+#nota{
+  font-size: 6vw;
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+}
+form textarea {
+  height: 90vw;
+  width: 99vw;
+}
+/* ---------------------------- BITACORA */
+.formularioBitacora {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 90vw;
+  margin: 0 auto;
+}
+.formularioBitacora input[type="date"],
+.formularioBitacora textarea {
+  width: 100%;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+#textoTeclas{
+   font-size: 3vw; 
+   text-align: center;
+}
+/* ------------------------------------- ASUNTOS */
+.admiAsunto {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+}
+.admiAsunto > * {
+    flex: 1;
+    min-width: 0;
+}
+#nuevoAsunto{
+    font-size: 7vw;
+    width: 40vw;
+    height: 4vw;
+    margin-right: 1vw; /* Espacio entre el select y el input */
+    margin-top: 0;
+    margin-bottom: 0;
+}
+#asunto {
+    width: 95vw ;
+    height: 22vw; 
+    font-size: 6w;
+}
+#listaAsuntos{
+    /* line-height: 2; */
+    width: 47vw !important;
+    /* width: auto; */
+    height: auto;
+    background-color: #5ff269;
+    padding-top: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 3.4vw;
+    font-weight: bold;
+    text-align: center;
+    justify-content: center;
+}
+#nuevoAsunto{
+    font-size: 4vw;
+}
+#detalleAsunto{
+    height: 21vw;
+    line-height: 1;
+    width: 95vw;
+    background-color: #010101;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 4.5vw;
+    font-weight: 100;
+    text-align: center;
+}
+.botoneraTrata{
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: rgb(131, 140, 191);
+    width: 90%;
+}
+.botoneraTrata>button{
+    width: auto;
+    background-color: rgb(84, 228, 136);
+    font-size: 5vw;
+    padding: 1vw;
+    margin: 1vw;
+
+    border-radius: 2vw;
+    list-style: none;
+    border-style: none;
+    cursor: pointer;
+}
+.botoneraAsuntos{
+    flex-wrap: wrap;
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: rgb(131, 140, 191);
+    width: 99%;
+}
+.botoneraAsuntos>button{
+    background-color: rgb(84, 228, 136);
+    width: auto;
+    font-size: 5vw;
+    padding: 1vw;
+    margin: 1vw;
+    border-radius: 2vw;
+    list-style: none;
+    border-style: none;
+    cursor: pointer; 
+}
+.seccionAsuntosJson{
+    background-color: rgb(2, 2, 2);
+    flex-wrap: wrap;
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    /* width: 99%; */
+    width: auto;
+}
+.seccionAsuntosJson>button{
+    background-color: rgb(84, 228, 136);
+    width: auto;
+    font-size: 5w;
+    font-weight: bold;
+    padding: 1vw;
+    margin: 1vw;
+    border-radius: 1vw;
+    list-style: none;
+    border-style: none;
+    cursor: pointer; 
+}
+.inputAsuntos{
+    font-size: 5vw !important;
+}
+
+/*-------------------------------------- CUENTA Q */
+#formularioCuentaQ{
+    background-color: #65c480;
+}
+.seccionEstadoCuenta {
+    background-color: #65c480;
+    align-content: center;
+    align-items: center;
+    text-align: center;
+    color: rgb(5, 5, 5);
+}
+#cuenta {
+    margin-top: 1%;
+    /* margin: 0 auto;
+    align-content: center;
+    text-align: center !important; */
+    margin-left: 2vw;
+    margin-right: 0vw;
+    padding-left: 1%;
+    border-radius: 4px;
+    font-size: 6vw;
+    width: 85vw;
+    background-color: #5b6365;
+    color: white;
+}
+.estadoQ{
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
+    padding-right: 12vw;
+    font-size: 6vw;
+    font-weight: bold;
+}
+.btnSelectores {
+  margin: 0,0,0;
+  width: 7vw;
+  background-color: #0fc543;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 5vw;
+  text-align: center;
+}
+.seccionTotales {
+    text-align: right;
+}
+/* ------------------- MOTIVOS */
+#motivo {
+    align-content: center;
+    padding-left: 1%;
+    margin-right: 0vw;
+    padding-left: 1%;
+    border-radius: 4px;
+    font-size: 6vw;
+    width: 82vw;
+    background-color: #5b6365;
+    color: white;
+}
+/*------------------ TRANSACCION */
+.seccionTransaccion{
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+}
+#elemento {
+    font-size: 8vw !important;
+    width: 90vw;
+    color: black !important;
+    padding-left: 0.1vw;
+}
+#cantidad {
+    width: 24vw !important;
+    text-align: right;
+    font-size: 8vw !important;
+    color: black;
+}
+#valor{
+    width: 64vw !important;
+    font-size: 8vw !important;
+    text-align: right;
+    margin-right: 5px;
+    color: black !important;
+}
+/* ---------------------- SIMULADOR */
+.seccionSimulaMontos{
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+    font-size: 7vw !important;
+    width: 90vw;
+    padding: 1vw ;
+    border-style: groove;
+    border-radius: 2vw;
+    background-color: rgb(172, 216, 105);
+}
+#total, #simulaIngreso, #simulaEgreso {
+    border: none;
+    font-size: 7vw !important;
+    font-weight: bold;
+    text-align: right;
+    width: 100%;
+    background-color: #d0f882;
+    color: black;
+}
+#simulaIngreso{
+    color: rgb(43, 0, 255);
+}
+#simulaEgreso{
+    color: rgb(255, 8, 0);
+}
+#btnSim{
+    width: 20vw;
+    text-align: center;
+    background-color: #23898f;
+
+}
+#btnReset{
+    width: 23vw;
+    text-align: center;
+    background-color: #eb612a;
+}
+/* ------------------BOTONERA TRANSACCION */
+.seccionBotonera{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+#btnMas,#btnMen,#btnBD{
+    width: 12vw;
+    height: 10vw;
+    margin: .5vw;
+    font-weight: bold;
+    font-size: 5vw;
+    border-radius: 6px;
+    text-align: center;
+}
+#btnMen{
+    background-color: #eb612a;
+}
+#btnBD{
+    width: 15vw !important;
+    background-color: #5b65d3;
+}
+/* TABLAS CUENTAS */
+#transaccion {
+    align-items: center;
+    background-color: #d0cbcb;
+}
+#transaccion select {
+    border-radius: 4px;
+    font-size: 1.5vw;
+    margin-right: 10px;
+}
+#transaccion input {
+    border-radius: 4px;
+    font-size: 1.5vw;
+    margin-bottom: 10px;
+}
+#tituloCuentas{
+    cursor: pointer;
+    text-align: center;
+    font-size: 6vw;
+}
+#formCuentas input {
+    font-size: 16px;
+    /* padding: 10px; */
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+#formCuentas label {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+#tablaCuentas {
+    background-color: #6ddc70;
+    border-collapse: collapse;
+    margin: 20px 0;
+    width: 100%;
+    text-align: rigth;
+    font-size: 5vw;
+}
+td {
+  text-align: rigth;
+  justify-content: right;
+  text-align: rigth;
+}
+#tablaCuentas td {
+  text-align: rigth;
+  border-bottom: 1px solid #ddd;
+}
+#tablaCuentas tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+/*-------------------- TABLA TRANSACIONES */
+#tituloTransacciones{
+    cursor: pointer;
+    font-size: 6vw;
+    text-align: center;
+}
+#tituloTransaccionesTodas{
+    cursor: pointer;
+    font-size: 6vw;
+    text-align: center;
+}
+#tablaTransacciones{
+  font-size: 2vw;
+}
+#tablaTransacciones th {
+  background-color: #4CAF50;
+  color: white;
+  text-align: right;
+}
+#tablaTransacciones td {
+    justify-content: right;
+    text-align: rigth;
+    border-bottom: 1px solid #ddd;
+}
+#tablaTransacciones tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+#botonera {
+    margin-top: 2vw;
+    margin: 1vw;
+    padding: 1em;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+#tablaTransacciones {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 50px;
+}
+#tablaTransacciones td, #tablaTransacciones th {
+    border: 1px solid #ddd;
+}
+#tablaTransacciones tr:nth-child(even){background-color: #f2f2f2;}
+
+#tablaTransacciones tr:hover {background-color: #ddd;}
+
+#tablaTransacciones th {
+  text-align: right;
+  background-color: #4CAF50;
+  color: white;
+}
+#tablaTransaccionesCuenta{
+  font-size: 2vw;
+}
+.seccionBtnQ{
+    text-align: center;;
+    width: auto;
+    background-color: #000000;
+}
+#btnQuenta, #btnQuentaHiden, #btnVer{
+    font-size: 5vw;
+    font-weight: bold;
+    margin-bottom: 0 auto;
+    background-color: #0fc543;
+    padding: 1vw;
+    border-style: none;
+    border-radius: 1vw;
+}
+#btnVer{
+   background-color: rgb(80, 78, 215);
+}
+#btnQuentaHiden{
+    background-color: orange;
+}
+.hidden {
+    display: none;
+}
+#clave{
+    font-size: 4vw;
+    font-weight: bold;
+    width: 25vw;
+    margin-bottom: 0 auto;
+    text-align: left;
+    /* background-color: #097f2a; */
+    padding: 1vw;
+    border-style: none;
+    border-radius: 1vw;
+}
+.noBoton{
+    font-size: 5vw;
+    width: auto;
+    background-color: #000000;
+    color: azure;
+    border-style: none;
+    border-radius: 7vw;
+    padding: 1vw;
+}

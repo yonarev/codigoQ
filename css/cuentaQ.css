@@ -1,0 +1,348 @@
+/* body {
+    margin-top: 1%;
+    padding-top: 1%;
+    font-family: Arial, sans-serif;
+    background-color:#a9b2a9;
+    font-size: 4vw;
+} */
+form{
+  background-color: #3cedb8;
+  text-align: right;
+}
+#btnQ{
+  background-color: blue !important;
+  color: rgb(250, 250, 250);
+  width: 10vw;
+  height: 10vw;
+  font-size: 6vw;
+  font-weight: bold;
+  border-radius: 1vw;
+}
+#btnBit{
+  background-color: rgb(184, 184, 63) !important;
+  color: rgb(5, 5, 5);
+  width: 11vw;
+  height: 11vw;
+  font-size: 6vw;
+  font-weight: bold;
+  border-radius: 1vw;
+}
+#btnGra{
+  background-color: rgb(237, 215, 25) !important;
+  color: rgb(5, 5, 5);
+  width: 21vw;
+  height: 11vw;
+  font-size: 6vw;
+  font-weight: bold;
+  border-radius: 1vw;
+}
+
+.btnSelectores {
+  margin: 0,0,0;
+  width: 7vw;
+  background-color: #0fc543;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 5vw;
+  text-align: center;
+}
+input{
+  font-size: 5vw !important;
+  color: rgb(253, 253, 253);
+}
+#cuenta {
+    margin-top: 1%;
+    align-content: center;
+    margin-left: 0vw;
+    margin-right: 0vw;
+    padding-left: 1%;
+    border-radius: 4px;
+    font-size: 6vw;
+    width: 85vw;
+    background-color: #5b6365;
+    color: white;
+}
+.seccionEstadoCuenta {
+  background-color: #eb612a;
+  align-content: center;
+}
+p {
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 0;
+  padding-right: 10vw;
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: 0;
+  margin-right: 0;
+}
+.seccionTotales {
+    text-align: right;
+}
+#saldoActual, #saldoTotal {
+    justify-content:right;
+    text-align: right;
+    font-size: 6vw !important;
+    font-weight: bold;
+    color: white;
+    padding: 0 0 0;
+}
+.seccionTransaccion{
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+}
+
+#saldoSimuladoIngreso {
+  width: 13vw;
+}
+#motivo {
+  align-content: center;
+  padding-left: 1%;
+  margin-right: 0vw;
+  padding-left: 1%;
+  border-radius: 4px;
+  font-size: 6vw;
+  width: 82vw;
+  background-color: #5b6365;
+  color: white;
+}
+.seccionInput{
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  width: 91vw;
+  padding: 1vw;
+  color: black;
+  background-color: red;
+}
+.seccionMontos{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-content: center;
+  font-size: 6vw !important;
+  width: 70vw;
+  color: black;
+}
+#elemento {
+  font-size: 8vw !important;
+  width: 92vw;
+  color: black !important;
+  padding-left: 0.1vw;
+}
+#cantidad {
+  width: 25vw !important;
+  text-align: right;
+  font-size: 8vw !important;
+  color: black;
+}
+#valor{
+  width: 65vw !important;
+  font-size: 8vw !important;
+  text-align: right;
+  margin-right: 5px;
+  color: black !important;
+}
+.seccionSimulaMontos{
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+    font-size: 7vw !important;
+    width: 70vw;
+    padding: 1vw ;
+    border-style: groove;
+    border-radius: 2vw;
+}
+#total, #simulaIngreso, #simulaEgreso {
+    border: none;
+    font-size: 7vw !important;
+    font-weight: bold;
+    text-align: right;
+    width: 100%;
+    background-color: #d0f882;
+    color: black;
+}
+#simulaEgreso {
+  color: orangered;
+}
+#simulaIngreso{
+  color: green;
+}
+.seccionBotonera {
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    text-align: center;
+}
+#btnMas,#btnMen,#btnBD{
+    width: 10vw;
+    height: 10vw;
+    margin: .5vw;
+    font-weight: bold;
+    font-size: 5vw;
+    border-radius: 6px;
+}
+#btnMen{
+    background-color: #eb612a;
+  }
+#btnBD{
+  width: 15vw !important;
+    background-color: #5b65d3;
+}
+
+#transaccion {
+    align-items: center;
+    background-color: #d0cbcb;
+}
+#transaccion select {
+    border-radius: 4px;
+    font-size: 1.5vw;
+    margin-right: 10px;
+}
+#transaccion input {
+    border-radius: 4px;
+    font-size: 1.5vw;
+    margin-bottom: 10px;
+}
+.seccionBotonera button {
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1.5vw;
+}
+
+#tablaCuentas {
+    background-color: #6ddc70;
+    border-collapse: collapse;
+    margin: 20px 0;
+    width: 95%;
+    text-align: rigth;
+}
+td {
+  text-align: rigth;
+}
+#tablaCuentas td {
+  text-align: rigth;
+  border-bottom: 1px solid #ddd;
+}
+#tablaCuentas tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+#tablaTransacciones{
+  font-size: 2vw;
+}
+#tablaTransacciones th {
+  background-color: #4CAF50;
+  color: white;
+  text-align: right;
+}
+#tablaTransacciones td {
+    border-bottom: 1px solid #ddd;
+}
+#tablaTransacciones tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+#botonera {
+    margin-top: 2vw;
+    margin: 1vw;
+    padding: 1em;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+#tablaTransacciones {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 50px;
+}
+#tablaTransacciones td, #tablaTransacciones th {
+    border: 1px solid #ddd;
+}
+
+#tablaTransacciones tr:nth-child(even){background-color: #f2f2f2;}
+
+#tablaTransacciones tr:hover {background-color: #ddd;}
+
+#tablaTransacciones th {
+  text-align: right;
+  background-color: #4CAF50;
+  color: white;
+}
+#tablaTransaccionesCuenta{
+  font-size: 2vw;
+}
+.eliminar {
+background-color: #f44336;
+}
+.eliminar:hover {
+background-color: #da190b;
+}
+#formMotivos {
+display: flex;
+flex-direction: column;
+align-items: center;
+}
+#formMotivos label {
+font-size: 18px;
+margin-bottom: 10px;
+}
+#formMotivos input {
+font-size: 16px;
+/* padding: 10px; */
+margin-bottom: 20px;
+border-radius: 5px;
+border: 1px solid #ddd;
+}
+#formMotivos button:hover {
+    background-color: #3e8e41;
+}
+#formCuentas {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#formCuentas label {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+#formCuentas input {
+  font-size: 16px;
+  /* padding: 10px; */
+  margin-bottom: 20px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+::placeholder { 
+  color: #e0d5d5;
+ }
+ .seccionGraban{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  background-color: gray;
+  height: 37vw;
+}
+.seccionRecupera{
+  display: flex;
+  flex-direction: row;
+  background-color: rgb(85, 179, 242);
+  flex-wrap: wrap;
+  justify-content: center;
+  height: 10vw
+}
+.seccionElimina{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  background-color: rgb(233, 71, 71);
+  height: 38vw
+}

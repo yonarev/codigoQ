@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Modificar Tipo de Artículo</title>
+</head>
+<body>
+  <h1>Modificar Tipo de Artículo</h1>
+
+  <select id="tipos"></select>
+
+  <button onclick="modificarTipo()">Modificar Tipo</button>
+
+  <script>
+    // Función para cargar los tipos de artículos en el combobox
+    function cargarTiposArt() {
+      var tiposArt = JSON.parse(localStorage.getItem('tiposArt'));
+
+      if (tiposArt) {
+        var select = document.getElementById('tipos');
+        select.innerHTML = '';
+
+        // Agregar una opción vacía al inicio del combobox
+        var emptyOption = document.createElement('option');
+        emptyOption.value = '';
+        emptyOption.text = 'Seleccione un tipo de artículo';
+        select.appendChild(emptyOption);
+
+        // Agregar opciones de tipos de artículos
+        tiposArt.forEach(function(tipo) {
+          var option = document.createElement('option');
+          option.value = tipo.tipo;
+          option.text = tipo.tipo;
+          select.appendChild(option);
+        });
+      }
+    }
+
+    // Función para modificar el nombre del tipo
+    function modificarTipo() {
+      var selectedValue = document.getElementById('tipos').value;
+
+      if (selectedValue) {
+        var nuevoNombre = prompt('Ingrese el nuevo nombre del tipo de artículo');
+
+        // Validar que el nuevo nombre no esté repetido
+        var tiposArt = JSON.parse(localStorage.getItem('tiposArt'));
+
+        var tipoExistente = tiposArt.find(function(tipo) {
+          return tipo.tipo.toLowerCase() === nuevoNombre.toLowerCase();
+        });
+
+        if (tipoExistente) {
+          alert('El tipo de artículo ya existe. Ingrese un nombre diferente.');
+          return;
+        }
+
+        // Modificar el nombre del tipo en los registros y en el Local Storage
+        modificarTipoArticulos(selectedValue, nuevoNombre);
+        modificarTipoTransaccionInventario(selectedValue, nuevoNombre);
+        modificarTipoTiposArt(selectedValue, nuevoNombre);
+
+        // Volver a cargar los tipos de artículos en el combobox
+        cargarTiposArt();
+
+        alert('El tipo de artículo se modificó correctamente en todos los registros.');
+
+        // Alerta de modificación en el key 'articulos'
+        alert('El valor del key "articulos" en el Local Storage ha sido modificado.');
+
+        // Alerta de modificación en el key 'transaccionInventario'
+        alert('El valor del key "transaccionInventario" en el Local Storage ha sido modificado.');
+
+        // Alerta de modificación en el key 'tiposArt'
+        alert('El valor del key "tiposArt" en el Local Storage ha sido modificado.');
+      } else {
+        alert('Seleccione un tipo de artículo.');
+      }
+    }
+
+    // Función para modificar el tipo en los registros de 'articulos'
+    function modificarTipoArticulos(selectedValue, nuevoNombre) {
+      var articulos = JSON.parse(localStorage.getItem('articulos'));
+
+      for (var i = 0; i < articulos.length; i++) {
+        if (articulos[i].tipo === selectedValue) {
+          articulos[i].tipo = nuevoNombre;
+        }
+      }
+
+      localStorage.setItem('articulos', JSON.stringify(articulos));
+    }
+
+    // Función para modificar el tipo en los registros de 'transaccionInventario'
+    function modificarTipoTransaccionInventario(selectedValue, nuevoNombre) {
+      var transaccionInventario = JSON.parse(localStorage.getItem('transaccionInventario'));
+
+      for (var i = 0; i < transaccionInventario.length; i++) {
+        if (transaccionInventario[i].tipo === selectedValue) {
+          transaccionInventario[i].tipo = nuevoNombre;
+        }
+      }
+
+      localStorage.setItem('transaccionInventario', JSON.stringify(transaccionInventario));
+    }
+
+    // Función para modificar el tipo en los registros de 'tiposArt'
+    function modificarTipoTiposArt(selectedValue, nuevoNombre) {
+      var tiposArt = JSON.parse(localStorage.getItem('tiposArt'));
+
+      for (var i = 0; i < tiposArt.length; i++) {
+        if (tiposArt[i].tipo === selectedValue) {
+          tiposArt[i].tipo = nuevoNombre;
+        }
+      }
+
+      localStorage.setItem('tiposArt', JSON.stringify(tiposArt));
+    }
+
+    // Cargar los tipos de artículos al cargar la página
+    cargarTiposArt();
+  </script>
+</body>
+</html>

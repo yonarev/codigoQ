@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ordenar y actualizar datos en Local Storage</title>
+  <style>
+      table {
+        font-size: 1.5vw;
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+    
+    th{
+      text-align: center;
+      padding: 5px;
+    }
+    td {
+      text-align: right;
+    }
+    
+    th {
+      background-color: #f2f2f2;
+    }
+    
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+    
+    .text-right {
+      text-align: right;
+    }
+    
+    .text-right span {
+      display: inline-block;
+      text-align: right;
+    }
+  </style>
+  <script>   
+    function presentaInicio(){
+      let transacciones = JSON.parse(localStorage.getItem('transaccionInventario'));
+      let table = document.getElementById('tablaResultados');
+      table.innerHTML = '';
+      for (let i = 0; i < transacciones.length; i++) {
+        let row = table.insertRow();
+
+        let fechaCell = row.insertCell();
+        fechaCell.innerHTML = transacciones[i].fecha;
+
+        let horaCell = row.insertCell();
+        horaCell.innerHTML = transacciones[i].hora;
+
+        let idTransCell = row.insertCell();
+        idTransCell.innerHTML = transacciones[i].idTrans;
+
+        let inventarioCell = row.insertCell();
+        inventarioCell.innerHTML = transacciones[i].inventario;
+
+        let tipoCell = row.insertCell();
+        tipoCell.innerHTML = transacciones[i].tipo;
+
+        let articuloCell = row.insertCell();
+        articuloCell.innerHTML = transacciones[i].articulo;
+
+        let cantidadCell = row.insertCell();
+        cantidadCell.innerHTML = transacciones[i].cantidad;
+
+        let valorCell = row.insertCell();
+        valorCell.innerHTML = transacciones[i].valor;
+
+        let valorTotalCell = row.insertCell();
+        valorTotalCell.innerHTML = '<span>$</span>' + transacciones[i].valorTotal.toLocaleString();
+
+        let cantidadTotalCell = row.insertCell();
+        cantidadTotalCell.innerHTML = transacciones[i].cantidadTotal.toLocaleString();
+
+        let valorAcumuladoCell = row.insertCell();
+        valorAcumuladoCell.innerHTML = '<span>$</span>' + transacciones[i].valorAcumulado.toLocaleString();
+      }
+    }
+    function ordenarYActualizar() {
+      // Obtener datos del Local Storage
+      let transacciones = JSON.parse(localStorage.getItem('transaccionInventario'));
+      // Ordenar por fecha y hora
+      transacciones.sort(function(a, b) {
+        let fechaHoraA = new Date(a.fecha + ' ' + a.hora);
+        let fechaHoraB = new Date(b.fecha + ' ' + b.hora);
+        return fechaHoraA - fechaHoraB;
+      });
+      // Calcular cantidadTotal y valorAcumulado
+      let cantidadTotal = 0;
+      let valorAcumulado = 0;
+      for (let i = 0; i < transacciones.length; i++) {
+        // Calcular cantidadTotal
+        cantidadTotal += transacciones[i].cantidad;
+        transacciones[i].cantidadTotal = cantidadTotal;
+
+        // Calcular valorAcumulado
+        valorAcumulado += transacciones[i].valorTotal;
+        transacciones[i].valorAcumulado = valorAcumulado;
+
+        // Actualizar cantidadTotal y valorAcumulado en Local Storage
+        localStorage.setItem('cantidadTotal', cantidadTotal);
+        localStorage.setItem('valorAcumulado', valorAcumulado);
+      }
+
+      // Actualizar 'transaccionInventario' en Local Storage
+      localStorage.setItem('transaccionInventario', JSON.stringify(transacciones));
+
+      // Mostrar resultados en una tabla
+      let table = document.getElementById('tablaResultados');
+      table.innerHTML = '';
+
+      for (let i = 0; i < transacciones.length; i++) {
+        let row = table.insertRow();
+
+        let fechaCell = row.insertCell();
+        fechaCell.innerHTML = transacciones[i].fecha;
+
+        let horaCell = row.insertCell();
+        horaCell.innerHTML = transacciones[i].hora;
+
+        let idTransCell = row.insertCell();
+        idTransCell.innerHTML = transacciones[i].idTrans;
+
+        let inventarioCell = row.insertCell();
+        inventarioCell.innerHTML = transacciones[i].inventario;
+
+        let tipoCell = row.insertCell();
+        tipoCell.innerHTML = transacciones[i].tipo;
+
+        let articuloCell = row.insertCell();
+        articuloCell.innerHTML = transacciones[i].articulo;
+
+        let cantidadCell = row.insertCell();
+        cantidadCell.innerHTML = transacciones[i].cantidad;
+
+        let valorCell = row.insertCell();
+        valorCell.innerHTML = transacciones[i].valor;
+
+        let valorTotalCell = row.insertCell();
+        valorTotalCell.innerHTML = '<span>$</span>' + transacciones[i].valorTotal.toLocaleString();
+
+        let cantidadTotalCell = row.insertCell();
+        cantidadTotalCell.innerHTML = transacciones[i].cantidadTotal.toLocaleString();
+
+        let valorAcumuladoCell = row.insertCell();
+        valorAcumuladoCell.innerHTML = '<span>$</span>' + transacciones[i].valorAcumulado.toLocaleString();
+      }
+      alert('Se Ordenaron y actualizaron las Transacciones de Inventarios en Local Storage')
+    }
+    function guardarEnLocalStorage() {
+      // Obtener datos del Local Storage
+      let transacciones = JSON.parse(localStorage.getItem('transaccionInventario'));
+
+      // Guardar en Local Storage
+      localStorage.setItem('transaccionInventario', JSON.stringify(transacciones));
+      alert('Se Actualizaron los datos Ordenados en Local Storage')
+    }
+  </script>
+</head>
+<body>
+  <h1>Ordenar y actualizar datos en Local Storage</h1>
+  <button onclick="ordenarYActualizar()">Ordenar y Actualizar</button>
+  <!-- <button onclick="guardarEnLocalStorage()">Guardar en Local Storage</button> -->
+
+  <table id="tablaResultados">
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Hora</th>
+        <th>ID Transacción</th>
+        <th>Inventario</th>
+        <th>Tipo</th>
+        <th>Artículo</th>
+        <th>Cantidad</th>
+        <th>Valor</th>
+        <th>Valor Total</th>
+        <th>Cantidad Total</th>
+        <th>Valor Acumulado</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Las filas se generan dinámicamente con JavaScript -->
+    </tbody>
+  </table>
+  <script>
+    presentaInicio()
+
+  </script>
+</body>
+</html>
+
+
+
+

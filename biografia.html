@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generador de Biografía Personal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 5vw;
+            margin: 1vw;
+            width: 100vw;
+            background-color: #b5bee7;
+        }
+        .enLInea{
+            display: flex;
+            flex-direction: row;
+        }
+        .enColumna{
+            display: flex;
+            flex-direction: column;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        form {
+            width: 100vw;
+            max-width: 100vw;
+            margin: 0 auto;
+        }
+        #nombre{
+            max-width: 90vw;
+        }
+        #fechaNacimiento{
+            max-width: 30vw;
+        }
+        label {
+            display: block;
+            margin-top: 1vw;
+            font-weight: bold;
+        }
+        #intereses,#infanciaEducacion{
+            height: 40vw;
+        }
+        #carreraProfesional{
+            height: 200vw;
+        }
+        #filosofiaVida{
+            height: 100vw;
+        }
+        #vidaPersonal{
+            height: 150vw;
+        }
+        input[type="text"]{
+            width: 90vw;
+            background-color: #a8f3ab;
+
+        }
+        textarea {
+            width: 90vw;
+            padding: 5px;
+            margin-top: 5px;
+            height: 90vw;
+            background-color: #a8f3ab;
+        }
+        input[type="button"] {
+            display: block;
+            width: 100%;
+            max-width: 200px;
+            margin: 10px auto;
+            padding: 10px;
+            font-weight: bold;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        textarea[readonly] {
+            background-color: #f8f8f8;
+            resize: none;
+        }
+        textarea#biografiaOutput {
+            height: 200px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            max-width: 200px;
+            margin: 10px auto;
+            padding: 10px;
+            font-weight: bold;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+    <script src="./js/libreria.js"></script>
+    <script>
+        function savebiografia() {
+            let biografia = {
+                nombre: document.getElementById('nombre').value,
+                fechaNacimiento: document.getElementById('fechaNacimiento').value,
+                lugarNacimiento: document.getElementById('lugarNacimiento').value,
+                intereses: document.getElementById('intereses').value,
+                infanciaEducacion: document.getElementById('infanciaEducacion').value,
+                carreraProfesional: document.getElementById('carreraProfesional').value,
+                logrosReconocimientos: document.getElementById('logrosReconocimientos').value,
+                filosofiaVida: document.getElementById('filosofiaVida').value,
+                vidaPersonal: document.getElementById('vidaPersonal').value
+            };
+
+            if (localStorage.getItem('biografia')) {
+                // biografias = JSON.parse(localStorage.getItem('biografia'));
+                localStorage.setItem('biografia', JSON.stringify(biografia));
+            }
+
+            // biografias.push(biografia);
+
+            alert('La biografía se ha guardado exitosamente.');
+        }
+
+        function loadbiografia() {
+            let biografia = JSON.parse(localStorage.getItem('biografia'));
+            // let biografia = biografias[biografias.length - 1];
+            document.getElementById('nombre').value = biografia.nombre;
+            document.getElementById('fechaNacimiento').value = biografia.fechaNacimiento;
+            document.getElementById('lugarNacimiento').value = biografia.lugarNacimiento;
+            document.getElementById('intereses').value = biografia.intereses;
+            document.getElementById('infanciaEducacion').value=biografia.infanciaEducacion
+            document.getElementById('carreraProfesional').value = biografia.carreraProfesional;
+            document.getElementById('logrosReconocimientos').value = biografia.logrosReconocimientos;
+            document.getElementById('filosofiaVida').value = biografia.filosofiaVida;
+            document.getElementById('vidaPersonal').value = biografia.vidaPersonal;
+        }
+
+        function updatebiografia() {
+            let biografia = JSON.parse(localStorage.getItem('biografia'));
+            // let biografia = biografias[biografias.length - 1];
+            biografia.nombre = document.getElementById('nombre').value;
+            biografia.fechaNacimiento = document.getElementById('fechaNacimiento').value;
+            biografia.lugarNacimiento = document.getElementById('lugarNacimiento').value;
+            biografia.intereses = document.getElementById('intereses').value;
+            biografia.infanciaEducacion = document.getElementById('infanciaEducacion').value;
+            biografia.carreraProfesional = document.getElementById('carreraProfesional').value;
+            biografia.logrosReconocimientos = document.getElementById('logrosReconocimientos').value;
+            biografia.filosofiaVida = document.getElementById('filosofiaVida').value;
+            biografia.vidaPersonal = document.getElementById('vidaPersonal').value;
+            localStorage.setItem('biografia', JSON.stringify(biografia));
+            alert('La biografía se ha actualizado exitosamente.');
+        }
+
+        function displaybiografia() {
+            let biografia = JSON.parse(localStorage.getItem('biografia'));
+            // let biografia = biografias[biografias.length - 1];
+            let biografiaOutput = document.getElementById('biografiaOutput');
+
+            biografiaOutput.value = 'Nombre completo: ' + biografia.nombre + '\n' +
+                'Fecha de nacimiento: ' + biografia.fechaNacimiento + '\n' +
+                'Lugar de nacimiento: ' + biografia.lugarNacimiento + '\n' +
+                'Intereses o pasiones: ' + biografia.intereses + '\n' +
+                'Infancia y educación: ' + biografia.infanciaEducacion + '\n' +
+                'Carrera profesional: ' + biografia.carreraProfesional + '\n' +
+                'Logros y reconocimientos: ' + biografia.logrosReconocimientos + '\n' +
+                'Filosofía de vida: ' + biografia.filosofiaVida + '\n' +
+                'Vida personal: ' + biografia.vidaPersonal;
+        }
+    </script>
+</head>
+<body>
+<h1>Generador de Biografía Personal</h1>
+<h2>Ingrese los datos de su biografía:</h2>
+<form>
+    <div class="enLInea">
+        <div class="enColumna">
+            <label for="nombre">Nombre completo:</label>
+            <input type="text" id="nombre" required><br>
+        </div>
+    </div>
+    <div class="enColumna">
+        <label for="fechaNacimiento">Fecha de nacimiento:</label>
+        <input type="text" id="fechaNacimiento" required><br>
+    </div>
+
+    <label for="lugarNacimiento">Lugar de nacimiento:</label>
+    <input type="text" id="lugarNacimiento" required><br>
+
+    <label for="intereses">Intereses o pasiones:</label>
+    <textarea type="text" id="intereses" required></textarea><br>
+        
+
+    <label for="infanciaEducacion">Infancia y educación:</label>
+    <textarea type="text" id="infanciaEducacion"></textarea><br>
+
+    <label for="carreraProfesional">Carrera profesional:</label>
+    <textarea type="text" id="carreraProfesional"></textarea><br>
+
+    <label for="logrosReconocimientos">Logros y reconocimientos:</label>
+    <textarea type="text" id="logrosReconocimientos" required></textarea><br>
+
+    <label for="filosofiaVida">Filosofía de vida:</label>
+    <textarea type="text" id="filosofiaVida" required></textarea><br>
+
+    <label for="vidaPersonal">Vida personal:</label>
+    <textarea type="text" id="vidaPersonal" required></textarea><br>
+
+    <input type="button" value="Guardar biografía" onclick="savebiografia()">
+    <button type="button" value="Guardar JSON" onclick="cargarPagina('./biografiaLOcalStorage.html')">Lee /Guarda en Json</button>
+
+</form>
+
+<h2>Su biografía:</h2>
+<button onclick="loadbiografia();displaybiografia()">Cargar biografía</button><br>
+<label for="biografiaOutput">Biografía:</label>
+<textarea id="biografiaOutput" rows="10" cols="50" readonly></textarea>
+
+<script>
+    displaybiografia()
+    loadbiografia()
+    function updatebiografia() {
+        let biografia = JSON.parse(localStorage.getItem('biografia'));
+        // let biografia = biografias[biografias.length - 1];
+        biografia.nombre = document.getElementById('nombre').value;
+        biografia.fechaNacimiento = document.getElementById('fechaNacimiento').value;
+        biografia.lugarNacimiento = document.getElementById('lugarNacimiento').value;
+        biografia.intereses = document.getElementById('intereses').value;
+        biografia.infanciaEducacion = document.getElementById('infanciaEducacion').value;
+        biografia.carreraProfesional = document.getElementById('carreraProfesional').value;
+        biografia.logrosReconocimientos = document.getElementById('logrosReconocimientos').value;
+        biografia.filosofiaVida = document.getElementById('filosofiaVida').value;
+        biografia.vidaPersonal = document.getElementById('vidaPersonal').value;
+        localStorage.setItem('biografia', JSON.stringify(biografia));
+        alert('La biografía se ha actualizado exitosamente.');
+    }
+
+    function displaybiografia() {
+        let biografia = JSON.parse(localStorage.getItem('biografia'));
+        // let biografia = biografias[biografias.length - 1];
+        let biografiaOutput = document.getElementById('biografiaOutput');
+
+        biografiaOutput.value = 'Nombre completo: ' + biografia.nombre + '\n' +
+            'Fecha de nacimiento: ' + biografia.fechaNacimiento + '\n' +
+            'Lugar de nacimiento: ' + biografia.lugarNacimiento + '\n' +
+            'Intereses o pasiones: ' + biografia.intereses + '\n' +
+            'Infancia y educación: ' + biografia.infanciaEducacion + '\n' +
+            'Carrera profesional: ' + biografia.carreraProfesional + '\n' +
+            'Logros y reconocimientos: ' + biografia.logrosReconocimientos + '\n' +
+            'Filosofía de vida: ' + biografia.filosofiaVida + '\n' +
+            'Vida personal: ' + biografia.vidaPersonal;
+    }
+</script>
+<br>
+<input type="button" value="Actualizar biografía" onclick="updatebiografia()">
+<input type="button" value="Mostrar biografía" onclick="displaybiografia()">
+</body>
+</html>

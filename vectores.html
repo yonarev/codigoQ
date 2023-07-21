@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Transformación de un punto en diferentes formas</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+  <style>
+    #shape {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: black;
+    }
+  </style>
+</head>
+<body>
+  <div id="shape"></div>
+
+  <script>
+    // Definir los diferentes estados de transformación
+    var states = [
+      { width: "2px", height: "2px", borderRadius: "50%" },
+      { width: "150px", height: "2px", borderRadius: "0" },
+      { width: "150px", height: "150px", borderRadius: "50%" },
+      { width: "150px", height: "150px", borderRadius: "0", clipPath: "polygon(50% 0%, 0% 100%, 100% 100%)" },
+      { width: "150px", height: "150px", borderRadius: "50%", clipPath: "none" }
+    ];
+
+    // Obtener el elemento del punto
+    var shape = document.getElementById("shape");
+
+    // Animar la transformación
+    gsap.to(shape, {
+      duration: 2,
+      repeat: -1,
+      yoyo: true,
+      keyframes: states
+    });
+  </script>
+</body>
+</html>

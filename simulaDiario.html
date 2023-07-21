@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simulación de Gastos Mensuales</title>
+    <link rel="stylesheet" href="./css/simulaDiario.css">
+
+</head>
+<body>
+    <div class="container">
+        <h1>SIMULACION</h1>
+        <h2>Datos de las Cuentas</h2>
+        <table id="tablaCuentas">
+            <thead>
+                <tr>
+                    <th>Cuenta</th>
+                    <th>Saldo Actual</th>
+                </tr>
+            </thead>
+            <tbody id="datosCuentas"></tbody>
+        </table>
+        <p id="saldoTotal"></p>
+
+        <h2>Simulacion en base a gasto diario</h2>
+        <form onsubmit="simularGastos(event)">
+            <label for="montoDiario">Monto diario a simular:</label>
+            <input type="number" id="montoDiario" step="0.01">
+            <button type="submit">Simular</button>
+        </form>
+
+        <p id="resultado"></p>
+    </div>
+    <script src="./js/simulaDiario.js"></script>
+    <script>
+       
+ 
+
+        // Mostrar los datos de las cuentas al cargar la página
+        window.onload = function() {
+            mostrarDatosCuentas();
+        };
+    </script>
+</body>
+</html>

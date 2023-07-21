@@ -1,0 +1,83 @@
+* {
+    --fuente:20vw;
+}
+
+html,
+body {
+    font-size: val(--fuente); /* Tamaño de letra grande */
+    font-family: Arial;
+    text-align: center;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: top;
+    align-items: center;
+}
+
+h1,
+h2,
+p {
+    margin: 0;
+    font-size: val(--fuente); /* Tamaño de letra grande */
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* margin-top: 20px; */
+}
+
+input[type="number"] {
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+button {
+    padding: 10px 20px;
+    border-radius: 2vw;
+    background-color: orangered;
+    color: white;
+    font-weight: bold;
+}
+
+#resultado {
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: val(--fuenteGral); /* Tamaño de letra grande */
+}
+
+#tablaCuentas {
+    margin-top: 20px;
+    border-style: groove;
+}
+
+#tablaCuentas td,
+#tablaCuentas th {
+    padding: 8px;
+}
+
+#saldoTotal {
+    font-weight: bold;
+    /* font-size: calc(val(--fuenteGral)*2);  */
+    margin-top: 20px;
+}
+#tablaCuentas td:nth-child(2) {
+text-align: right;
+}
+
+#tablaCuentas td:nth-child(2)::before {
+content: "$";
+display: inline-block;
+margin-right: 5px;
+}
+
+#tablaCuentas td:nth-child(2)::after {
+content: attr(data-formato);
+}

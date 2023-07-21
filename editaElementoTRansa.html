@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Edición de Local Storage</title>
+</head>
+<body>
+	<table>
+		<thead>
+			<tr>
+				<th>Fecha</th>
+				<th>Hora</th>
+				<th>Elemento</th>
+				<th>Valor</th>
+			</tr>
+		</thead>
+		<tbody id="tabla">
+		</tbody>
+	</table>
+
+	<script>
+		// Obtener los datos del Local Storage
+		let datos = JSON.parse(localStorage.getItem("transacciones"));
+		// Mostrar los datos en la tabla
+		let tabla = document.getElementById("tabla");
+		for (let i = 0; i < datos.length; i++) {
+			let fila = tabla.insertRow();
+			let fecha = fila.insertCell();
+			let hora = fila.insertCell();
+			let elemento = fila.insertCell();
+			let valor = fila.insertCell();
+			fecha.innerText = datos[i].fecha;
+			hora.innerText = datos[i].hora;
+			elemento.innerText = datos[i].elemento;
+			valor.innerText = datos[i].valor;
+
+			// Agregar evento para editar el campo elemento
+			elemento.contentEditable = true;
+			elemento.addEventListener("blur", function() {
+				datos[i].elemento = elemento.innerText;
+				localStorage.setItem("transacciones", JSON.stringify(datos));
+			});
+		}
+	</script>
+</body>
+</html>

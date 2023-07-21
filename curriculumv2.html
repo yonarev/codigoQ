@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Formulario de Educación Profesional</title>
+  <script>
+    // Función para cargar los datos guardados del localStorage
+    function cargarDatosGuardados() {
+      const educacionBasicaInputs = document.querySelectorAll('input[name^="educacion-basica-"]');
+      const institucionEducacionBasicaInputs = document.querySelectorAll('input[name^="institucion-educacion-basica-"]');
+      const anioEducacionBasicaInputs = document.querySelectorAll('input[name^="anio-educacion-basica-"]');
+
+      const educacionProfesionalInputs = document.querySelectorAll('input[name^="educacion-profesional-"]');
+      const institucionEducacionProfesionalInputs = document.querySelectorAll('input[name^="institucion-educacion-profesional-"]');
+      const anioEducacionProfesionalInputs = document.querySelectorAll('input[name^="anio-educacion-profesional-"]');
+
+      const puestoInputs = document.querySelectorAll('input[name^="puesto-"]');
+      const empresaInputs = document.querySelectorAll('input[name^="empresa-"]');
+      const anioInputs = document.querySelectorAll('input[name^="anio-"]');
+
+      // Cargar datos de educación básica
+      for (let i = 0; i < educacionBasicaInputs.length; i++) {
+        const educacion = localStorage.getItem(`educacionBasica${i}`);
+        const institucion = localStorage.getItem(`institucionEducacionBasica${i}`);
+        const anio = localStorage.getItem(`anioEducacionBasica${i}`);
+
+        educacionBasicaInputs[i].value = educacion ? educacion : '';
+        institucionEducacionBasicaInputs[i].value = institucion ? institucion : '';
+        anioEducacionBasicaInputs[i].value = anio ? anio : '';
+      }
+
+      // Cargar datos de educación profesional
+      for (let i = 0; i < educacionProfesionalInputs.length; i++) {
+        const educacion = localStorage.getItem(`educacionProfesional${i}`);
+        const institucion = localStorage.getItem(`institucionEducacionProfesional${i}`);
+        const anio = localStorage.getItem(`anioEducacionProfesional${i}`);
+
+        educacionProfesionalInputs[i].value = educacion ? educacion : '';
+        institucionEducacionProfesionalInputs[i].value = institucion ? institucion : '';
+        anioEducacionProfesionalInputs[i].value = anio ? anio : '';
+      }
+
+      // Cargar datos de experiencia laboral
+      for (let i = 0; i < puestoInputs.length; i++) {
+        const puesto = localStorage.getItem(`puesto${i}`);
+        const empresa = localStorage.getItem(`empresa${i}`);
+        const anio = localStorage.getItem(`anio${i}`);
+
+        puestoInputs[i].value = puesto ? puesto : '';
+        empresaInputs[i].value = empresa ? empresa : '';
+        anioInputs[i].value = anio ? anio : '';
+      }
+    }
+
+    // Función para guardar los datos en el localStorage
+    function guardarDatos() {
+      const educacionBasicaInputs = document.querySelectorAll('input[name^="educacion-basica-"]');
+      const institucionEducacionBasicaInputs = document.querySelectorAll('input[name^="institucion-educacion-basica-"]');
+      const anioEducacionBasicaInputs = document.querySelectorAll('input[name^="anio-educacion-basica-"]');
+
+      const educacionProfesionalInputs = document.querySelectorAll('input[name^="educacion-profesional-"]');
+      const institucionEducacionProfesionalInputs = document.querySelectorAll('input[name^="institucion-educacion-profesional-"]');
+      const anioEducacionProfesionalInputs = document.querySelectorAll('input[name^="anio-educacion-profesional-"]');
+
+      const puestoInputs = document.querySelectorAll('input[name^="puesto-"]');
+      const empresaInputs = document.querySelectorAll('input[name^="empresa-"]');
+      const anioInputs = document.querySelectorAll('input[name^="anio-"]');
+
+      // Guardar datos de educación básica
+      for (let i = 0; i < educacionBasicaInputs.length; i++) {
+        const educacion = educacionBasicaInputs[i].value;
+        const institucion = institucionEducacionBasicaInputs[i].value;
+        const anio = anioEducacionBasicaInputs[i].value;
+
+        localStorage.setItem(`educacionBasica${i}`, educacion);
+        localStorage.setItem(`institucionEducacionBasica${i}`, institucion);
+        localStorage.setItem(`anioEducacionBasica${i}`, anio);
+      }
+
+      // Guardar datos de educación profesional
+      for (let i = 0; i < educacionProfesionalInputs.length; i++) {
+        const educacion = educacionProfesionalInputs[i].value;
+        const institucion = institucionEducacionProfesionalInputs[i].value;
+        const anio = anioEducacionProfesionalInputs[i].value;
+
+        localStorage.setItem(`educacionProfesional${i}`, educacion);
+        localStorage.setItem(`institucionEducacionProfesional${i}`, institucion);
+        localStorage.setItem(`anioEducacionProfesional${i}`, anio);
+      }
+
+      // Guardar datos de experiencia laboral
+      for (let i = 0; i < puestoInputs.length; i++) {
+        const puesto = puestoInputs[i].value;
+        const empresa = empresaInputs[i].value;
+        const anio = anioInputs[i].value;
+
+        localStorage.setItem(`puesto${i}`, puesto);
+        localStorage.setItem(`empresa${i}`, empresa);
+        localStorage.setItem(`anio${i}`, anio);
+      }
+
+      alert('Los datos se han guardado correctamente en el localStorage.');
+    }
+
+    // Llamar a la función para cargar los datos guardados al cargar la página
+    cargarDatosGuardados();
+  </script>
+</head>
+<body>
+  <h2>Educación Profesional</h2>
+  <h3>Educación Básica</h3>
+  <div>
+    <label for="educacion-basica-1">Educación:</label>
+    <input type="text" name="educacion-basica-1" id="educacion-basica-1">
+    <label for="institucion-educacion-basica-1">Institución:</label>
+    <input type="text" name="institucion-educacion-basica-1" id="institucion-educacion-basica-1">
+    <label for="anio-educacion-basica-1">Año:</label>
+    <input type="text" name="anio-educacion-basica-1" id="anio-educacion-basica-1">
+  </div>
+  <div>
+    <label for="educacion-basica-2">Educación:</label>
+    <input type="text" name="educacion-basica-2" id="educacion-basica-2">
+    <label for="institucion-educacion-basica-2">Institución:</label>
+    <input type="text" name="institucion-educacion-basica-2" id="institucion-educacion-basica-2">
+    <label for="anio-educacion-basica-2">Año:</label>
+    <input type="text" name="anio-educacion-basica-2" id="anio-educacion-basica-2">
+  </div>
+
+  <h3>Educación Profesional</h3>
+  <div>
+    <label for="educacion-profesional-1">Educación:</label>
+    <input type="text" name="educacion-profesional-1" id="educacion-profesional-1">
+    <label for="institucion-educacion-profesional-1">Institución:</label>
+    <input type="text" name="institucion-educacion-profesional-1" id="institucion-educacion-profesional-1">
+    <label for="anio-educacion-profesional-1">Año:</label>
+    <input type="text" name="anio-educacion-profesional-1" id="anio-educacion-profesional-1">
+  </div>
+  <div>
+    <label for="educacion-profesional-2">Educación:</label>
+    <input type="text" name="educacion-profesional-2" id="educacion-profesional-2">
+    <label for="institucion-educacion-profesional-2">Institución:</label>
+    <input type="text" name="institucion-educacion-profesional-2" id="institucion-educacion-profesional-2">
+    <label for="anio-educacion-profesional-2">Año:</label>
+    <input type="text" name="anio-educacion-profesional-2" id="anio-educacion-profesional-2">
+  </div>
+
+  <h3>Experiencia Laboral</h3>
+  <div>
+    <label for="puesto-1">Puesto:</label>
+    <input type="text" name="puesto-1" id="puesto-1">
+    <label for="empresa-1">Empresa:</label>
+    <input type="text" name="empresa-1" id="empresa-1">
+    <label for="anio-1">Año:</label>
+    <input type="text" name="anio-1" id="anio-1">
+  </div>
+  <div>
+    <label for="puesto-2">Puesto:</label>
+    <input type="text" name="puesto-2" id="puesto-2">
+    <label for="empresa-2">Empresa:</label>
+    <input type="text" name="empresa-2" id="empresa-2">
+    <label for="anio-2">Año:</label>
+    <input type="text" name="anio-2" id="anio-2">
+  </div>
+
+  <button onclick="guardarDatos()">Guardar</button>
+</body>
+</html>

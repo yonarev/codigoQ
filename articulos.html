@@ -1,0 +1,52 @@
+<!-- codigo en un solo archivo html que permita grabar una lista de articulos
+en local storage key='articulos' con la siguiente estructura
+articulos={
+    idArticulo, (si la fecha es 20/05/2023 y la hora 13:30:24 el id sera 2052023133024),
+    fecha: fecha        (se pone la atual formato 20/05/2023),
+    hora: hora        (se pone la atual formato  13:30:24),
+    articulo: articulo,
+    tipoArticulo:tipoArticulo (aqui un combo box a partir de local storage 
+    tiposArt=[tipo,{fecha,hora,idTipo,tipo}])
+    idTipo: idtipo (partir de local storage tiposArt=[] correspondiente al tipo)
+}
+y que agregue filas a una tabla con cada articulo grabado 
+validar que no se repitan los nombres de los articulos
+
+
+
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Artículos</title>
+    <link rel="stylesheet" href="./css/articulos.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Lista de Artículos</h1>
+        <form onsubmit="event.preventDefault(); grabarArticulo();">
+            <label for="articulo">Artículo:</label>
+            <input type="text" id="articulo" required>
+            <button type="submit">Agregar</button>
+        </form>
+        <h2>Tabla de Artículos</h2>
+        <table id="tablaArticulos" border="1">
+            <tr>
+                <th>ID</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Artículo</th>
+                <th>Acciones</th> <!-- Columna para los botones de eliminación -->
+            </tr>
+        </table>
+    </div>
+    <script>
+         window.onload = function() {
+            actualizarTabla();
+        };
+    </script>
+    <script src="./js/articulos.js"></script>
+</body>
+</html>
+            

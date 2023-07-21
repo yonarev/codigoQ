@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tabla de Transacciones de Inventario</title>
+  <style>
+    body {
+  margin: 1vw;
+  padding: 0;
+  font-family: Arial;
+}
+label {
+  font-size: 2vw;
+}
+
+button{
+  font-size: 1.4vw;
+  background-color: orange;
+  color: white;
+
+}
+select {
+  padding: .5vw;
+  width: 45vw;
+  font-size: 3.5vw;
+  background-color: #d4b8b8;
+}
+table {
+  font-size: 1.5vw;
+  width: 98vw;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid black;
+  text-align: left;
+  /* white-space: wrap; */
+  overflow: hidden;
+  /* text-overflow: ellipsis; */
+}
+
+th {
+  background-color: #d4b8b8;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+tr:hover {
+  background-color: #e6e6e6;
+}
+.claseId{
+  text-align: center;
+  width: 10vw !important;
+}
+.claseTiempo{
+  text-align: center;
+  width: 6vw !important;
+}
+.claseInv{
+  text-align: center;
+  width: 10vw;
+  background-color: rgb(66, 66, 241);
+}
+.claseTipo{
+  text-align: center;
+  width: 10vw;
+  background-color: rgb(113, 113, 202);
+}
+.claseArticulo{
+  text-align: center;
+  width: 15vw;
+  background-color: rgb(149, 149, 230);
+
+}
+.claseCant{
+  width: 3vw;
+}
+.claseDerecha{
+  text-align: right;
+}
+.alaIzquierda{
+  text-align: left;
+}
+.claseCentro{
+  text-align: center;
+  margin: 0 auto;
+}
+
+  </style>
+  <script src="./js/libreria.js"></script>
+  <script>
+    // Obtener los datos del local storage
+    var transacciones = JSON.parse(localStorage.getItem('transaccionInventario'));
+    var inventarios = JSON.parse(localStorage.getItem('inventarios'));
+    var tiposArt = JSON.parse(localStorage.getItem('tiposArt'));
+
+    // Función para construir la tabla filtrada
+    function construirTabla() {
+      // Obtener los valores seleccionados de los filtros
+      var inventarioSeleccionado = document.getElementById('inventarioSelect').value;
+      var tipoSeleccionado = document.getElementById('tipoArticuloSelect').value;
+
+      // Filtrar las transacciones según los filtros seleccionados
+      var transaccionesFiltradas = transacciones.filter(function(transaccion) {
+        return (inventarioSeleccionado === '' || transaccion.inventario === inventarioSeleccionado) &&
+               (tipoSeleccionado === '' || transaccion.tipo === tipoSeleccionado);
+      });
+
+      // Construir la tabla con los datos filtrados
+      var tablaHTML = '<table>';
+      tablaHTML += '<tr><th class="claseTiempo">Fecha</th><th class="claseTiempo">Hora</th><th class="claseId">ID</th><th class="claseInv">Inventario</th><th class="claseTipo">Tipo </th><th class="claseArticulo">Artículo</th><th class="claseCant claseCentro">Cant</th><th class="claseCentro">Valor</th><th class="claseCentro">Total</th><th class="claseCentro">Cant T</th><th class="claseCentro">Acumula</th><th class="claseCentro">Eliminar</th></tr>';
+      transaccionesFiltradas.forEach(function(transaccion) {
+        tablaHTML += '<tr>';
+        tablaHTML += '<td>' + transaccion.fecha + '</td>';
+        tablaHTML += '<td>' + transaccion.hora + '</td>';
+        tablaHTML += '<td >' + transaccion.idTrans + '</td>';
+        tablaHTML += '<td class="alaIzquierda claseInv">' + transaccion.inventario + '</td>';
+        tablaHTML += '<td class="alaIzquierda claseTipo">' + transaccion.tipo + '</td>';
+        tablaHTML += '<td class="alaIzquierda claseArticulo">' + transaccion.articulo + '</td>';
+        tablaHTML += '<td class="claseDerecha">' + transaccion.cantidad + '</td>';
+        tablaHTML += '<td class="claseDerecha">' + formatoPeso(transaccion.valor) + '</td>';
+        tablaHTML += '<td class="claseDerecha">' + formatoPeso(transaccion.valorTotal) + '</td>';
+        tablaHTML += '<td class="claseDerecha">' + transaccion.cantidadTotal + '</td>';
+        tablaHTML += '<td class="claseDerecha">' + formatoPeso(transaccion.valorAcumulado) + '</td>';
+        tablaHTML += '<td class="centro"><button onclick="eliminarRegistro(\'' + transaccion.idTrans + '\')">Eliminar</button></td>';
+        tablaHTML += '</tr>';
+      });
+      tablaHTML += '</table>';
+
+      // Mostrar la tabla en el elemento con id "tablaTransacciones"
+      document.getElementById('tablaTransacciones').innerHTML = tablaHTML;
+    }
+
+    // Función para eliminar un registro de transaccionInventario
+    function eliminarRegistro(idTrans) {
+      
+      // Filtrar las transacciones para excluir el registro a eliminar
+      // debugger
+      // let borraIinventario =''
+      transacciones = transacciones.filter(function(transaccion) {
+        // borraIinventario= transaccion.inventario
+        return transaccion.idTrans !== idTrans;
+      });
+
+      // Actualizar los datos en el local storage
+      localStorage.setItem('transaccionInventario', JSON.stringify(transacciones));
+
+        // //todas las trnsacciones con el nombre einventario
+      // eliminaTransacionesInventario(borraIinventario)
+
+      // Reconstruir la tabla
+      construirTabla();
+    }
+
+    function eliminaTransacionesInventario(borraIinventario) {
+      // Obtener los registros almacenados en el local storage
+      const transacciones = JSON.parse(localStorage.getItem('transaccionInventario')) || [];
+
+      // Filtrar los registros que no coinciden con el valor "borraIinventario"
+      const nuevosRegistros = transacciones.filter((registro) => registro.inventario !== borraIinventario);
+
+      // Actualizar el local storage con los nuevos registros
+      localStorage.setItem('transaccionInventario', JSON.stringify(nuevosRegistros));
+    }
+
+  </script>
+</head>
+<body>
+  <h3>Transacciones de Inventarios</h3>
+  <label for="tipoArticuloSelect">Inventario</label>
+  <div>
+    <select id="inventarioSelect" onchange="construirTabla()">
+      <option value="">Todos</option>
+      <script>
+        inventarios.forEach(function(inventario) {
+          document.write('<option value="' + inventario.inventario + '">' + inventario.inventario + '</option>');
+        });
+      </script>
+    </select>
+  </div>
+    <label for="tipoArticuloSelect">Tipo de Artículo</label>
+  <div>
+    <!-- <label for="tipoArticuloSelect">Filtrar por Tipo de Artículo:</label> -->
+    <select id="tipoArticuloSelect" onchange="construirTabla()">
+      <option value="">Todos</option>
+      <!-- Construir las opciones del select a partir de los tipos de artículo -->
+      <script>
+        tiposArt.forEach(function(tipoArticulo) {
+          document.write('<option value="' + tipoArticulo.tipo + '">' + tipoArticulo.tipo + '</option>');
+        });
+      </script>
+    </select>
+  </div>
+
+  <div id="tablaTransacciones">
+  </div>
+  
+  <script>
+    construirTabla();
+  </script>
+</body>
+</html>

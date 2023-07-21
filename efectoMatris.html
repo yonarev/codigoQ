@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Efecto Matrix</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrixCanvas"></canvas>
+
+    <script>
+        function presentaMatrix() {
+            // Obtener el elemento canvas
+            let canvas = document.getElementById("matrixCanvas");
+            let context = canvas.getContext("2d");
+
+            // Establecer el tamaño del canvas para que se ajuste a la ventana
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            // Configuraciones del efecto Matrix
+            let chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%+-/~{[|`]}";
+            let charSize = 14;
+            let columns = canvas.width / charSize;
+
+            // Crear la matriz de caracteres
+            let matrix = [];
+            for (let x = 0; x < columns; x++) {
+                matrix[x] = canvas.height / charSize + 1;
+            }
+
+            // Función para dibujar la matriz en el canvas
+            function drawMatrix() {
+                // Establecer el color de fondo transparente para crear el efecto de desvanecimiento
+                context.fillStyle = "rgba(0, 0, 0, 0.05)";
+                context.fillRect(0, 0, canvas.width, canvas.height);
+
+                // Establecer el color de los caracteres
+                context.fillStyle = "#0F0";
+                context.font = charSize + "px monospace";
+
+                // Dibujar cada carácter en la matriz
+                for (let x = 0; x < columns; x++) {
+                    let charsCount = Math.floor(Math.random() * 10);
+                    let charIndex = Math.floor(Math.random() * chars.length);
+
+                    for (let y = 0; y < charsCount; y++) {
+                        let charY = (matrix[x] - y) * charSize;
+                        context.fillText(chars[charIndex], x * charSize, charY);
+                    }
+
+                    // Actualizar la matriz, simulando el desplazamiento hacia abajo
+                    if (matrix[x] * charSize > canvas.height && Math.random() > 0.975) {
+                        matrix[x] = 0;
+                    }
+
+                    matrix[x]++;
+                }
+
+                // Verificar si se hizo clic en la pantalla para detener la animación
+                if (stopAnimation) {
+                    return;
+                }
+
+                // Continuar la animación llamando a la función de dibujo
+                requestAnimationFrame(drawMatrix);
+            }
+
+            // Variable para indicar si se debe detener la animación
+            let stopAnimation = false;
+
+            // Event listener para detectar el clic en el canvas
+            canvas.addEventListener("click", function() {
+                // Detener la animación al hacer clic en la pantalla
+                stopAnimation = true;
+            });
+
+            // Iniciar la animación
+            drawMatrix();
+        }
+
+        presentaMatrix();
+    </script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+necesito una funcion llamada setHoy() que presente en el calendario mostrando la fecha de hoy y 
+desplegando los datos de esta fecha. adjunto elemento y funciones asociadas
+<input type="date" id="fechaBit" name="fechaBit" value="" class="form-field date"><br><br>
+document.getElementById("fechaBit").addEventListener("change", cargarNota);
+function cargarNota() {
+    // Obtenemos la fecha seleccionada
+    let fecha = document.getElementById("fechaBit").value;
+    // Convertimos la fecha al formato "dd-mm-yyyy"
+    let fechaFormateada = fecha.split("-").reverse().join("-");
+    // VALIDA SI ESTA EN LOCAL
+    let nota=localStorage.getItem("bitacora")
+    if(nota==='undefined'){
+        alert('no Hay Bitacora en LocalStorage')
+        return
+    }
+    // Obtenemos la lista de notas almacenadas en el Local Storage
+    let bitacora = JSON.parse(localStorage.getItem("bitacora")) || [];
+    // Buscamos la nota correspondiente a la fecha seleccionada
+    let notaEncontrada = bitacora.find(function(nota){
+        return nota.fecha == fechaFormateada;
+    });
+    // Si encontramos una nota para la fecha seleccionada, la cargamos en el campo de nota
+    if (notaEncontrada) {
+        document.getElementById("nota").value = notaEncontrada.nota;
+    } else {
+        document.getElementById("nota").value = "";
+    }
+}

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Unir archivos JSON</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <button onclick="unirArchivos()">Unir archivos JSON</button>
+
+  <script>
+    function unirArchivos() {
+      // Rutas de los archivos JSON
+      var archivo1 = 'archivo1.json';
+      var archivo2 = 'archivo2.json';
+
+      // Obtener los archivos JSON
+      $.getJSON(archivo1, function(data1) {
+        $.getJSON(archivo2, function(data2) {
+          // Juntar los datos en un solo objeto JSON
+          var datosUnidos = { ...data1, ...data2 };
+
+          // Convertir el objeto JSON a texto
+          var datosTexto = JSON.stringify(datosUnidos);
+
+          // Guardar el archivo en disco duro
+          descargarArchivo(datosTexto, 'datos_unidos.json');
+        });
+      });
+    }
+
+    function descargarArchivo(contenido, nombreArchivo) {
+      var enlace = document.createElement('a');
+      enlace.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(contenido);
+      enlace.download = nombreArchivo;
+
+      // Simular el clic en el enlace para iniciar la descarga
+      enlace.click();
+    }
+  </script>
+</body>
+</html>

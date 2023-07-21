@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tabla de Transacciones</title>
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+}
+
+h1, h2 {
+  margin-bottom: 10px;
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+}
+
+select, input[type="text"], input[type="number"] {
+  width: 100%;
+  padding: 5px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button[type="submit"] {
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+#detalleTransaccion {
+  margin-top: 20px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+  </style>
+</head>
+<body>
+  <h1>Tabla de Transacciones</h1>
+
+  <label for="selectTransacciones">Seleccionar transacción:</label>
+  <select id="selectTransacciones" onchange="mostrarDetalleTransaccion()">
+    <option value="">Seleccione una transacción</option>
+  </select>
+
+  <h2>Detalle de la transacción seleccionada:</h2>
+  <div id="detalleTransaccion"></div>
+
+  <script>
+    // Obtener los datos de la tabla desde el Local Storage
+    const tablaTransacciones = JSON.parse(localStorage.getItem('transacciones')) || [];
+
+    // Rellenar el select con las opciones de transacciones
+    const selectTransacciones = document.getElementById('selectTransacciones');
+    tablaTransacciones.forEach((transaccion) => {
+      const option = document.createElement('option');
+      option.value = transaccion.idTrans;
+      option.textContent = `ID: ${transaccion.idTrans} - ${transaccion.motivo}`;
+      selectTransacciones.appendChild(option);
+    });
+
+    // Mostrar el detalle de la transacción seleccionada
+    function mostrarDetalleTransaccion() {
+      const selectedIdTrans = selectTransacciones.value;
+      const detalleTransaccion = document.getElementById('detalleTransaccion');
+      detalleTransaccion.innerHTML = '';
+
+      if (selectedIdTrans) {
+        const transaccionSeleccionada = tablaTransacciones.find((transaccion) => transaccion.idTrans === selectedIdTrans);
+
+        const transaccionHTML = `
+          <form id="formularioEdicion">
+            <p>ID: ${transaccionSeleccionada.idTrans}</p>
+            <p>Cuenta: ${transaccionSeleccionada.idCuenta} - ${transaccionSeleccionada.nombreCuenta}</p>
+            <p>Fecha: ${transaccionSeleccionada.fecha}</p>
+            <p>Hora: ${transaccionSeleccionada.hora}</p>
+            <label for="motivo">Motivo:</label>
+            <input type="text" id="motivo" value="${transaccionSeleccionada.motivo}" required>
+            <label for="elemento">Elemento:</label>
+            <input type="text" id="elemento" value="${transaccionSeleccionada.elemento}" required>
+            <label for="cantidad">Cantidad:</label>
+            <input type="number" id="cantidad" value="${transaccionSeleccionada.cantidad}" required>
+            <button type="submit">Guardar cambios</button>
+          </form>
+        `;
+
+        detalleTransaccion.innerHTML = transaccionHTML;
+
+        const formularioEdicion = document.getElementById('formularioEdicion');
+        formularioEdicion.addEventListener('submit', (event) => {
+          event.preventDefault();
+          guardarCambios(selectedIdTrans);
+        });
+      }
+    }
+
+    // Guardar los cambios realizados en la transacción
+    function guardarCambios(idTrans) {
+      const motivo = document.getElementById('motivo').value;
+      const elemento = document.getElementById('elemento').value;
+      const cantidad = document.getElementById('cantidad').value;
+
+      // Buscar la transacción en la tabla y actualizar los campos
+      const transaccionActualizada = tablaTransacciones.find((transaccion) => transaccion.idTrans === idTrans);
+      transaccionActualizada.motivo = motivo;
+      transaccionActualizada.elemento = elemento;
+      transaccionActualizada.cantidad
+      transaccionActualizada.cantidad = cantidad;
+
+      // Guardar los cambios en el Local Storage
+      localStorage.setItem('transacciones', JSON.stringify(tablaTransacciones));
+
+      // Mostrar un mensaje de éxito
+      alert('Los cambios se han guardado correctamente.');
+
+      // Actualizar el detalle de la transacción en la página
+      mostrarDetalleTransaccion();
+    }
+  </script>
+</body>
+</html>

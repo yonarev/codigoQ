@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Grabar datos en archivo con Ajax o Fetch</title>
+</head>
+<body>
+  <script>
+    // Obtener los datos del localStorage
+    var relatos = JSON.parse(localStorage.getItem('relatos')) || [];
+
+    // Función para guardar los datos en el archivo
+    function guardarDatos() {
+      // Convertir los datos a texto JSON
+      var datos = JSON.stringify(relatos);
+
+      // Enviar los datos al servidor utilizando Fetch
+      fetch('./BD/relatos.json', {
+        method: 'POST',
+        body: datos,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(function(response) {
+        if (response.ok) {
+          console.log('Los datos se han guardado correctamente.');
+        } else {
+          console.log('Error al guardar los datos.');
+        }
+      })
+      .catch(function(error) {
+        console.log('Error en la solicitud:', error);
+      });
+    }
+
+    // Llamar a la función para guardar los datos en el archivo
+    guardarDatos();
+  </script>
+</body>
+</html>

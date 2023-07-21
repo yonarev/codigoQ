@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registro de Deudas</title>
+</head>
+<body>
+    <h1>Registro de Deudas</h1>
+
+    <form id="deudaForm">
+        <label for="deuda">Deuda:</label>
+        <input type="text" id="deuda" required><br>
+
+        <label for="monto">Monto:</label>
+        <input type="text" id="monto" required><br>
+
+        <label for="detalle">Detalle:</label><br>
+        <textarea id="detalle" rows="4" cols="50"></textarea><br>
+
+        <input type="hidden" id="editID">
+
+        <button type="submit">Guardar</button>
+    </form>
+
+    <table id="deudasTable">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>ID Deuda</th>
+                <th>Deuda</th>
+                <th>Monto</th>
+                <th>Detalle</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Datos de deudas se agregarán aquí dinámicamente -->
+        </tbody>
+    </table>
+
+    <div id="sumatoriaMonto"></div>
+
+    <script>
+        // Función para generar un ID único para cada deuda
+        function generateID() {
+            // Lógica para generar un ID único, puedes adaptarla según tus necesidades
+            return Date.now().toString();
+        }
+
+        // Función para dar formato al monto con separador de miles
+        function formatCurrency(amount) {
+            return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
+        // Función para guardar la deuda en el Local Storage
+        function saveDeuda(event) {
+            event.preventDefault();
+
+            const deuda = document.getElementById('deuda').value;
+            const monto = document.getElementById('monto').value;
+            const detalle = document.getElementById('detalle').value;
+            const editID = document.getElementById('editID').value;
+
+            const deudas = JSON.parse(localStorage.getItem('deudas')) || [];
+
+            if (editID) {
+                // Editar deuda existente
+                const existingDeuda = deudas.find(item => item.idDeuda === editID);
+
+                if (existingDeuda) {
+                    existingDeuda.deuda = deuda;
+                    existingDeuda.monto = monto;
+                    existingDeuda.detalle = detalle;
+
+                    localStorage.setItem('deudas', JSON.stringify(deudas));
+                }
+            } else {
+                // Agregar nueva deuda
+                const existingDeuda = deudas.find(item => item.deuda === deuda);
+
+                if (existingDeuda) {
+                    alert('El nombre de la deuda ya existe. Por favor, ingresa un nombre diferente.');
+                    return;
+                }
+
+                const fecha = new Date().toLocaleDateString();
+                const hora = new Date().toLocaleTimeString();
+                const idDeuda = generateID();
+
+                const deudaObj = {
+                    fecha: fecha,
+                    hora: hora,
+                    idDeuda: idDeuda,
+                    deuda: deuda,
+                    monto: monto,
+                    detalle: detalle
+                };
+
+                deudas.push(deudaObj);
+                localStorage.setItem('deudas', JSON.stringify(deudas));
+            }
+
+            document.getElementById('deudaForm').reset();
+            document.getElementById('editID').value = '';
+
+            displayDeudas();
+        }
+
+        // Función para mostrar las deudas en la tabla y calcular la sumatoria de montos
+        function displayDeudas() {
+            const deudas = JSON.parse(localStorage.getItem('deudas')) || [];
+            const tableBody = document.querySelector('#deudasTable tbody');
+            const sumatoriaMonto = document.getElementById('sumatoriaMonto');
+
+            tableBody.innerHTML = '';
+            sumatoriaMonto.innerHTML = '';
+
+            let totalMonto = 0;
+
+            deudas.forEach(deuda => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${deuda.fecha}</td>
+                    <td>${deuda.hora}</td>
+                    <td>${deuda.idDeuda}</td>
+                    <td>${deuda.deuda}</td>
+                    <td>${formatCurrency(deuda.monto)}</td>
+                    <td>${deuda.detalle}</td>
+                    <td>
+                        <button onclick="editDeuda('${deuda.idDeuda}')">Editar</button>
+                        <button onclick="deleteDeuda('${deuda.idDeuda}')">Eliminar</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+
+                const montoNum = parseFloat(deuda.monto.replace(/\./g, '').replace(',', '.'));
+                totalMonto += montoNum;
+            });
+
+            const totalMontoFormatted = formatCurrency(totalMonto);
+            sumatoriaMonto.textContent = `Sumatoria de Montos: ${totalMontoFormatted}`;
+        }
+
+        // Función para editar una deuda
+        function editDeuda(id) {
+            const deudas = JSON.parse(localStorage.getItem('deudas')) || [];
+            const deuda = deudas.find(item => item.idDeuda === id);
+
+            if (deuda) {
+                document.getElementById('deuda').value = deuda.deuda;
+                document.getElementById('monto').value = deuda.monto;
+                document.getElementById('detalle').value = deuda.detalle;
+                document.getElementById('editID').value = deuda.idDeuda;
+            }
+        }
+
+        // Función para eliminar una deuda
+        function deleteDeuda(id) {
+            const deudas = JSON.parse(localStorage.getItem('deudas')) || [];
+            const updatedDeudas = deudas.filter(item => item.idDeuda !== id);
+            localStorage.setItem('deudas', JSON.stringify(updatedDeudas));
+
+            displayDeudas();
+        }
+
+        // Agregar el evento submit al formulario para guardar la deuda
+        document.getElementById('deudaForm').addEventListener('submit', saveDeuda);
+
+        // Mostrar las deudas existentes al cargar la página
+        displayDeudas();
+    </script>
+</body>
+</html>

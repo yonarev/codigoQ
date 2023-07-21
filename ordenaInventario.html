@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ordenar y mostrar datos en una tabla</title>
+  <style>
+    table {
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid black;
+      padding: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Ordenar y mostrar datos en una tabla</h1>
+  <table id="tablaDatos">
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Hora</th>
+        <th>ID de Transacción</th>
+        <th>Inventario</th>
+        <th>Tipo</th>
+        <th>Artículo</th>
+        <th>Cantidad</th>
+        <th>Valor</th>
+        <th>Valor Total</th>
+        <th>Cantidad Total</th>
+        <th>Valor Acumulado</th>
+      </tr>
+    </thead>
+    <tbody id="tbodyDatos"></tbody>
+  </table>
+  <button onclick="reemplazarDatos();ordenarDatosInv();ordenarDatosTipos();ordenarDatosArt()">Orden Base completa'</button>
+  <script>
+    // Función para ordenar los datos alfabéticamente por inventario, luego por tipo y finalmente por artículo
+    function ordenarDatos() {
+      // Obtener los datos del local storage
+      var transaccionInventario = JSON.parse(localStorage.getItem('transaccionInventario'));
+      // Ordenar los datos
+      transaccionInventario.sort(function(a, b) {
+        // Ordenar por inventario
+        if (a.inventario !== b.inventario) {
+          return a.inventario.localeCompare(b.inventario);
+        }
+        
+        // Ordenar por tipo
+        if (a.tipo !== b.tipo) {
+          return a.tipo.localeCompare(b.tipo);
+        }
+        
+        // Ordenar por artículo
+        return a.articulo.localeCompare(b.articulo);
+      });
+
+      // Almacenar los datos ordenados en el local storage con el nuevo key 'inventariosOrd'
+      localStorage.setItem('inventariosOrd', JSON.stringify(transaccionInventario));
+    }
+
+    // Función para mostrar los datos en la tabla
+    function mostrarDatosEnTabla() {
+      // Obtener los datos ordenados del local storage
+      var inventariosOrd = JSON.parse(localStorage.getItem('inventariosOrd'));
+
+      // Obtener el tbody de la tabla
+      var tbody = document.getElementById('tbodyDatos');
+
+      // Generar las filas de la tabla
+      inventariosOrd.forEach(function(item) {
+        var row = document.createElement('tr');
+
+        // Crear las celdas de la fila
+        Object.values(item).forEach(function(value) {
+          var cell = document.createElement('td');
+          cell.textContent = value;
+          row.appendChild(cell);
+        });
+
+        // Agregar la fila al tbody
+        tbody.appendChild(row);
+      });
+    }
+
+    // Función para reemplazar 'transaccionInventario' con 'inventariosOrd'
+    function reemplazarDatos() {
+        // Obtener los datos de 'inventariosOrd'
+        let inventariosOrd = JSON.parse(localStorage.getItem('inventariosOrd'));
+        // Almacenar los datos en 'transaccionInventario'
+        localStorage.setItem('transaccionInventario', JSON.stringify(inventariosOrd));
+        alert("Las transacciones de los Inventarios estan ordenadas")
+      //   alert("El key 'transaccionInventario' ha sido reemplazado con los datos de 'inventariosOrd'.");
+    }
+
+    function ordenarDatosInv() {
+      // Obtener los datos del local storage
+      let inventarios = JSON.parse(localStorage.getItem('inventarios'));
+      // Ordenar los datos por inventario
+      inventarios.sort(function(a, b) {
+        return a.inventario.localeCompare(b.inventario);
+      });
+      // Almacenar los datos ordenados en el local storage
+      localStorage.setItem('inventarios', JSON.stringify(inventarios));
+      alert("los 'inventarios' estan ordenados")
+    }
+
+        // Función para ordenar los datos alfabéticamente por 'articulo' y 'tipo'
+    function ordenarDatosArt() {
+            // Obtener los datos del local storage
+            var articulos = JSON.parse(localStorage.getItem('articulos'));
+            // Ordenar los datos por 'articulo' y 'tipo'
+            articulos.sort(function(a, b) {
+              // Ordenar por 'articulo'
+              if (a.articulo !== b.articulo) {
+                return a.articulo.localeCompare(b.articulo);
+              }
+              // Ordenar por 'tipo'
+              return a.tipo.localeCompare(b.tipo);
+            });
+            // Almacenar los datos ordenados en el local storage
+            localStorage.setItem('articulos', JSON.stringify(articulos));
+            alert('Los articulos estan ordenados')
+    }
+
+       // Función para ordenar los datos alfabéticamente por 'tipo'
+    function ordenarDatosTipos() {
+      // Obtener los datos del local storage
+      var tiposArt = JSON.parse(localStorage.getItem('tiposArt'));
+
+      // Ordenar los datos por 'tipo'
+      tiposArt.sort(function(a, b) {
+        return a.tipo.localeCompare(b.tipo);
+    });
+
+      // Almacenar los datos ordenados en el local storage
+      localStorage.setItem('tiposArt', JSON.stringify(tiposArt));
+      alert('Los tipos estan ordenados')
+    }
+    
+    // // Llamar a la función para ordenar los datos
+    // ordenarDatos();
+    
+    // Llamar a la función para mostrar los datos en la tabla
+    mostrarDatosEnTabla();
+    // Llamar a la función para ordenar y actualizar los datos
+    // ordenarDatosInv();
+
+  </script>
+</body>
+</html>
+

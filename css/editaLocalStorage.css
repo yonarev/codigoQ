@@ -1,0 +1,70 @@
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 20px;
+  }
+  
+  th, td {
+    text-align: left;
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  th {
+    background-color: #f2f2f2;
+  }
+  .elimina{
+    background-color: orangered;
+  }
+  
+  #grabaTotal{
+    background-color: yellow;
+    color: black;
+    font-weight: 500;
+  }
+  /* Estilo para los botones */
+  button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px 0;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    opacity: 0.8;
+  }
+  
+  /* Estilo para el encabezado */
+  h2 {
+    margin-top: 50px;
+    text-align: center;
+  }
+  .seccionBD{
+    background-color: #707e70;
+    padding: 1vw;
+
+  }
+  .seccionXls{
+    background-color: rgb(177, 177, 141);
+    padding: 1vw;
+    justify-content: center;
+
+  }
+  .seccionesBD{
+    display: flex;
+    flex-direction: row;
+  }
+  .seccionUneArchivos{
+    border-style: groove;
+    background-color: #707e70;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }

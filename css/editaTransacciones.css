@@ -1,0 +1,92 @@
+*{
+  --fuente:18vw;
+  --anchoCampo:90vw;
+}
+.tiempo{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+#fecha,#hora {
+  width: 30vw;
+  text-align: center;
+}
+#idTrans{
+  font-size: calc(var(--fuente)/2);
+  width: 60vw;
+  text-align: center;
+}
+.deshabilitado{
+  background-color: rgb(165, 156, 156);
+}
+body {
+    /* margin: 0; */
+    all: 0;
+    padding: 1vw;
+    font-family: Arial, sans-serif;
+    font-size: 6vw !important;
+    font-size: var(--fuente);
+    background-color: darkgray;
+  }
+
+h1, h2 {
+  text-align: center;
+  all: 0;
+}
+.container {
+  max-width: 100vw;
+  margin: 0 auto;
+  padding: 1vw;
+  height: 100vh;
+  overflow-y: auto;
+}
+form {
+  margin-top: 20px;
+  width: 70vw;
+}
+label {
+  font-size: calc(var(--fuente)/4);
+  font-weight: bold;
+  display: block;
+  /* margin-bottom: 5px; */
+}
+
+input[type="text"] {
+  font-size: calc(var(--fuente)/3);
+  width: auto;
+  width: var(--anchoCampo);
+}
+
+button {
+  font-size: calc(var(--fuente)/3);
+  padding: 1vw 1vw;
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  border-radius: 2vw;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+select {
+  width: 100%;
+  /* padding: 5px; */
+  margin-bottom: 10px;
+  font-size: calc(var(--fuente)/3);
+  background-color: grey;
+
+}
+
+/* Estilos adicionales para ajustar la pantalla */
+html, body {
+  height: 100%;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Barra de Tareas Flotante</title>
+  <style>
+    body {
+      font-size: 5vw;
+    }
+    /* Estilos para la barra de tareas */
+    .floating-bar {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      background-color: #f1f1f1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .link-item {
+      margin-bottom: 5px;
+    }
+    .linksInput{
+      font-size: 5vw;
+      width: 90vw;
+
+    }
+    button {
+      width: 25vw;
+      font-size: 5vw;
+      background-color: green;
+    }
+  </style>
+</head>
+<body>
+  <div class="floating-bar">
+    <h3>Accesos directos</h3>
+    <div id="linkList">
+      <!-- Los accesos directos se agregarán dinámicamente aquí -->
+    </div>
+    <hr>
+    <h4>Agregar nuevo acceso directo:</h4>
+    <input type="text" id="linkName" class="linksInput" placeholder="Nombre del enlace">
+    <input type="text" id="linkURL" class="linksInput" placeholder="URL del enlace">
+    <button onclick="addLink()">Agregar</button>
+  </div>
+
+  <script>
+    // Función para agregar un nuevo enlace
+    function addLink() {
+      var linkName = document.getElementById("linkName").value;
+      var linkURL = document.getElementById("linkURL").value;
+      if (linkName.trim() === "" || linkURL.trim() === "") {
+        alert("Por favor, ingresa un nombre y una URL válida");
+        return;
+      }
+      var link = {'linkName':linkName, 'linkURL':linkURL};
+      // Obtener los enlaces existentes desde el Local Storage
+      var links = JSON.parse(localStorage.getItem("links")) || [];
+      // Agregar el nuevo enlace a la lista
+      links.push(link);
+      // Guardar la lista actualizada en el Local Storage
+      localStorage.setItem("links", JSON.stringify(links));
+      // Limpiar los campos de entrada
+      document.getElementById("linkName").value = "";
+      document.getElementById("linkURL").value = "";
+      // Actualizar la visualización de los enlaces
+      displayLinks();
+    }
+
+    // Función para mostrar los enlaces guardados
+    function displayLinks() {
+      debugger
+      var linkList = document.getElementById("linkList");
+      // Limpiar la lista actual
+      linkList.innerHTML = "";
+      // Obtener los enlaces desde el Local Storage
+      var links = JSON.parse(localStorage.getItem("links")) || [];
+      // Generar elementos de lista para cada enlace y agregarlos al HTML
+      links.forEach(function(link) {
+        var listItem = document.createElement("div");
+        listItem.className = "link-item";
+        listItem.innerHTML = '<a href="' + linkName+ '">' + linkURL + '</a>';
+        linkList.appendChild(listItem);
+      });
+    }
+
+    // Cargar los enlaces al cargar la página
+    window.onload = function() {
+      displayLinks();
+      // debugger
+      let focoInicio =document.getElementById('linkName')
+      focoInicio.focus();
+
+    };
+  </script>
+</body>
+</html>

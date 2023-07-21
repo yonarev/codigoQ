@@ -1,0 +1,59 @@
+body{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+button {
+    width: 30vw;
+    height: 7vw;
+    border-radius: 2vw;
+    border-style:groove;
+    font-size: 2.5vw;
+    margin: 1vw;
+}
+button:hover {
+    cursor: pointer;
+  }
+
+.seccionGraban{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    /* padding: 1vw,1vw,1vw; */
+    /* padding-top:0; */
+    /* margin-top: 0; */
+    background-color: gray;
+    height: 37vw;
+}
+.btnGraba{
+    background-color: rgb(71, 237, 71);
+}
+#archivo{
+    font-size: 3vw;
+}
+.seccionElimina{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    background-color: rgb(233, 71, 71);
+    height: 38vw
+}
+.btnElimina{
+    background-color: red;
+    color: white;
+}
+.seccionRecupera{
+    display: flex;
+    flex-direction: row;
+    background-color: rgb(85, 179, 242);
+    flex-wrap: wrap;
+    justify-content: center;
+    height: 10vw
+}
+.btnRecupera{
+    background-color: blue;
+    color: white;
+
+}

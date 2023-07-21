@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>LocalStorage to JSON File</title>
+  <script src="./js/libreria.js"></script>
+  <script>
+    function saveToJSON() {
+      // Obtener los datos del localStorage
+      const data = localStorage.getItem('biografia');
+      // Crear un objeto Blob con los datos en formato JSON
+      const blob = new Blob([data], { type: 'application/json' });
+      // Crear un enlace de descarga
+      const downloadLink = document.createElement('a');
+      downloadLink.href = URL.createObjectURL(blob);
+      // debugger
+      let indiceArchivo=generateID()
+      let nombreArchivo='biografia'+indiceArchivo+'.json'
+      downloadLink.download = nombreArchivo;
+      // Simular un clic en el enlace para iniciar la descarga
+      downloadLink.click();
+    }
+    function loadFromJSON(event) {
+      const file = event.target.files[0];
+      // Crear un objeto FileReader
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        // Obtener los datos del archivo cargado
+        const contents = e.target.result;
+
+        // Guardar los datos en el localStorage
+        localStorage.setItem('biografia', contents);
+        alert('biografia cargada exitosamente en LocalStorage.');
+      };
+      // Leer el archivo como texto
+      reader.readAsText(file);
+    }
+  </script>
+</head>
+<body>
+  <button onclick="saveToJSON()">Guardar en JSON</button>
+  <input type="file" accept=".json" onchange="loadFromJSON(event)">
+</body>
+</html>

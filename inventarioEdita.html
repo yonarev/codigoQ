@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Editar inventario</title>
+</head>
+<body>
+    <div>
+        <select id="inventario">
+            <option disabled selected value="">Seleccione Inventario</option>
+            <script>
+                let inventarios = JSON.parse(localStorage.getItem('inventarios')) || [];
+                inventarios.forEach(function(inv) {
+                    document.write('<option value="' + inv.inventario + '">' + inv.inventario + '</option>');
+                });
+            </script>
+        </select>
+        <button onclick="nuevoInventario()">+</button>
+        <button onclick="eliminarInventario()">Eliminar</button>
+    </div>
+    <button id='btnEliminaInv'onclick="editaInventario()">Edita</button>
+
+    <script>
+        function actualizarComboboxInv() {
+            let inventarios = JSON.parse(localStorage.getItem('inventarios')) || [];
+            let select = document.getElementById('inventario');
+
+            // Limpiar el combobox
+            while (select.firstChild) {
+                select.removeChild(select.firstChild);
+            }
+
+            // Agregar opciones al combobox
+            inventarios.forEach(function(inv) {
+                let option = document.createElement('option');
+                option.value = inv.inventario;
+                option.text = inv.inventario;
+                select.appendChild(option);
+            });
+        }
+
+        function editaInventario() {
+            let inventarios = JSON.parse(localStorage.getItem('inventarios')) || [];
+            let inventarioSeleccionado = document.getElementById('inventario').value;
+
+            if (inventarioSeleccionado === "") {
+                alert('Por favor, seleccione un inventario válido.');
+                return;
+            }
+
+            let nuevoNombre = prompt('Ingrese el nuevo nombre del inventario:', inventarioSeleccionado);
+
+            if (nuevoNombre === null) {
+                return;
+            }
+
+            for (let i = 0; i < inventarios.length; i++) {
+                if (inventarios[i].inventario === inventarioSeleccionado) {
+                    inventarios[i].inventario = nuevoNombre;
+                }
+            }
+
+            localStorage.setItem('inventarios', JSON.stringify(inventarios));
+
+            // Actualizar nombre del inventario en las transacciones
+            let transacciones = JSON.parse(localStorage.getItem('transaccionInventario')) || [];
+            let inventarioEnUso = false;
+
+            for (let i = 0; i < transacciones.length; i++) {
+                if (transacciones[i].inventario === inventarioSeleccionado) {
+                    transacciones[i].inventario = nuevoNombre;
+                }
+            }
+
+            localStorage.setItem('transaccionInventario', JSON.stringify(transacciones));
+
+            alert('Se ha cambiado el nombre del inventario y actualizado las transacciones.');
+
+            // Actualizar el combobox después de realizar los cambios
+            actualizarComboboxInv();
+        }
+
+        function eliminarInventario() {
+            let inventarios = JSON.parse(localStorage.getItem('inventarios')) || [];
+            let inventarioSeleccionado = document.getElementById('inventario').value;
+
+            if (inventarioSeleccionado === "") {
+                alert('Por favor, seleccione un inventario válido.');
+                return;
+            }
+
+            let transacciones = JSON.parse(localStorage.getItem('transaccionInventario')) || [];
+            let inventarioEnUso = false;
+
+            for (let i = 0; i < transacciones.length; i++) {
+                if (transacciones[i].inventario === inventarioSeleccionado) {
+                    inventarioEnUso = true;
+                    break;
+                }
+            }
+
+            if (inventarioEnUso) {
+                alert('No se puede eliminar el inventario, ya que está siendo utilizado en transacciones.');
+            } else {
+                inventarios = inventarios.filter(function(inv) {
+                    return inv.inventario !== inventarioSeleccionado;
+                });
+
+                localStorage.setItem('inventarios', JSON.stringify(inventarios));
+
+                alert('Se ha eliminado el inventario.');
+
+                // Actualizar el combobox después de realizar los cambios
+                actualizarComboboxInv();
+            }
+        }
+
+    </script>
+</body>
+</html>

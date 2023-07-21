@@ -1,0 +1,16 @@
+ren    agregaEliminaCorreosTipo.txt agregaEliminaCorreosTipo.css  
+ren    bitacora.txt bitacora.css
+ren     cargaEmergencia.txt cargaEmergencia.css 
+ren   codDatAgrega.txt codDatAgrega.css 
+ren   codDatAgrega2.txt codDatAgrega2.css   
+ren    codDatLista.txt codDatLista.css  
+ren     codlab.txt codlab.css 
+ren     editaCorreosTipo.txt editaCorreosTipo.css 
+ren      editaLocalStorage.txt editaLocalStorage.css
+ren    encuentraId.txt encuentraId.css  
+ren    grabaAlertaLocal.txt grabaAlertaLocal.css  
+ren   grabaNotas.txt   grabaNotas.css 
+ren   index.txt  index.css  
+ren   listaCargaGrabaCorreosTipo.txt  listaCargaGrabaCorreosTipo.css  
+ren    listaXhora.txt listaXhora.css   
+ren   llamaAlerta.txt llamaAlerta.css   

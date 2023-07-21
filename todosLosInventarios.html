@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Listado de Inventarios</title>
+    <style>
+        #tabla-inventarios {
+            table-layout: auto;
+            width: auto;
+            font-size: 1.4vw;
+            font-family: Arial;
+
+        }
+          
+        #tabla-inventarios th,
+        #tabla-inventarios td {
+            white-space: nowrap;
+        }
+        .inventario-0 {
+            background-color: #3ea3cb;
+        }
+        td {
+            text-align: right;
+        }
+        h1 {
+            text-align: center;
+        }
+
+        .inventario-1 {
+            background-color: #3fc46e;
+        }
+
+        .inventario-2 {
+            background-color: #efa060;
+        }
+
+        .total-row {
+            font-weight: bold;
+        }
+        .alaDerecha {
+            text-align: right;
+        }
+        .alaIzquierda {
+            text-align: left;
+        }
+
+    </style>
+      
+   <!-- <link rel="stylesheet" href="./css/todosLosInventarios.css"> -->
+</head>
+<body>
+    <div class="container">
+        <h1>Listado de Inventarios</h1>
+        <div class="table-wrapper">
+            <table id="tabla-inventarios">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>ID Trans.</th>
+                        <th>Inventario</th>
+                        <th>Tipo</th>
+                        <th>Artículo</th>
+                        <th>Cant</th>
+                        <th>Valor</th>
+                        <th>Valor Total</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-body"></tbody>
+                <tfoot id="tabla-footer"></tfoot>
+            </table>
+        </div>
+    </div>
+    <script src="./js/libreria.js"></script>
+    <script>
+        // Datos del Local Storage
+        var transaccionInventario = JSON.parse(localStorage.getItem('transaccionInventario'));
+        var inventarios = JSON.parse(localStorage.getItem('inventarios'));
+        var tiposArt = JSON.parse(localStorage.getItem('tiposArt'));
+
+        // Función para asignar clases únicas a cada inventario
+        function asignarClaseInventario(inventarios) {
+            var inventarioClases = {};
+            inventarios.forEach(function(inventario, index) {
+                inventarioClases[inventario.inventario] = 'inventario-' + (index % 3);
+            });
+            return inventarioClases;
+        }
+
+        // Ordenar los inventarios por nombre de inventario
+        inventarios.sort(function(a, b) {
+            return a.inventario.localeCompare(b.inventario);
+        });
+
+        // Obtener clases de inventario
+        var inventarioClases = asignarClaseInventario(inventarios);
+
+        // Construir la tabla HTML con los datos de inventarios
+        var tablaBody = document.getElementById('tabla-body');
+        var cantidadTotal = 0;
+        var valorTotal = 0;
+
+        inventarios.forEach(function(inventario) {
+            var filtrados = transaccionInventario.filter(function(transaccion) {
+                return transaccion.inventario === inventario.inventario;
+            });
+
+            // Ordenar los inventarios filtrados por tipo
+            filtrados.sort(function(a, b) {
+                return a.tipo.localeCompare(b.tipo);
+            });
+            let valorI =0
+            let ValorT=0
+            filtrados.forEach(function(transaccion) {
+                var fila = document.createElement('tr');
+                fila.classList.add(inventarioClases[transaccion.inventario]);
+                // let valorI=separadorMiles(transaccion.valor)
+                // valorI="$"+valorI;
+                // let ValorT="$"+transaccion.valorTotal;
+                valorI=formatoPeso(transaccion.valor)
+                valorT=formatoPeso(transaccion.valorTotal)
+                fila.innerHTML = `
+                    <td>${transaccion.fecha}</td>
+                    <td>${transaccion.hora}</td>
+                    <td>${transaccion.idTrans}</td>
+                    <td class="alaIzquierda">${transaccion.inventario}</td>
+                    <td class="alaIzquierda">${transaccion.tipo}</td>
+                    <td class="alaIzquierda">${transaccion.articulo}</td>
+                    <td>${transaccion.cantidad}</td>
+                    <td>${formatoPeso(transaccion.valor)}</td>
+                    <td>${formatoPeso(transaccion.valorTotal)}</td>
+                `;
+
+                tablaBody.appendChild(fila);
+
+                cantidadTotal += transaccion.cantidad;
+                valorTotal += transaccion.valorTotal;
+            });
+        });
+        function separadorMiles(numero) {
+                return numero.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
+
+        // Mostrar los totales en el footer de la tabla
+        var tablaFooter = document.getElementById('tabla-footer');
+        var totalHTML = '<tr class="total-row">';
+        totalHTML += '<td colspan="6">Total</td>';
+        totalHTML += '<td>' + cantidadTotal + '</td>';
+        totalHTML += '<td></td>';
+        totalHTML += '<td>' + valorTotal + '</td>';
+        totalHTML += '</tr>';
+        tablaFooter.innerHTML = totalHTML;
+    </script>
+</body>
+</html>

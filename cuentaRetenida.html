@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edición de Cuentas Retenidas</title>
+    <style>
+        .green {
+            background-color: green;
+        }
+
+        .light-orange {
+            background-color: lightorange;
+        }
+    </style>
+</head>
+<body>
+    <h1>Edición de Cuentas Retenidas</h1>
+
+    <select id="selectCuentas"></select>
+    <br>
+    <label for="nuevaCuenta">Nueva Cuenta:</label>
+    <input type="text" id="nuevaCuenta">
+    <br>
+    <label for="cuentaR">Cuenta R:</label>
+    <input type="text" id="cuentaR" disabled>
+    <br>
+    <label for="valorR">Valor R:</label>
+    <input type="text" id="valorR">
+    <br>
+    <button onclick="grabarCuentaR()" class="green">Grabar Cuenta R</button>
+    <button onclick="eliminarCuentaR()" class="light-orange">Eliminar Cuenta R</button>
+
+    <script>
+        // Obtener cuentas retenidas de localStorage o inicializar si no existen
+        let cuentasRetenidas = JSON.parse(localStorage.getItem('cuentasRetenidas')) || [];
+
+        // Función para mostrar las cuentas en el select
+        function mostrarCuentas() {
+            const selectCuentas = document.getElementById('selectCuentas');
+            selectCuentas.innerHTML = '';
+
+            cuentasRetenidas.forEach(cuenta => {
+                const option = document.createElement('option');
+                option.value = cuenta.idCuentaR;
+                option.text = cuenta.cuentaR;
+                selectCuentas.appendChild(option);
+            });
+        }
+
+        // Función para actualizar los campos de cuentaR y valorR
+        function actualizarCampos() {
+            const selectCuentas = document.getElementById('selectCuentas');
+            const cuentaSeleccionada = selectCuentas.value;
+
+            const cuenta = cuentasRetenidas.find(cuenta => cuenta.idCuentaR === cuentaSeleccionada);
+
+            if (cuenta) {
+                document.getElementById('cuentaR').value = cuenta.cuentaR;
+                document.getElementById('valorR').value = cuenta.valorR;
+            }
+        }
+
+        // Función para grabar la cuentaR y valorR en localStorage
+        function grabarCuentaR() {
+            const selectCuentas = document.getElementById('selectCuentas');
+            const cuentaSeleccionada = selectCuentas.value;
+
+            if (cuentaSeleccionada) {
+                const cuenta = cuentasRetenidas.find(cuenta => cuenta.idCuentaR === cuentaSeleccionada);
+
+                if (cuenta) {
+                    cuenta.cuentaR = document.getElementById('cuentaR').value;
+                    cuenta.valorR = document.getElementById('valorR').value;
+                }
+            } else {
+                const nuevaCuentaR = document.getElementById('nuevaCuenta').value;
+                const nuevaValorR = document.getElementById('valorR').value;
+
+                const fechaActual = new Date();
+                const fecha = fechaActual.getDate() + '/' + (fechaActual.getMonth() + 1) + '/' + fechaActual.getFullYear();
+                const hora = fechaActual.getHours() + ':' + fechaActual.getMinutes() + ':' + fechaActual.getSeconds();
+                const idCuentaR = fecha + hora.replace(/:/g, '');
+                
+                const nuevaCuenta = {
+                    fecha,
+                    hora,
+                    idCuentaR,
+                    cuentaR: nuevaCuentaR,
+                    valorR: nuevaValorR
+                };
+
+                cuentasRetenidas.push(nuevaCuenta);
+            }
+
+            // Actualizar localStorage
+            localStorage.setItem('cuentasRetenidas', JSON.stringify(cuentasRetenidas));
+
+            // Mostrar las cuentas actualizadas en el select
+            mostrarCuentas();
+        }
+
+        // Función para eliminar la cuentaR seleccionada de localStorage
+        function eliminarCuentaR() {
+            const selectCuentas = document.getElementById('selectCuentas');
+            const cuentaSeleccionada = selectCuentas.value;
+
+            cuentasRetenidas = cuentasRetenidas.filter(cuenta => cuenta.idCuentaR !== cuentaSeleccionada);
+
+            // Actualizar localStorage
+            localStorage.setItem('cuentasRetenidas', JSON.stringify(cuentasRetenidas));
+
+            // Limpiar los campos
+            document.getElementById('cuentaR').value = '';
+            document.getElementById('valorR').value = '';
+
+            // Actualizar la lista de cuentas en el select
+            mostrarCuentas();
+        }
+
+        // Formatear el valorR con formato $ con separador de miles
+        function formatearValorR(valor) {
+            return '$' + valor.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        }
+
+        // Event listener para actualizar los campos cuando se selecciona una cuenta
+        document.getElementById('selectCuentas').addEventListener('change', actualizarCampos);
+
+        // Inicializar la lista de cuentas en el select y actualizar los campos
+        mostrarCuentas();
+        actualizarCampos();
+    </script>
+</body>
+</html>

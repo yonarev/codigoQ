@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Modificar y eliminar asuntos en local storage</title>
+  <link rel="stylesheet" href="./css/editaAsunto.css">
+</head>
+<body>
+  <h1>Edita asuntos</h1>
+  <label for="asuntos">Asuntos:</label>
+  <select id="asuntos" name="asuntos" onchange="cargarAsunto()">
+    <option value="">Seleccione un asunto</option>
+  </select><br>
+  <label for="asunto">Nuevo nombre:</label>
+  <input type="text" id="asunto" name="asunto"><br>
+  <label for="detalle">Detalle:</label>
+  <textarea id="detalle" name="detalle"></textarea><br>
+  <button onclick="guardarAsunto()">Guardar</button>
+  <button onclick="eliminarAsunto()">Eliminar</button>
+  <!-- script -->
+  <script>
+  // Obtener la lista de asuntos almacenados en local storage y agregarlos al select
+  var selectAsuntos = document.getElementById("asuntos");
+  var asuntos = JSON.parse(localStorage.getItem("asuntos"));
+  if (asuntos != null) {
+    for (var i = 0; i < asuntos.length; i++) {
+      var option = document.createElement("option");
+      option.value = i;
+      option.text = asuntos[i].asunto;
+      selectAsuntos.appendChild(option);
+    }
+  }
+  function cargarAsunto() {
+    var indice = document.getElementById("asuntos").value;
+    if (indice != "") {
+      var asunto = asuntos[indice];
+      // Actualizar los valores del formulario con los valores del objeto almacenado
+      document.getElementById("asunto").value = asunto.asunto;
+      document.getElementById("detalle").value = asunto.detalle;
+    } else {
+      // Limpiar los valores del formulario si no se ha seleccionado un asunto
+      document.getElementById("asunto").value = "";
+      document.getElementById("detalle").value = "";
+    }
+  }
+  function guardarAsunto() {
+    var indice = document.getElementById("asuntos").value;
+    if (indice != "") {
+      var asunto = asuntos[indice];
+      // Actualizar el objeto con el nuevo nombre del asunto
+      asunto.asunto = document.getElementById("asunto").value;
+      asunto.detalle = document.getElementById("detalle").value;
+      // Guardar el objeto actualizado en local storage
+      localStorage.setItem("asuntos", JSON.stringify(asuntos));
+      alert("El asunto se ha actualizado correctamente en local storage");
+    } else {
+      alert("Debe seleccionar un asunto antes de actualizarlo");
+    }
+  }
+  function eliminarAsunto() {
+    var indice = document.getElementById("asuntos").value;
+    if (indice != "") {
+      // Eliminar el objeto del asunto seleccionado de la lista de asuntos
+      asuntos.splice(indice, 1);
+      // Guardar la lista de asuntos actualizada en local storage
+      localStorage.setItem("asuntos", JSON.stringify(asuntos));
+      // Actualizar el select con la lista de asuntos actualizada
+      indice=parseInt(indice)
+      selectAsuntos.options[indice + 1].remove();
+      // Limpiar los valores del formulario
+      document.getElementById("asunto").value = "";
+      document.getElementById("detalle").value = "";
+      alert("El asunto se ha eliminado correctamente de local storage");
+    } else {
+      alert("Debe seleccionar un asunto antes de eliminarlo");
+    }
+}
+  </script>
+</body>
+</html>

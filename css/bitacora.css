@@ -1,0 +1,199 @@
+*{
+  margin: 0;
+  padding-top: 1vw;
+  margin-top: 1vw;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+body {
+    flex-direction: column;
+    flex-wrap: wrap;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding-top: 0;
+    margin-top: 0;
+    padding-bottom: 0;
+    margin-bottom: 0;
+    padding: 0;
+    background: linear-gradient(to left, #3a3a8f, #87CEFA);
+}
+.container {
+  max-width: 90vw;
+  margin: 0 auto;
+  padding: 5px;
+}
+h1 {
+  font-size: 6vw;
+  text-align: center;
+  /* margin-bottom: 1vw; */
+  padding: 0,0,0,0;
+  margin: 0,0,0,0;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  /* margin-bottom: 5px; */
+}
+form label {
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+form input[type="date"], form textarea {
+  /* font-size: 20px; */
+  font-size: 3vw;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-bottom: 5px;
+}
+form textarea {
+  height: 90vw;
+  /* width: 90vw; */
+}
+form button {
+  font-size: 3vw;
+  padding: 1vw 2vw;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+form button:hover {
+  background-color: #3e8e41;
+}
+.note-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.note-list li {
+  font-size: 18px;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+.note-list li span {
+  font-weight: bold;
+}
+.alert {
+  background-color: #f2dede;
+  color: #a94442;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ebccd1;
+  margin-bottom: 20px;
+}
+.alert-success {
+  background-color: #dff0d8;
+  color: #3c763d;
+  border: 1px solid #d6e9c6;
+}
+.form-field {
+  font-size: 2vw;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
+}
+.form-field.date {
+  width: 30vw;
+  margin: 0 auto;
+  display: block;
+}
+.formularioBitacora {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 80vw;
+  margin: 0 auto;
+}
+.formularioBitacora input[type="date"],
+.formularioBitacora textarea {
+  width: 100%;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+.formularioBitacora button {
+  /* padding: 10px 20px; */
+  margin-left: 3vw;
+  border-radius: 5px;
+  border: none;
+  background-color: #4CAF50;
+  color: #fff;
+  font-size: 3vw;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  
+}
+.formularioBitacora button:hover {
+  background-color: #3e8e41;
+}
+textarea {
+  font-size: 20px;
+  width: 90vw;
+}
+
+.tempo{
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  align-items: baseline;
+  margin: 0 auto;
+  font-size: 5vw;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.botonera{
+  display: flex;
+  flex-direction: row;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+#btnQ #btnB{
+  background-color: blue !important;
+  font-weight: bold;
+  font-size: 6vw;
+  border-radius: 8vw;
+}
+#btnQ{
+  background-color: #3a3a8f;
+}
+#btnB{
+  background-color: #cd9733;
+
+}
+#fechaBit{
+  width: 35vw;
+  height:6vw;
+  font-size: 5vw;
+
+}
+#horaBit {
+  width: 20vw;
+  height:4.5vw;
+  background-color: #fffffe;
+  padding: 1vw;
+}
+#botonesJson{
+  display: flex;
+  flex-direction: row;
+  margin-left: 2vw;
+  padding: 2vw,2vw,2vw,2vw;
+}
+#archivoJSON{
+  margin-left: 3vw;
+}
+#horaGrabaBit{
+  font-size: 4vw;
+  padding: 0,0,0,0;
+  margin: 0,0,0,0;
+}
+.seccionBtnBit{
+  width: auto;
+}

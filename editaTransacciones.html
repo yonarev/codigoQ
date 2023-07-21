@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Editando Transacciones</title>
+  <link rel="stylesheet" href="./css/editaTransacciones.css">
+</head>
+<body>
+  <label for="selectTransacciones">Transacciones</label>
+  <select id="selectTransacciones" onchange="mostrarDetalleTransaccion()">
+    <option value="">Seleccionar Transacción</option>
+  </select>
+
+  <div id="detalleTransaccion" style="display: none;">
+    <!-- <h2>Detalle</h2> -->
+    <form>
+      <label for="idTrans">ID Transacción:</label>
+      <input type="text" id="idTrans" class="deshabilitado" readonly><br>
+      <div class="tiempo">
+        <!-- <label for="fecha">Fecha:</label> -->
+        <input type="text" id="fecha" class="deshabilitado" readonly><br>
+        <!-- <label for="hora">Hora:</label> -->
+        <input type="text" id="hora" class="deshabilitado" readonly><br>
+      </div>
+      
+      <label for="idCuenta">ID Cuenta:</label>
+      <input type="text" id="idCuenta" class="deshabilitado" readonly><br>
+      
+      <label for="nombreCuenta">Nombre de Cuenta:</label>
+      <input type="text" id="nombreCuenta" class="deshabilitado" readonly><br>
+      <div>
+        <select class="selector" id="motivoNuevo" name="motivoNuevo" placeholder="Motivo"></select>
+        <button  onclick="cambiaMotivo()">Cambia El Motivo</button>
+    </div>
+      <label for="motivo">Motivo:</label>
+      <input type="text" id="motivo"><br>
+      
+      <label for="elemento">Elemento:</label>
+      <input type="text" id="elemento"><br>
+      
+      <label for="cantidad">Cantidad:</label>
+      <input type="text" id="cantidad" class="deshabilitado" readonly><br>
+      
+      <button type="button" onclick="guardarCambios()">Guardar Cambios</button>
+    </form>
+  </div>
+
+  <script>
+    cargarMotivos()
+    const tablaTransacciones = JSON.parse(localStorage.getItem('transacciones')) || [];
+
+    // Llenar el select con las transacciones
+    const selectTransacciones = document.getElementById('selectTransacciones');
+    for (let i = 0; i < tablaTransacciones.length; i++) {
+      const transaccion = tablaTransacciones[i];
+      const option = document.createElement('option');
+      option.value = transaccion.idTrans;
+      option.text = transaccion.idTrans;
+      selectTransacciones.appendChild(option);
+    }
+
+    // Mostrar el detalle de la transacción seleccionada
+    function mostrarDetalleTransaccion() {
+      const idTransSeleccionado = selectTransacciones.value;
+      const transaccionSeleccionada = tablaTransacciones.find(t => t.idTrans === idTransSeleccionado);
+      
+      if (transaccionSeleccionada) {
+        document.getElementById('idTrans').value = transaccionSeleccionada.idTrans;
+        document.getElementById('idCuenta').value = transaccionSeleccionada.idCuenta;
+        document.getElementById('nombreCuenta').value = transaccionSeleccionada.nombreCuenta;
+        document.getElementById('fecha').value = transaccionSeleccionada.fecha;
+        document.getElementById('hora').value = transaccionSeleccionada.hora;
+        document.getElementById('motivo').value = transaccionSeleccionada.motivo;
+        document.getElementById('elemento').value = transaccionSeleccionada.elemento;
+        document.getElementById('cantidad').value = transaccionSeleccionada.cantidad;
+  
+        document.getElementById('detalleTransaccion').style.display = 'block';
+      } else {
+        document.getElementById('detalleTransaccion').style.display = 'none';
+      }
+    }
+
+        // Guardar los cambios en la transacción seleccionada
+        function guardarCambios() {
+      const idTransSeleccionado = document.getElementById('idTrans').value;
+      const transaccionSeleccionada = tablaTransacciones.find(t => t.idTrans === idTransSeleccionado);
+
+      if (transaccionSeleccionada) {
+        transaccionSeleccionada.motivo = document.getElementById('motivo').value;
+        transaccionSeleccionada.elemento = document.getElementById('elemento').value;
+        transaccionSeleccionada.cantidad = document.getElementById('cantidad').value;
+
+        // Actualizar el detalle de la transacción en el Local Storage
+        localStorage.setItem('transacciones', JSON.stringify(tablaTransacciones));
+
+        // Mostrar mensaje de éxito
+        alert('Cambios guardados correctamente.');
+      }
+    }
+    function cambiaMotivo(){
+        let motivoNuevo=document.getElementById('motivoNuevo')
+        selectedOption = motivoNuevo.options[motivoNuevo.selectedIndex]
+        let selectedMotivo = selectedOption.text;
+        document.getElementById('motivo').value=selectedMotivo
+        event.preventDefault()
+    }
+    function cargarMotivos() {
+        let motivos = JSON.parse(localStorage.getItem("motivos")); // Obtener la lista de motivos de Local Storage
+        if(motivos===null){
+            return
+        }
+        var motivoSelect = document.getElementById("motivoNuevo"); // Obtener el ComboBox "Motivo"
+        motivoSelect.innerHTML=""
+        for (let i = 0; i < motivos.length; i++) {
+            let motivo = motivos[i];
+            let option = document.createElement("option"); // Crear una nueva opción
+            option.text = motivo.nombreMotivo; // Asignar el nombre del motivo como texto de la opción
+            option.value = motivo.idMotivos; // Asignar el ID del motivo como valor de la opción
+            motivoSelect.add(option);
+        }
+    }
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Listado de Inventarios</title>
+    <style>
+        *{
+            font-family: Arial;
+        }
+        #tabla-inventarios {
+            table-layout: auto;
+            width: auto;
+            font-size: 1.4vw;
+
+        }
+          
+        #tabla-inventarios th,
+        #tabla-inventarios td {
+            white-space: nowrap;
+        }
+        .inventario-0 {
+            background-color: #3ea3cb;
+        }
+        td {
+            text-align: right;
+        }
+        h1 {
+            text-align: center;
+        }
+
+        .inventario-1 {
+            background-color: #3fc46e;
+        }
+
+        .inventario-2 {
+            background-color: #efa060;
+        }
+
+        .total-row {
+            font-weight: bold;
+        }
+        .alaDerecha {
+            text-align: right;
+        }
+        .alaIzquierda {
+            text-align: left;
+        }
+    </style>
+      
+</head>
+<body>
+    <div class="container">
+        <p>Lista de Inventarios</p>
+        <div class="table-wrapper">
+            <table id="tabla-inventarios">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>ID Trans.</th>
+                        <th>Inventario</th>
+                        <th>Tipo</th>
+                        <th>Artículo</th>
+                        <th>Cant</th>
+                        <th>Valor</th>
+                        <th>Valor Total</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-body"></tbody>
+                <tfoot id="tabla-footer"></tfoot>
+            </table>
+        </div>
+    </div>
+    <script src="./js/libreria.js"></script>
+    <script>
+        // Datos del Local Storage
+        let transaccionInventario = JSON.parse(localStorage.getItem('transaccionInventario'));
+        let inventarios = JSON.parse(localStorage.getItem('inventarios'));
+        let tiposArt = JSON.parse(localStorage.getItem('tiposArt'));
+
+        // Función para asignar clases únicas a cada inventario
+        function asignarClaseInventario(inventarios) {
+            let inventarioClases = {};
+            inventarios.forEach(function(inventario, index) {
+                inventarioClases[inventario.inventario] = 'inventario-' + (index % 3);
+            });
+            return inventarioClases;
+        }
+        // Ordenar los inventarios por nombre de inventario
+        inventarios.sort(function(a, b) {
+            return a.inventario.localeCompare(b.inventario);
+        });
+        // Obtener clases de inventario
+        let inventarioClases = asignarClaseInventario(inventarios);
+        // Construir la tabla HTML con los datos de inventarios
+        let tablaBody = document.getElementById('tabla-body');
+        let cantidadTotal = 0;
+        let valorTotal = 0;
+
+        inventarios.forEach(function(inventario) {
+            let filtrados = transaccionInventario.filter(function(transaccion) {
+                return transaccion.inventario === inventario.inventario;
+            });
+            // Ordenar los inventarios filtrados por tipo
+            filtrados.sort(function(a, b) {
+                return a.tipo.localeCompare(b.tipo);
+            });
+            let valorI =0
+            let ValorT=0
+            filtrados.forEach(function(transaccion) {
+                let fila = document.createElement('tr');
+                fila.classList.add(inventarioClases[transaccion.inventario]);
+                valorI=formatoPeso(transaccion.valor)
+                valorT=formatoPeso(transaccion.valorTotal)
+                fila.innerHTML = `
+                    <td>${transaccion.fecha}</td>
+                    <td>${transaccion.hora}</td>
+                    <td>${transaccion.idTrans}</td>
+                    <td class="alaIzquierda">${transaccion.inventario}</td>
+                    <td class="alaIzquierda">${transaccion.tipo}</td>
+                    <td class="alaIzquierda">${transaccion.articulo}</td>
+                    <td>${transaccion.cantidad}</td>
+                    <td>${formatoPeso(transaccion.valor)}</td>
+                    <td>${formatoPeso(transaccion.valorTotal)}</td>
+                `;
+
+                tablaBody.appendChild(fila);
+
+                cantidadTotal += transaccion.cantidad;
+                valorTotal += transaccion.valorTotal;
+            });
+        });
+        // Mostrar los totales en el footer de la tabla
+        let tablaFooter = document.getElementById('tabla-footer');
+        let totalHTML = '<tr class="total-row">';
+        totalHTML += '<td colspan="6">Total de Articulos:</td>';
+        totalHTML += '<td>' + cantidadTotal + '</td>';
+        totalHTML += '<td></td>';
+        totalHTML += '<td>' + formatoPeso(valorTotal) + '</td>';
+        totalHTML += '</tr>';
+        tablaFooter.innerHTML = totalHTML;
+    </script>
+</body>
+</html>

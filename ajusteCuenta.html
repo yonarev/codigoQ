@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ajuste de Cuenta</title>
+  <script src="./js/libreria.js"></script>
+  <script src="./js/cuentaQ.js"></script>
+
+  <script type="text/javascript">
+    function ajustaCuenta(event) {
+      event.preventDefault();
+      // CALCULOS
+      let saldoCtaSel = retornaSaldoCta();
+      let montoReal = document.getElementById("montoRealInput").value;
+      montoReal = parseInt(montoReal);
+
+      // VALIDA INPUT
+      if (!montoReal && montoReal !== 0) {
+        alert("Ingresa el monto real");
+        return;
+      } else {
+        if (montoReal === 0) {
+          let confirma0 = confirm("El monto de la cuenta será 0. ¿Quieres continuar?");
+          if (!confirma0) {
+            return;
+          }
+        }
+      }
+
+      let descontar = saldoCtaSel - montoReal;
+      alert(
+        "El saldo de la cuenta es: $" + saldoCtaSel +
+        "\nEl monto a descontar es $" + descontar +
+        "\nEl monto Real es $" + montoReal
+      );
+
+      // DATOS
+      let saldoIni = entregaSaldosCuenta("saldoIni");
+      let saldoFin = entregaSaldosCuenta("saldoFin");
+      let saldoAct = entregaSaldosCuenta("saldoAct");
+      let motivoReal = 'AJUSTE ERROR';
+      let fecha = fechaAhoraOk();
+      let hora = new Date().toLocaleTimeString();
+      let id = indiceAhora();
+      let idCta = document.getElementById("cuenta").value;
+      let nombreCuenta = document.getElementById("cuenta").options[document.getElementById("cuenta").selectedIndex].text;
+      let elemento = 'Ajuste de cuenta a cuadrar';
+      let transa = [{
+        "fecha": fecha,
+        "hora": hora,
+        "idTrans": id,
+        "idCuenta": idCta,
+        "nombreCuenta": nombreCuenta,
+        "saldoInicial": saldoIni,
+        "saldoActual": montoReal,
+        "saldoFinal": montoReal,
+        "motivo": motivoReal,
+        "cantidad": 1,
+        "elemento": elemento,
+        "valor": montoReal,
+        "total": montoReal,
+        "suma": 0,
+        "resta": descontar
+      }];
+
+      let confirmaGrabar = confirm("¿Confirma Grabar?");
+      if (!confirmaGrabar) {
+        return;
+      }
+
+      // Obtener la lista de transacciones existente en Local Storage
+      let transacciones = JSON.parse(localStorage.getItem("transacciones")) || [];
+      // Agregar la nueva lista de transacciones a la lista existente
+      transacciones.push(transa[0]);
+      localStorage.setItem("transacciones", JSON.stringify(transacciones));
+
+      grabaCuentaSaldos(saldoIni, montoReal, montoReal);
+      cargarDatosCuenta();
+    //   resetValores();
+    //   actualizarTabla(); //transacciones
+    //   presentarTablaCuentas(); //cuentas
+    //   posiciona();
+    }
+  </script>
+</head>
+<body>
+  <form onsubmit="ajustaCuenta(event)">
+    <label for="montoRealInput">Monto Real de la Cuenta:</label>
+    <input type="text" id="montoRealInput" required>
+    <br>
+    <label for="cuenta">Cuenta:</label>
+    <select id="cuenta">
+      <!-- Opciones de cuenta -->
+    </select>
+    <br>
+    <button type="submit">Realizar Ajuste</button>
+  </form>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Eliminar Tipo de Artículo</title>
+</head>
+<body>
+  <h1>Eliminar Tipo de Artículo</h1>
+
+  <select id="tipo"></select>
+
+  <button onclick="eliminarTipo()">Eliminar Tipo</button>
+
+  <script>
+    // Función para cargar los tipos de artículos en el combobox
+    function cargarTiposArt() {
+      var tiposArt = JSON.parse(localStorage.getItem('tiposArt'));
+
+      if (tiposArt) {
+        var select = document.getElementById('tipo');
+        select.innerHTML = '';
+
+        // Agregar una opción vacía al inicio del combobox
+        var emptyOption = document.createElement('option');
+        emptyOption.value = '';
+        emptyOption.text = 'Seleccione un tipo de artículo';
+        select.appendChild(emptyOption);
+
+        // Agregar opciones de tipos de artículos
+        tiposArt.forEach(function(tipo) {
+          var option = document.createElement('option');
+          option.value = tipo.tipo;
+          option.text = tipo.tipo;
+          select.appendChild(option);
+        });
+      }
+    }
+
+    // Función para eliminar el tipo seleccionado
+    function eliminarTipo() {
+      var selectedValue = document.getElementById('tipo').value;
+      if (selectedValue) {
+        // Verificar si el tipo está siendo utilizado por algún artículo
+        var articulos = JSON.parse(localStorage.getItem('articulos'));
+        var tipoEnUso = articulos.some(function(articulo) {
+          return articulo.tipo === selectedValue;
+        });
+
+        if (tipoEnUso) {
+          alert('El tipo de artículo está siendo utilizado por algún artículo. No se puede eliminar.');
+        } else {
+          // Eliminar el tipo seleccionado de 'tipos'
+          eliminarTipoTiposArt(selectedValue);
+          // Volver a cargar los tipos de artículos en el combobox
+          cargarTiposArt();
+        }
+      } else {
+        alert('Seleccione un tipo de artículo.');
+      }
+    }
+
+    // Función para eliminar el tipo de 'tiposArt'
+    function eliminarTipoTiposArt(selectedValue) {
+      let tiposArt = JSON.parse(localStorage.getItem('tiposArt'));
+        let confirma=confirm('seguro de eliminar el tipo? ');
+        if(!confirma){
+            return
+        }
+      for (let i = 0; i < tiposArt.length; i++) {
+        if (tiposArt[i].tipo === selectedValue) {
+          tiposArt.splice(i, 1);
+          break;
+        }
+      }
+      localStorage.setItem('tiposArt', JSON.stringify(tiposArt));
+      alert('El tipo de artículo se eliminó correctamente.');
+    }
+
+    // Cargar los tipos de artículos al cargar la página
+    cargarTiposArt();
+  </script>
+</body>
+</html>

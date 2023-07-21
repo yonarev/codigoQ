@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Convertir archivo JSON a texto</title>
+  <script>
+    function leerArchivoJSON(event) {
+        let archivo = event.target.files[0];
+        let nombreArchivo = archivo.name;
+        let tablaEs
+        if (nombreArchivo.startsWith('bitacora')) {
+            tablaEs='bitacora'
+        } else if (nombreArchivo.startsWith('asuntos')) {
+            tablaEs='asuntos'
+        } else if (nombreArchivo.startsWith('baseDatos')) {
+            tablaEs='base'
+        } else {
+            return
+        }
+
+        let lectorBit = new FileReader();
+        if(tablaEs==='bitacora'){
+            lectorBit.onload = function(e) {
+                let contenido = e.target.result;
+                let bitacora = JSON.parse(contenido);
+                let textoConvertido = '';
+                for (let i = 0; i < bitacora.length; i++) {
+                    let fecha = bitacora[i].fecha;
+                    let nota = bitacora[i].nota;
+                    textoConvertido += '=== ' + fecha + ' ===\n';
+                    textoConvertido += 'Capítulo: ' + nota + '\n\n';
+                }
+                var enlaceDescarga = document.createElement('a');
+                enlaceDescarga.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(textoConvertido));
+                enlaceDescarga.setAttribute('download', archivo.name.replace(/\.[^/.]+$/, "") + '.txt');
+                enlaceDescarga.style.display = 'none';
+                document.body.appendChild(enlaceDescarga);
+                enlaceDescarga.click();
+                document.body.removeChild(enlaceDescarga);
+            };
+            lectorBit.readAsText(archivo);
+            return
+        }
+        let lectorAs=new FileReader();
+        if(tablaEs='asuntos'){
+            // LEE ASUNTOS
+            lectorAs.onload = function(e) {
+                let contenido = e.target.result;
+                let asuntos = JSON.parse(contenido);
+    
+                let textoConvertido = '';
+                for (let i = 0; i < asuntos.length; i++) {
+                let asunto = asuntos[i].asunto;
+                let detalle = asuntos[i].detalle;
+    
+                textoConvertido += '--- ' + asunto + ' ---\n';
+                textoConvertido += 'Capítulo: ' + detalle + '\n\n';
+                }
+    
+                let enlaceDescarga = document.createElement('a');
+                enlaceDescarga.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(textoConvertido));
+                enlaceDescarga.setAttribute('download', archivo.name.replace(/\.[^/.]+$/, "") + '.txt');
+                enlaceDescarga.style.display = 'none';
+                document.body.appendChild(enlaceDescarga);
+                enlaceDescarga.click();
+                document.body.removeChild(enlaceDescarga);
+            };
+            lectorAs.readAsText(archivo);
+            return
+        }
+
+    }
+  </script>
+</head>
+<body>
+  <h1>Convertir archivo JSON a texto</h1>
+  <input type="file" accept=".json" onchange="leerArchivoJSON(event)">
+</body>
+</html>
+
+
+

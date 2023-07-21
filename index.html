@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="es"></html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q</title>
+    <link rel="icon" href="./img/icono1.png" type="image/x-icon">
+    <link rel="stylesheet" href="./css/formatoCelular.css">
+    <style id="animanInicio">
+        #picaflor,
+        #colibri {
+            position: relative;
+            animation-duration: 3s;
+            animation-iteration-count: infinite;
+        }
+        #picaflor {
+        animation-name: moverPicaflor;
+        }
+        #colibri {
+        animation-name: moverColibri;
+        }
+        #caracol {
+            position: absolute;
+            left: -53vw;
+            top: 18vw;
+            animation-name: movercaracol;
+            animation-duration: 10s;
+            animation-timing-function: linear;
+            animation-iteration-count: 1;
+        }
+        @keyframes movercaracol {
+            0% {
+                transform: translateX(-100px);
+            }
+            100% {
+                transform: translateX(calc(100% + 100px));
+            }
+        }
+        @keyframes moverPicaflor {
+        0%   { left: 0px; transform: scaleX(-1); }
+        25%  { left: 200px; transform: scaleX(-1); }
+        50%  { left: 200px; transform: scaleX(1); }
+        75%  { left: 0px; transform: scaleX(1); }
+        100% { left: 0px; transform: scaleX(1); }
+        }
+        @keyframes moverColibri{
+        0%   { right: 200px; top: 200px; }
+        25%  { right: 0px; top: 200px; }
+        50%  { right: 0px; top: 0px; }
+        75%  { right: 200px; top: 0px; }
+        100% { right: 200px; top: 200px; }
+        }
+    </style>
+
+</head>
+<body id="contenido">
+    <div class="presentacion">
+        <div>
+            <br>
+            <h2 class ='textoLogo' onclick="cargarPagina('./efectoMatris.html')" >C0digo Q</h2>
+            <div id="caracol">
+                <img id="paloma" onmouseover="mensajeOver('Backup archivo BD enServidor')" onmouseout="ocultaMensajeOver(event)" onclick="cantaPajarito('palomita');activaAnimaCSS('animanInicio',false);grabaServerBack(true)" src="./img/paloma.png" alt="+Q" style="width: 45%; height: auto; margin-top: 0vw;">
+            </div>
+        </div>
+        <img id="colibri" onclick="presentaBase(true);cantaPajarito('picaflor');activaAnimaCSS('animanInicio',true)" src="./img/picaflor.png" alt="-Q" style="width: 30%; height: auto; margin-top: 2vw;">
+        <br>
+        <img id="picaflor" onclick="presentaBase(false);cantaPajarito('colibri');activaAnimaCSS('animanInicio',false)" src="./img/colibri.png" alt="-Q" style="width: 20%; height: auto; margin-top: 2vw;">
+        <br>
+        <div>
+            <br>
+            <p id="mensajeAyuda" ></p>
+            <br>
+            <p id="mensajeOver" ></p>
+        </div>
+        <img id="palomita" onmouseover="mensajeOver('Lee Base Datos Servidor')" onmouseout="ocultaMensajeOver(event)" onclick="cantaPajarito('palomita');activaAnimaCSS('animanInicio',false);cargaServerJson(false,event)" src="./img/palomita.png" alt="+Q" style="width: 45%; height: auto; margin-top: 1vw;">
+        <img id="pajarin" onclick="cantaPajarito('pajaron');presentaQuenta(true)" src="./img/pajarito.png" alt="+Q" style="width: 20%; height: auto; margin-top: 5vw;">
+        <img id="pajaritito" onmouseover="mensajeOver('Graba Base Datos en el Servidor')" onmouseout="ocultaMensajeOver(event)" src="./img/pajrarin.png" onclick="cantaPajarito('gorrion');grabaServer(true)" alt="+Q" style="width: 25%; height: auto; margin-top: 2vw; margin-left: 0;">
+        <img onclick="onclick=detenerAnimacion();" src="./img/caracol.png" alt="+Q" style="width: 25%; height: auto; margin-top: .5vw; margin-left: 0;">
+        <!-- <img id="paloma" onclick="cantaPajarito('pajaritos');presentaQuenta(false)" src="./img/paloma.png" alt="-Q" style="width: 60%; height: auto; margin-top: 2vw;"> -->
+    </div>
+    <div class="container">
+        <!-- NO BORRAR SON BOTONES RAPIDOS -->
+        <!-- <section  class="seccionGraban">
+            <section class="btnImagen seccionBotonesLat">
+                <button class="btnServerLee" onclick="cargaServerJson(false)"></button>
+                <label class="etiqueta">Carga</label>
+            </section>
+            <section class="btnImagen seccionBotonesLat">
+                <button class="btnImgServerGraba" onclick="grabaServer(true)"></button>
+                <label class="etiqueta">Graba</label>
+            </section>
+        </section> -->
+        <section hidden id="seccionBotoneraBase">
+            <!-- ACTIVA DESACTIVA ARCHIVOS -->
+            <section class="seccionBtnAs containerPop id="seccionBtnPresArchivos">
+                <button class="btnImagen" id="btnPresentaArchivos" onclick="presentaArchivos(true)">&#x2606</button>
+                <button class="btnImagen" id="btnOcultaArchivos" disabled="true" onclick="presentaArchivos(false)">&#x2605</button>
+                <div class="popup">
+                    <p>Archivos</p>
+                </div>
+                <!-- SECCION DE ARCHIVOS -->
+                <section hidden id="seccionArchivos">
+                    <!-- PRESENTA OCULTA GRABAN -->
+                    <section class="seccionBtnAs containerPop">
+                        <button id="btnPresentaGraban" onclick="presentaGraban(true)"></button>
+                        <button id="btnOcultaGraban" onclick="presentaGraban(false)"></button>
+                        <div class="popup">
+                            <p>Graban tablas Json</p>
+                        </div>
+                    </section>
+                    <!-- GRABAN -->
+                    <section style="display: none"  id="seccionGraban" class="seccionGrabanArch">
+                        <section class="btnImagen seccionBotonesLat">
+                            <button class="btnImgGrabaB" onclick="guardar('bitacora')"></button>
+                            <label for="" class="etiqueta btnImagen">Bitacora</label>
+                        </section>
+                        <section class="btnImagen seccionBotonesLat">
+                            <button class="btnImgGrabaB" onclick="guardar('asuntos')"></button>
+                            <label for="" class="etiqueta">Asuntos</label>
+                        </section>
+                        <section class="btnImagen seccionBotonesLat">
+                            <button class="btnImgGrabaB" onclick="guardar('desarrollo')"></button>
+                            <label for="" class="etiqueta">Desarrollo</label>
+                        </section>
+                        <section class="btnImagen seccionBotonesLat">
+                            <button class="btnImgGrabaB" onclick="guardar('motivos')"></button>
+                            <label for="" class="etiqueta">Motivos</label>
+                        </section>
+                        <section class="btnImagen seccionBotonesLat">
+                            <button class="btnImgGrabaB" onclick="guardar('cuentas')"></button>
+                            <label for="" class="etiqueta">Cuentas</label>
+                        </section>
+                        <section class="btnImagen seccionBotonesLat">
+                            <button class="btnImgGrabaB" onclick="guardar('transacciones')"></button>
+                            <label for="" class="etiqueta">Trans</label>
+                        </section>
+                        <section class="btnImagen seccionBotonesLat">
+                            <button class="btnImgGrabaB" onclick="guardar('inventarios')"></button>
+                            <label for="" class="etiqueta">Inventarios</label>
+                        </section>
+                        <section class="btnImagen seccionBotonesLat">
+                            <button class="btnImgGrabaB" onclick="guardar('articulos')"></button>
+                            <label for="" class="etiqueta">Articulos</label>
+                        </section>
+                        <section class="btnImagen seccionBotonesLat">
+                            <button class="btnImgGrabaB" onclick="guardar('tiposArt')"></button>
+                            <label for="" class="etiqueta">tipos</label>
+                        </section>
+                        <section class="btnImagen seccionBotonesLat">
+                            <button class="btnImgGrabaB" onclick="guardar('inventarios')"></button>
+                            <label for="" class="etiqueta">Inventarios</label>
+                        </section>
+                        <section class="btnImagen seccionBotonesLat">
+                            <button class="btnImgGrabaB" onclick="guardar('transaccionInventario')"></button>
+                            <label for="" class="etiqueta">trans Inv</label>
+                        </section>
+                        <section class="btnImagen seccionBotonesLat">
+                            <button class="btnImgGrabaB" onclick="guardar('relatos')"></button>
+                            <label for="" class="etiqueta">relatos</label>
+                        </section>
+                    </section>
+                    <!-- PRESENTA OCULTA GRABAN BASES-->
+                    <section class="seccionBtnAs containerPop">
+                        <button id="btnPresentaGrabanBases" onclick="presentaGrabanBases(true)"></button>
+                        <button id="btnOcultaGrabanBases" onclick="presentaGrabanBases(false)"></button>
+                        <div class="popup">
+                            <p>Graban Bases Json</p>
+                        </div>
+                    </section>
+                    <!-- GRABAN BASES -->
+                    <div style="display: none" id="seccionGrabanBases" class="seccionGraban">
+                        <section class="btnImagen seccionBotonesLat">
+                            <button class="btnImgGrabaT" onclick="guardar('baseCuentas')"></button>
+                            <label for="" class="etiqueta">Base Ctas</label>
+                        </section>
+                        <section class="btnImagen seccionBotonesLat">
+                            <button class="btnImgGrabaT" onclick="guardar('baseInventarios')"></button>
+                            <label for="" class="etiqueta">Base Inv</label>
+                        </section>
+                        <section class="btnImagen seccionBotonesLat">
+                            <button id="grabaTodo" name="grabaTodo" class="btnImgGrabaT" onclick="guardar('todo')"></button>
+                            <label for="grabaTodo" class="etiqueta">Base Tot</label>
+                        </section>
+                    </div>
+                    <!-- PRESENTA OCULTA GRABAN SERVER-->
+                    <section class="seccionBtnAs containerPop">
+                        <button id="btnPresentaGrabanServer" onclick="presentaGrabanServer(true)"></button>
+                        <button id="btnOcultaGrabanServer" onclick="presentaGrabanServer(false)"></button>
+                        <div class="popup">
+                            <p>Server Json</p>
+                        </div>
+                    </section>
+                    <!-- GRABAN SERVER -->
+                    <section style="display: none" id="seccionGrabanServer" class="seccionGraban">
+                        <!-- GRABA SERVER -->
+                        <section class="btnImagen seccionBotonesLat">
+                            <button id="SereverGraba" name="SereverGraba" class="btnImgServerGraba" onclick="grabaServer(true)"></button>
+                            <label for="SereverGraba" class="etiqueta">Serv Graba</label>
+                        </section>
+                        <!-- LEE SERVER VIENDO -->
+                        <section class="btnImagen seccionBotonesLat">
+                            <button id="SereverVer" name="SereverVer" class="btnServerViendo" onclick="cargaServerJson(true)"></button>
+                            <label for="SereverVer" class="etiqueta">Serv leeVer</label>
+                        </section>
+                        <!-- SERVER LEE AUTOMATICO -->
+                        <section class="btnImagen seccionBotonesLat">
+                            <button id="SereverLee" name="SereverLee" class="btnServerLee" onclick="cargaServerJson(false)"></button>
+                            <label for="SereverLee" class="etiqueta">Serv Carga</label>
+                        </section>
+                    </section>
+                    <!-- PRESENTA ELIMINAN -->
+                    <section class="seccionBtnAs containerPop">
+                        <button id="btnPresentaEliminan" onclick="presentaEliminan(true)"></button>
+                        <button id="btnOcultaEliminan" onclick="presentaEliminan(false)"></button>
+                        <div class="popup">
+                            <p>Elimina Tablas Json</p>
+                        </div>
+                    </section>
+                    <!-- ELIMINAN -->
+                    <section style="display: none" id="seccionEliminan" class="seccionGraban">'
+                        <section class="btnImagen seccionBotonesLat">
+                            <button class="btnImagen btnImgEditaEli" onclick="borrar('bitacora')"></button>
+                            <label for="" class="etiqueta">Bitacora</label>
+                        </section>
+                        <section class="btnImagen seccionBotonesLat">
+                            <button class="btnImagen btnImgEditaEli" onclick="borrar('asuntos')"></button>
+                            <label for="" class="etiqueta">Asuntos</label>
+                        </section>
+                        <section class="btnImagen seccionBotonesLat">
+                            <button class="btnImagen btnImgEditaEli" onclick="borrar('desarrollo')"> </button>
+                            <label for="" class="etiqueta">Desarrollo</label>
+                        </section>
+                        <section class="btnImagen seccionBotonesLat">
+                            <button class="btnImagen btnImgEditaEli" onclick="borrar('motivos')"></button>
+                            <label for="" class="etiqueta">Motivos</label>
+                        </section>
+                        <section class="btnImagen seccionBotonesLat">
+                            <button class="btnImagen btnImgEditaEli" onclick="borrar('cuentas')"></button>
+                            <label for="" class="etiqueta">Cuentas</label>
+                        </section>
+                        <section class="btnImagen seccionBotonesLat">
+                            <button class="btnImagen btnImgEditaEli" onclick="borrar('transacciones')"></button>
+                            <label for="" class="etiqueta">Trans</label>
+                        </section>
+                        <section class="btnImagen seccionBotonesLat">
+                            <button class="btnImagen btnImgEditaEli" onclick="borrar('articulos')"></button>
+                            <label for="" class="etiqueta">Articulos</label>
+                        </section>
+                        <section class="btnImagen seccionBotonesLat">
+                            <button class="btnImagen btnImgEditaEli" onclick="borrar('tiposArt')"></button>
+                            <label for="" class="etiqueta">tipos</label>
+                        </section>
+                        <section class="btnImagen seccionBotonesLat">
+                            <button class="btnImagen btnImgEditaEli" onclick="borrar('inventarios')"></button>
+                            <label for="" class="etiqueta">Inventarios</label>
+                        </section>
+                        <section class="btnImagen seccionBotonesLat">
+                            <button class="btnImagen btnImgEditaEli" onclick="borrar('transaccionInventario')"></button>
+                            <label for="" class="etiqueta">trans.Inv</label>
+                        </section>
+                        <section class="btnImagen seccionBotonesLat">
+                            <button class="btnImagen btnImgEditaEli" onclick="borrar('todo')"></button>
+                            <label for="" class="etiqueta">Base T</label>
+                        </section>
+                    </section>
+                    <!-- PRESENTA CARGAN-->
+                    <section class="seccionBtnAs containerPop">
+                        <button id="btnPresentaCargan" onclick="presentaCargan(true)"></button>
+                        <button id="btnOcultaCargan" onclick="presentaCargan(false)"></button>
+                        <div class="popup">
+                            <p>Carga Json</p>
+                        </div>
+                    </section>
+                    <!-- CARGAN JSON -->
+                    <section style="display: none" id="seccionCargan" class="seccionRecupera">
+                        <section class="btnImagen seccionBotonesLat">
+                            <button class='btnImgCargaBD' onclick="cargar(true)"></button>
+                            <label for="" class="etiqueta">Recuperar</label>
+                        </section>
+                        <section class="btnImagen seccionBotonesLat">
+                            <button class='btnImgCargaBD' onclick="cargar(false)"></button>
+                            <label for="" class="etiqueta">Rescata</label>
+                        </section>
+                        <input type="file" id="archivo" accept=".json">
+                    </section>
+                    <br>
+                    <!-- PRESENTA EDITAN-->
+                    <section class="seccionBtnAs containerPop">
+                        <button id="btnPresentaEditan" onclick="presentaEditan(true)"></button>
+                        <button id="btnOcultaEditan" onclick="presentaEditan(false)"></button>
+                        <div class="popup">
+                            <p>Edicion Json</p>
+                        </div>
+                    </section>
+                    <!-- EDICIONES -->
+                    <section style="display: none"  id="seccionEditan" class="seccionGraban">
+                        <section class="btnImagen seccionBotonesLat">
+                            <button class="btnLocalEdita"  onclick="cargarPagina('./localStorageEdicion.html') "></button>
+                            <label for="" class="etiqueta">Edita</label>
+                        </section>
+                        <section class="btnImagen seccionBotonesLat">
+                            <button class="btnImgPresAs"  onclick="cargarPagina('./localstorage.html') "></button>
+                            <label for="" class="etiqueta">Local S</label>
+                        </section>
+                    </section>
+                </section>
+            </section>
+        </section>
+        <!-- botonera para presentar la bitacora -->
+        <section class="seccionBtnBit containerPop">
+            <button class="btnImagen" id="btnPresentaBit" onclick="presentaBit(true)">&#x2659</button>
+            <button class="btnImagen" id="btnOcultaBit" onclick="presentaBit(false)">&#x265f</button>
+            <div class="popup">
+                <p>Bitacora</p>
+            </div>
+        </section>
+        <!-- formulario bitacora -->
+        <form style="display: none;" class="formularioBitacora">
+            <section class="seccionTemporal">
+                <div class="encabezados">
+                    <p id="textoDelDia"></p>
+                </div>
+                <div class="tempo">
+                    <input type="date" id="fechaBit" name="fechaBit" value="" class="form-field date"><br><br>
+                    <p><span id="horaBit"></span></p>
+                    <button id="btnSetHoy" onclick="setHoy(event)">Hoy</button>
+                </div>
+            </section>
+            <div class="presentaHoraRec">
+                <p><span id="horaGrabaBit"></span></p>
+            </div>
+            <section class="seccionDetalleBit">
+                <textarea id="nota" name="nota" rows="5" cols="50"></textarea><br><br>
+                <!-- <P id="textoTeclas">Fecha= F3 Grabar= F2</P> -->
+            </section>
+            <section class="botoneraLateral">
+                <section class="seccionBotonesLat">
+                    <button class="btnImgGuarda" onclick="guardarNota(event)"></button>
+                    <label class="etiquetaBotones">Guarda Bit</label>
+                </section>
+                <section class="seccionBotonesLat">
+                    <button class="btnImgGrabaB" onclick="event.preventDefault();guardar('bitacora')"></button>
+                    <label class="etiquetaBotones">Graba Bit</label> 
+                </section>
+                <section class="seccionBotonesLat">
+                    <button class="btnImgGrabaT" onclick="event.preventDefault();guardar('todo')"></button>
+                    <label class="etiquetaBotones">Graba Base</label> 
+                </section>
+                <section class="seccionBotonesLat">
+                    <button class="btnImgConvierte" onclick="event.preventDefault();cargarPagina('./convierteJsonAtexto.html')"></button>
+                    <label class="etiquetaBotones">Convierte Bit</label> 
+                </section>
+            </section>
+        </form>
+        <!-- botonera para presentar asuntos-->
+        <section class="seccionBtnAs containerPop">
+            <button id="btnActivaAsunto" onclick="presentaAsuntos(true)">&#x2657</button>
+            <button id="btnAsuntoOculto" disabled="true" onclick="presentaAsuntos(false)">&#x265d</button>
+            <div class="popup">
+                <p>Asuntos</p>
+            </div>
+        </section>
+        <!-- seccion de asuntos -->
+        <section hidden id="seccionDeAsuntos">
+            <section class="admiAsunto">
+                <div class="botones inputAsuntos">
+                    <select id="listaAsuntos" onchange="mostrarDetalleAsunto()"></select>
+                    <button id="btnSetAsunto" onclick="setAsunto()"></button>
+                </div>
+            </section>
+            <section class="ingresaNuevoAsuto">
+                <input type="text" id="nuevoAsunto" placeholder="Nuevo Asunto" oninput="limpiaDetalle()"><br><br>
+            </section>
+            <!-- DETALLE ASUNTO -->
+            <button onclick="copiarAlPortapapeles('detalleAsunto')">Copiar al portapapeles</button>
+            <div class="seccionDetalleAs">
+                    <textarea id="detalleAsunto" placeholder="Asunto" ></textarea><br><br>
+            </div>
+            <!-- botonera para dministrar asuntos -->
+            <section class="botoneraLateral">
+                <section class="seccionBotonesLat">
+                    <button class="btnGuardaAs" onclick="agregarAsunto()"></button>
+                    <label class="etiquetaBotones">Grab Nuevo</label> 
+                </section>
+                <section class="seccionBotonesLat">
+                    <button class="btnGuardaDetalleAs" onclick="grabarDetalle()"></button>
+                    <label class="etiquetaBotones">Guarda Det</label> 
+                </section>
+                <section class="seccionBotonesLat">
+                    <button class="btnImgGrabaBaseCta" onclick="guardar('asuntos')"></button>
+                    <label class="etiquetaBotones">Graba As</label> 
+                </section>
+                <section class="seccionBotonesLat">
+                    <button class="btnImgEditaEli" onclick="eliminarAsunto()"></button>
+                    <label class="etiquetaBotones">Elimina</label> 
+                </section>
+                <section class="seccionBotonesLat">
+                    <button class="btnOrdenaAS" onclick="ordenaAsuntos();mostrarAsuntos()"></button>
+                    <label class="etiquetaBotones">Ordena</label>      
+                </section>
+                <section class="seccionBotonesLat">
+                    <button class="btnImgEditaAs" onclick="editaAsunto()"></button>
+                    <label  class="etiquetaBotones">Editor</label> 
+                </section>
+                <section class="seccionBotonesLat">
+                    <button class="btnImgConvierteAs" onclick="cargarPagina('./convierteJsonAtexto.html')"></button>
+                    <label class="etiquetaBotones">Convierte</label> 
+                </section>
+            </section>
+        </section>  
+        <!-- botonera para presentar el desarrollo-->
+        <section class="seccionBtnAs containerPop">
+            <button id="btnActivaDesarrollo" onclick="presentaDesarrollo(true)">&#x2654</button>
+            <button id="btnOcultaDesarrollo" onclick="presentaDesarrollo(false)" disabled="true">&#x265a</button>
+            <div class="popup">
+                <p>Desarrollo</p>
+            </div>
+        </section>
+        <!-- seccion desarrollo -->
+        <section hidden id="seccionDeDesarrollo" class="botones SeccionDesarrolloAsuntos">
+            <div style="width: 100vw;">
+                <textarea name="desarrollo" id="desarrollo" cols="30" rows="10"></textarea>
+            </div>
+            <div style="width: 100vw;">
+                <button id="btnGrabaDes" onclick="guardaLocalDesarrollo()">Guarda el Desarrollo</button>
+                <button id="btnGrabaJsonDesarrollo" onclick="grabaJsonDesarrollo()">Graba Desarrollo</button>
+                <button id="btnResetDesarrollo" onclick="resetDesarrollo()">Resetear Desarrollo</button>
+            </div>
+        </section>          
+        <!-- botonera presenta cuentas -->
+        <section class="seccionActivaCuentas containerPop">
+            <button id="btnQuenta"  onclick="quanticoVal()">&#x2655</button>
+            <button id="btnQuentaHiden" disabled="true" onclick="presentaQuenta(false);ocultaPasword()">&#x265b</button>
+            <div class="popup">
+                <p>Qentas</p>
+            </div>
+            <div hidden id="seccionClave">
+                <input type="password" id="clave">
+                <!-- <button id="btnVerCta" onclick="quanticoVal()">Ver</button> -->
+                <button id="btnResetPswCta" onclick="btnResetPswCta()">X</button>
+            </div>
+        </section>
+        <!-- formulario completo de cuentas -->
+        <form hidden id="formularioCuentaQ">
+            <button id="btnCuentasR" onclick="event.preventDefault();cargarPagina('./nuevacuentaRetenida.html')">Cuentas Retenidas</button>
+            <button id="btnCuentasD" onclick="event.preventDefault();cargarPagina('./deudas.html')" >Deudas</button>
+            <!-- ESTADO DE LA CUENTA -->
+            <section class="seccionEstadoCuenta">
+                <div>
+                    <select class="selector" id="cuenta" onchange="cargarDatosCuenta()" placeholder="Cuenta"></select>
+                    <button id="btnNuevaCta" onclick="creaCuentaNueva(event)">+</button>
+                    <button  id="btnCtaEdit" onclick="cambiaNombreCuenta(event)">Edit</button>
+                    <button  id="btnCtaElimina" onclick="eliminarCuenta(event)">Elimina</button>
+                    <button  id="btnCtaNueva" onclick="cargarPag('./cuentas.html')">Edicion</button>
+                </div>
+                <!-- despliega totales -->
+                <section class="seccionTotales">
+                    <p class="seccionTotales estadoQ"><span id="saldoActual"></span></p>
+                    <p class="seccionTotales estadoQ"><span id="saldoTotal"></span></p>
+                </section>
+            </section>
+            <!-- TRANSACCION -->
+            <section class="seccionTransaccion">
+                <div>
+                    <select class="selector" id="motivo" name="motivo" placeholder="Motivo"></select>
+                    <button class="btnSelectores" onclick="guardaNuevoMotivo(event)">+</button>
+                </div>
+                <div>
+                    <button onclick="eliminaMotivo(event)" id="btnEliminaMot">Elimina</button>
+                    <button onclick="cargarPag('./motivos.html')">Edicion</button>
+                </div>
+                <input type="text" id="elemento" name="elemento" placeholder="Elemento" >
+                <div class="montos">
+                        <input type="number" id="cantidad" name="cantidad" placeholder="Cant" onchange="calcularTotal()">
+                        <input type="text" id="valor" oninput="formatoSeparador(this)" pattern="[0-9]*" onchange="calcularTotal()">
+                </div>
+                <div>
+                    <button id="btnSim" onclick="presentaSimula()">Simula</button>
+                    <button id="btnReset" onclick="resetSimula()">Reset</button>
+                    <!-- <button id="btnAjuste" onclick="ajusteCuenta(event)">Ajuste</button> -->
+                    <button id="btnAjuste" onclick="mostrarSeccionAjuste()">Ajuste</button>
+                    <!-- AJUSTE CUENTA -->
+                    <section hidden id="seccionAjuste">
+                        <br>
+                        <label for="montoRealInput">Monto Real de la Cuenta:</label>
+                        <input type="text" id="montoRealInput" required>
+                        <br>
+                        <br>
+                        <button onclick="ajustaCuenta(event)">Realizar Ajuste</button>
+                    </section>
+                </div>
+                <section class="seccionSimulaMontos">
+                        <!-- TOTAL -->
+                        <div>
+                            <input class="simula2"  onchange="" type="text" pattern="[0-9]*" id="total" name="total" placeholder="Total" onblur="formatoSeparador(this)">
+                        </div>
+                        <!-- SALDO SIMULADO IMGRESO -->
+                        <div>
+                            <input class="simula2" type="numer" id="simulaIngreso" name="simulaIngreso" placeholder="Simula Ing.">
+                        </div>
+                        <!-- SALDO SIMULADO EGRESO -->
+                        <div>
+                            <input class="simula2" type="numer" id="simulaEgreso" name="simulaEgreso" placeholder="Simula Egr.">
+                        </div>
+                </section>
+            </section>
+            <!-- botonera de ingreso y egreso  -->
+            <section class="seccionBotonera" >
+                    <button id="btnMas" onclick="guardarTransaccion('ingreso')">+</button>
+                    <button id="btnMen" onclick="guardarTransaccion('egreso')">-</button>
+            </section>
+            <!-- botonera dministra cuentas -->
+            <section class="botoneraLateral alineadoAlCentro">
+                    <section class="seccionBotonesLat">
+                        <button class="btnImgGrabaBaseCta" onclick="guardar('cuentas')"></button>
+                        <label class="etiquetaBotones ">Graba Cuentas</label> 
+                    </section>
+                    <section class="seccionBotonesLat">
+                        <button class="btnImgGrabaBaseCta" onclick="guardar('transacciones')"></button>
+                        <label class="etiquetaBotones ">Graba Transac.</label> 
+                    </section>
+                    <section class="seccionBotonesLat">
+                        <button class="btnImgGrabaBaseCta" onclick="guardar('motivos')"></button>
+                        <label class="etiquetaBotones ">Graba Motivos</label> 
+                    </section>
+                    <section class="seccionBotonesLat">
+                        <button class="btnImgGrabaBaseCta" onclick="guardar('baseCuentas')"></button>
+                        <label class="etiquetaBotones ">Graba Base Q</label> 
+                    </section>
+            </section>
+            <!-- DETALLE CUENTAS  -->
+            <h2 id="tituloCuentas" onclick="cargarPag('./simulaDiario.html')">Cuentas</h2>
+            <table id="tablaCuentas">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Nombre de Cuenta</th>
+                        <th>Monto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <!-- DETALLE TRANSACCIONES EN TABLA-->
+            <button onclick="event.preventDefault();cargarPagina('./transaccionesElimina.html')" >Elimina Trans</button>
+            <button onclick="event.preventDefault();cargarPagina('./editaTransacciones.html')" >Edit Trans</button>
+            <button onclick="event.preventDefault();cargarPagina('./editaElementoTRansa.html')">Edit Elem</button>
+            <h2 id="tituloTransaccionesTodas">Transacciones</h2>
+            <table id="tablaTransacciones">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>Motivo</th>
+                        <th>Cuenta</th>
+                        <th>Saldo</th>
+                        <th>Cant</th>
+                        <th>Elemento</th>
+                        <th>Valor</th>
+                        <th>Total</th>
+                        <th>Suma</th>
+                        <th>Resta</th>
+                    </tr>
+                </thead>
+                <tbody id="cuerpoTabla">
+                </tbody>
+            </table>
+            <!-- DETALLE DE TRANSACCIONES DE CUENTA ESPECIFICA -->
+            <h2 id="tituloTransacciones" onclick="actualizarTablaCuenta()">Transacciones Cuenta</h2>
+            <table id="tablaTransaccionesCuenta">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>Motivo</th>
+                        <th>Cuenta</th>
+                        <th>Saldo Fin</th>
+                        <th>Cant</th>
+                        <th>Elem</th>
+                        <th>Valor</th>
+                        <th>Total</th>
+                        <th>Suma</th>
+                        <th>Resta</th>
+                    </tr>
+                </thead>
+                <tbody id="cuerpoTablaCuenta">
+                </tbody>
+            </table>
+        </form>
+        <!-- botonera presenta inventario -->
+        <inventariosection class="seccionBtnAs containerPop">
+            <button class="btnImagen" id="btnPresentaInv" onclick="presentaInv(true)">&#x2656</button>
+            <button class="btnImagen" id="btnOcultaInv" disabled="true" onclick="presentaInv(false)">&#x265c</button>
+            <div class="popup">
+                <p>Inventario</p>
+            </div>
+        </inventariosection>
+        <section hidden id="seccionInventario" >
+            <section class="seccionBotoneraInv">
+                <button class='botonesInventario'onclick="cargarPagina('./baseInventario.html')">Base Inventario</button>
+                <button class='botonesInventario'onclick="cargarPagina('./filtroInventario.html')">Filtro Inventario</button>
+                <button class='botonesInventario'onclick="cargarPagina('./inventarioFiltro.html')">Edita Transacciones</button>
+                <button class='botonesInventario'onclick="cargarPagina('./inventariosTotales.html')">Totales</button>
+                <button class='botonesInventario'onclick="ordenarDatosTransInv()">Ord a-z</button>
+                <button class='botonesInventario'onclick="cargarPagina('./recalculoInventarios.html')">Recalc</button>
+            </section>
+            <form>
+                <div>
+                    <div>
+                        <select id="inventario" onchange="actualizarTablaInventario()">
+                            <option disabled selected value="">Seleccione Inventario</option>
+                            <script>
+                                    let inventarios = JSON.parse(localStorage.getItem('inventarios')) || [];
+                                    let selector = document.getElementById('inventario');
+                                    inventarios.forEach(function (inv) {
+                                        let option = document.createElement('option');
+                                        option.value = inv.inventario;
+                                        option.textContent = inv.inventario;
+                                        selector.appendChild(option);
+                                    });
+                            </script>
+                        </select>
+                        <button onclick="nuevoInventario()" >+</button>
+                    </div>
+                    <button onclick="editaInventario()" >Edita</button>
+                    <button id="btnEliminaInv" onclick="eliminarInventario()">Elimina</button>
+                    <button onclick="cargarPagina('./inventarios.html')" >Edita Inventarios</button>
+                    <br>
+                    <!-- TIPO -->
+                    <select id="tipo" onchange="mostrarArticulos()">
+                        <option disabled selected value="">Seleccione un Tipo</option>
+                        <script>
+                            let tiposArt = JSON.parse(localStorage.getItem('tiposArt')) || [];
+                            let select = document.getElementById('tipo');
+                            tiposArt.forEach(function (tipo) {
+                                let option = document.createElement('option');
+                                option.value = tipo.tipo;
+                                option.textContent = tipo.tipo;
+                                select.appendChild(option);
+                            });
+                        </script>
+                    </select>
+                    <button onclick="nuevoTipo()" >+</button>
+                    <button onclick="modificarTipo()">Edita</button>
+                    <button id='btnEliminaTip' onclick="eliminarTipo()">Elimina</button>
+                    <button onclick="cargarPagina('./tipos.html')" >Edicion Tipos</button>
+                    <br>
+                    <!-- ARTICULO -->
+                    <label for="articulo">Artículo:</label>
+                    <div>
+                        <select id="articulo">
+                            <!-- <option disabled selected value="">Seleccione un Articulo</option> -->
+                        </select>
+                        <button onclick="nuevoArticulo()">+</button>
+                        <button onclick="actualizarArticulo()">Edita</button>
+                        <button id='btnEliminaArt' onclick="eliminarArticulo(event)">Elimina</button>
+
+                        <button onclick="cargarPagina('./articulo.html')" >Edita Articulos</button>
+                        
+                    </div>
+                </div>
+                <label for="cantidadI">Cantidad:</label>
+                <div>
+                    <input type="text" id="cantidadI" oninput="formatNumber('cantidadI')" required>
+                </div>
+                <label for="valor">Valor:</label>
+                <div>
+                    <input type="text" id="valorI" oninput="formatoMoneda('valorI')" required>
+                </div>
+                <br>
+                <button type="button" onclick="agregarTransaccion()">Agregar al Inventario</button>
+            </form>
+            <br>
+            <table id="tablaTransaccionesInv" border="1">
+                <tr>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>ID Trans</th>
+                    <th>Inventario</th>
+                    <th>Tipo</th>
+                    <th>Artículo</th>
+                    <th>Cant</th>
+                    <th>Valor</th>
+                    <th>Total</th>
+                    <th>Cant Tot</th>
+                    <th>Valor I</th>
+                </tr>
+                
+            </table>
+            <br>
+            <h1 style="font-size: 3vw; font-family:arial">Tabla Inventario</h1>
+            <div id="tabla-inventario" border="1"></div>
+        </section>
+        <!-- botonera presenta oraculo -->
+         <section id="presentaOraculo"  class="seccionBtnAs containerPop">
+            <button class="btnImagen" id="btnPresentaOra" onclick="presentaOra(true)">&#x2658</button>
+            <button class="btnImagen" id="btnOcultaOra" disabled="true" onclick="presentaOra(false)">&#x265e</button>
+            <div class="popup">
+                <p>Relatos</p>
+            </div>
+        </section>
+        <!-- seccion oraculo -->
+        <section hidden id="seccionOraculo" onclick="cargarPagina('./oraculoZen.html')" >
+            <p>Salto Cuantico</p>
+        </section>
+        <!-- botonera presenta curriculum -->
+        <section class="seccionBtnAs containerPop id="seccionBtnCur">
+            <button class="btnImagen" id="btnPresentaCur" onclick="presentaCur(true)">&#x2667</button>
+            <button class="btnImagen" id="btnOcultaCur" disabled="true" onclick="presentaCur(false)">&#x2663</button>
+            <div class="popup">
+                <p>BioCurriculum</p>
+            </div>
+        <section>
+        <section class="seccionBtnAs" id="seccionCurriculum"  hidden>
+            <button id="btnGenCur" onclick="cargarPagina('./curriculum.html')" >Curriculum</button>
+            <!-- <button id= "btnPresCur" onclick="cargarPagina('./curriculumImprimeExporta.html')" >Presenta Curriculum</button> -->
+            <button id= "btnPresBio" onclick="cargarPagina('./biografia.html')" >Biografia</button>
+        </section>
+    </div>
+    <!-- <div>
+        <br>
+        <p id="mensajeAyuda" ></p>
+        <br>
+        <p id="mensajeOver" ></p>
+    </div> -->
+    <!-- pajaritos en la base de la pagina -->
+    <img onclick="cantaPajarito('jardin')" src="./img/pajaritoEnRama.png" alt="+Q" style="width: 45%; height: auto; margin-top: 1vw;">
+    <img onclick="cantaPajarito('jardin')" src="./img/pajarinEnramado.png" alt="+Q" style="width: 45%; height: auto; margin-top: 1vw;">
+    <footer id="footer">
+        <p id="mensaje"</p>
+    </footer>
+    <script>
+        function mostrarSeccionAjuste() {
+            document.getElementById("seccionAjuste").style.display = "block";
+        }
+        function ocultarSeccionAjuste() {
+            document.getElementById("seccionAjuste").style.display = "none";
+        }
+    </script>
+    <script src="./js/libreria.js"></script>
+    <script src="./js/localstorage.js"></script>
+    <script src="./js/bitacora.js"></script>
+    <script src="./js/cuentaQ.js"></script>
+    <script src="./js/transaInventario.js"></script>
+    <script src="./js/filtroInventario.js"></script>
+    <script src="./js/inventario.js"></script>
+    <script src="./js/index.js"></script>
+    <script>
+        //activa o desactiva animacion
+        activaAnimaCSS("animanInicio",false)
+        // GUARDA BITACORA AUTOMATICO 
+        document.getElementById("nota").addEventListener("input", guardarNota);
+    </script>
+
+    
+</body>
+</html>

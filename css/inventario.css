@@ -1,0 +1,83 @@
+    html, body {
+  height: 100%;
+  margin: 2vw;
+  padding: 0;
+  font-size: 6vw;
+}
+
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+h1, h2, h3, p {
+  margin: 0;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+form label {
+  margin-bottom: 5px;
+}
+
+input,select{
+    font-size: 4vw !important;
+}
+form input[type="text"],
+form input[type="number"] {
+  width: 40vw;
+  padding: 1vw;
+  margin-bottom: 1vw;
+}
+
+form button {
+  padding: 5px 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1vw;
+  font-size: 2.5vw !important;
+  border-style: groove;
+
+}
+
+th, td {
+  /* padding: 8px; */
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  border-style: groove;
+
+}
+
+th {
+  background-color: #f2f2f2;
+  color: black;
+}
+
+.total {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+h1{
+    text-align: center;
+}
+/* @media (max-width: 768px) {
+  form input[type="text"],
+  form input[type="number"] {
+    width: 100%;
+  }
+} */

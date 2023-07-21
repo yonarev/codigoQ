@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>motivos en Local Storage</title>
+	<link rel="stylesheet" href="./css/motivos.css">
+	<script src="./js/libreria.js"></script>
+	<script src="./js/motivos.js"></script>
+</head>
+<body>
+    <h1>Motivos en Local Storage</h1>
+    <form>
+        <label for="nombreMotivo">Nombre de motivo:</label>
+        <input type="text" id="nombreMotivo"><br>
+        <button onclick="ordenaMotivos()">Ordena</button>
+        <input id="btnAgregaMot" type="button" value="Agregar motivo" onclick="agregarMotivo()">
+    </form>
+    <br>
+    <label for="motivo">Seleccionar motivo:</label>
+    <select id="motivo" onchange="mostrarMotivo()">
+    </select>
+    <button id="btnEliminaMotivo" onclick="eliminaMotivo(event)">Eliminar motivo</button>
+    <br><br>
+    <label for="idMotivosMostrar">ID de motivo:</label>
+    <input type="text" id="idMotivosMostrar" readonly><br>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Filtro Inventario</title>
+    <link rel="stylesheet" href="./css/filtroInventarioTipo.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Filtro Inventario</h1>
+        <div class="label-wrapper">
+            <select id="inventario" onchange="actualizarTablaInventario()"></select>
+        </div>
+        <div class="label-wrapper">
+            <select id="tipo-articulo" onchange="actualizarTablaInventario()"></select>
+        </div>
+        <!-- <div class="table-wrapper" id="tabla-inventario"></div> -->
+        <button onclick="guardarFiltro()">Guardar filtro</button>
+    </div>
+    <!-- <div id="tabla-inventario"></div> -->
+    <div id="tabla-inventario"></div>
+
+    <script src="./js/filtroInventario.js"></script>
+    <script>
+        cargaInventarioFiltro()
+        cargaTiposFiltro()
+        actualizarTablaInventario()
+    </script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Combo Box de Artículos</title>
+</head>
+<body>
+  <h2>Combo Box de Artículos</h2>
+  
+  <select id="comboBoxArticulos" onchange="mostrarArticuloSeleccionado()"></select>
+  
+  <br><br>
+  
+  <label for="articuloSeleccionado">Artículo seleccionado:</label>
+  <input type="text" id="articuloSeleccionado" readonly>
+
+  <script>
+    // Obtener la lista de artículos del almacenamiento local
+    var listaArticulos = JSON.parse(localStorage.getItem("articulos")) || [];
+
+    // Obtener el elemento select del combo box
+    var comboBox = document.getElementById("comboBoxArticulos");
+
+    // Obtener el campo de texto para el artículo seleccionado
+    var campoArticuloSeleccionado = document.getElementById("articuloSeleccionado");
+
+    // Agregar las opciones de los artículos al combo box
+    for (var i = 0; i < listaArticulos.length; i++) {
+      var articulo = listaArticulos[i];
+
+      var opcion = document.createElement("option");
+      opcion.value = articulo.idArticulo;
+      opcion.textContent = articulo.articulo;
+
+      comboBox.appendChild(opcion);
+    }
+
+    // Función para mostrar el artículo seleccionado
+    function mostrarArticuloSeleccionado() {
+      var indiceSeleccionado = comboBox.selectedIndex;
+      
+      if (indiceSeleccionado !== -1) {
+        var opcionSeleccionada = comboBox.options[indiceSeleccionado];
+        campoArticuloSeleccionado.value = opcionSeleccionada.textContent;
+      } else {
+        campoArticuloSeleccionado.value = "";
+      }
+    }
+  </script>
+</body>
+</html>

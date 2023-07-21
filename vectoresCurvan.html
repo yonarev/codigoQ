@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Líneas transformándose en ondas</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: black;
+    }
+
+    canvas {
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <script>
+    // Configuración del lienzo
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+    var width = canvas.width = window.innerWidth;
+    var height = canvas.height = window.innerHeight;
+
+    // Crear un objeto para representar una línea
+    function Line(x, y, length, angle) {
+      this.x = x;
+      this.y = y;
+      this.length = length;
+      this.angle = angle;
+
+      this.update = function() {
+        this.x += Math.cos(this.angle) * 2;
+        this.y += Math.sin(this.angle) * 2;
+      };
+
+      this.draw = function() {
+        ctx.strokeStyle = "#FFFFFF";
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y);
+        ctx.lineTo(this.x + Math.cos(this.angle) * this.length, this.y + Math.sin(this.angle) * this.length);
+        ctx.stroke();
+      };
+    }
+
+    // Crear un array de líneas
+    var lines = [];
+    for (var i = 0; i < 100; i++) {
+      var line = new Line(Math.random() * width, Math.random() * height, Math.random() * 100 + 50, Math.random() * Math.PI * 2);
+      lines.push(line);
+    }
+
+    // Función de animación
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+
+      for (var i = 0; i < lines.length; i++) {
+        var line = lines[i];
+        line.update();
+        line.draw();
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    // Iniciar la animación
+    animate();
+  </script>
+</body>
+</html>

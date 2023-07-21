@@ -1,0 +1,62 @@
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+  }
+  
+  h1 {
+    text-align: center;
+  }
+  
+  form {
+    margin-bottom: 20px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  #btnEliCta{
+    width: auto;
+    background-color: orangered;
+  }
+  input[type="text"],
+  input[type="number"] {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 10px;
+  }
+  
+  input[type="button"] {
+    padding: 5px 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  input[type="button"]:hover {
+    background-color: #45a049;
+  }
+  
+  select {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 10px;
+  }
+  
+  /* Estilos específicos */
+  #idCuenta,
+  #saldoInicialMostrar,
+  #saldoFinalMostrar,
+  #saldoActualMostrar {
+    width: 50%;
+  }
+  
+  #comboBoxCuentas,
+  input[type="button"] {
+    width: 30%;
+    margin-bottom: 0;
+  }
+  
+  

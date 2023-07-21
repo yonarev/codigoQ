@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Editor de Local Storage</title>
+  <style>
+    body {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    h1, h2 {
+      color: #333;
+    }
+
+    textarea {
+      width: 100%;
+      resize: vertical;
+    }
+
+    button {
+        width: auto;
+        font-size: 5vw;
+        color: black;
+        margin-top: 1vw;
+        padding: 1vw 1vw;
+        border-radius: 5px;
+        /* color: #fff; */
+        font-weight: bold;
+        cursor: pointer;
+    }
+    .elimina{
+        background-color: rgb(234, 79, 27);
+
+    }
+    .actualiza{
+        background-color: green;
+    }
+    #btnRecarga {
+      background-color: #2664a792;
+    }
+
+    button.delete {
+      background-color: #FF9800;
+    }
+
+    button.reload {
+      background-color: #00BCD4;
+    }
+  </style>
+  <script>
+    function loadLocalStorage() {
+      let bitacora = JSON.parse(localStorage.getItem('bitacora')) || [];
+      let asuntos = JSON.parse(localStorage.getItem('asuntos')) || [];
+      let desarrollo = JSON.parse(localStorage.getItem('desarrollo')) || [];
+      let cuentas = JSON.parse(localStorage.getItem('cuentas')) || [];
+      let motivos = JSON.parse(localStorage.getItem('motivos')) || [];
+      let transacciones = JSON.parse(localStorage.getItem('transacciones')) || [];
+      let articulos = JSON.parse(localStorage.getItem('articulos')) || [];
+      let transaccionInventario = JSON.parse(localStorage.getItem('transaccionInventario')) || [];
+      let cuentasRetenidas = JSON.parse(localStorage.getItem('cuentasRetenidas')) || [];
+      let curriculum = JSON.parse(localStorage.getItem('curriculum')) || {};
+      let biografia = JSON.parse(localStorage.getItem('biografia')) || [];
+      let deudas = JSON.parse(localStorage.getItem('deudas')) || [];
+      let relatos = JSON.parse(localStorage.getItem('relatos')) || [];
+
+      // Mostrar los valores en pantalla y permitir la edición
+      document.getElementById('bitacora').value = JSON.stringify(bitacora, null, 2);
+      document.getElementById('asuntos').value = JSON.stringify(asuntos, null, 2);
+      document.getElementById('desarrollo').value = JSON.stringify(desarrollo, null, 2);
+      document.getElementById('cuentas').value = JSON.stringify(cuentas, null, 2);
+      document.getElementById('motivos').value = JSON.stringify(motivos, null, 2);
+      document.getElementById('transacciones').value = JSON.stringify(transacciones, null, 2);
+      document.getElementById('articulos').value = JSON.stringify(articulos, null, 2);
+      document.getElementById('transaccionInventario').value = JSON.stringify(transaccionInventario, null, 2);
+      document.getElementById('cuentasRetenidas').value = JSON.stringify(cuentasRetenidas, null, 2);
+      document.getElementById('curriculum').value = JSON.stringify(curriculum, null, 2);
+      document.getElementById('biografia').value = JSON.stringify(biografia, null, 2);
+      document.getElementById('deudas').value = JSON.stringify(deudas, null, 2);
+      document.getElementById('relatos').value = JSON.stringify(relatos, null, 2);
+    
+    }
+
+    function updateLocalStorage(key) {
+      let value = document.getElementById(key).value;
+      localStorage.setItem(key, value);
+      alert(`La clave ${key} se ha actualizado en el Local Storage.`);
+    }
+
+    function deleteKey(key) {
+      localStorage.removeItem(key);
+      alert(`La clave ${key} ha sido eliminada del Local Storage.`);
+      location.reload(); // Recargar la página para reflejar los cambios
+    }
+  </script>
+</head>
+<body onload="loadLocalStorage()">
+  <h1>Editor de Local Storage</h1>
+
+  <h2>Bitácora</h2>
+  <textarea id="bitacora" rows="5" cols="50"></textarea>
+  <button class="actualiza" onclick="updateLocalStorage('bitacora')">Actualizar</button>
+  <button class='elimina' onclick="deleteKey('bitacora')">Eliminar</button>
+
+  <h2>Asuntos</h2>
+  <textarea id="asuntos" rows="5" cols="50"></textarea>
+  <button class="actualiza" onclick="updateLocalStorage('asuntos')">Actualizar</button>
+  <button class='elimina' onclick="deleteKey('asuntos')">Eliminar</button>
+
+  <h2>Desarrollo</h2>
+  <textarea id="desarrollo" rows="5" cols="50"></textarea>
+  <button class="actualiza" onclick="updateLocalStorage('desarrollo')">Actualizar</button>
+  <button class='elimina' onclick="deleteKey('desarrollo')">Eliminar</button>
+
+  <h2>Cuentas</h2>
+  <textarea id="cuentas" rows="5" cols="50"></textarea>
+  <button class="actualiza" onclick="updateLocalStorage('cuentas')">Actualizar</button>
+  <button class='elimina' onclick="deleteKey('cuentas')">Eliminar</button>
+
+  <h2>Motivos</h2>
+  <textarea id="motivos" rows="5" cols="50"></textarea>
+  <button class="actualiza" onclick="updateLocalStorage('motivos')">Actualizar</button>
+  <button class='elimina' onclick="deleteKey('motivos')">Eliminar</button>
+
+  <h2>Transacciones</h2>
+  <textarea id="transacciones" rows="5" cols="50"></textarea>
+  <button class="actualiza" onclick="updateLocalStorage('transacciones')">Actualizar</button>
+  <button class='elimina' onclick="deleteKey('transacciones')">Eliminar</button>
+
+  <h2>Artículos</h2>
+  <textarea id="articulos" rows="5" cols="50"></textarea>
+  <button class="actualiza" onclick="updateLocalStorage('articulos')">Actualizar</button>
+  <button class='elimina' onclick="deleteKey('articulos')">Eliminar</button>
+
+  <h2>Transacción de Inventario</h2>
+  <textarea id="transaccionInventario" rows="5" cols="50"></textarea>
+  <button class="actualiza" onclick="updateLocalStorage('transaccionInventario')">Actualizar</button>
+  <button class='elimina' onclick="deleteKey('transaccionInventario')">Eliminar</button>
+
+  <h2>Cuentas Retenidas</h2>
+  <textarea id="cuentasRetenidas" rows="5" cols="50"></textarea>
+  <button class="actualiza" onclick="updateLocalStorage('cuentasRetenidas')">Actualizar</button>
+  <button class='elimina' onclick="deleteKey('cuentasRetenidas')">Eliminar</button>
+  
+  <h2>Deudas</h2>
+  <textarea id="deudas" rows="5" cols="50"></textarea>
+  <button class="actualiza" onclick="updateLocalStorage('deudas')">Actualizar</button>
+  <button class='elimina' onclick="deleteKey('deudas')">Eliminar</button>
+
+  <h2>Currículum</h2>
+  <textarea id="curriculum" rows="5" cols="50"></textarea>
+  <button class="actualiza" onclick="updateLocalStorage('curriculum')">Actualizar</button>
+  <button class='elimina' onclick="deleteKey('curriculum')">Eliminar</button>
+
+  <h2>Biografía</h2>
+  <textarea id="biografia" rows="5" cols="50"></textarea>
+  <button class="actualiza" onclick="updateLocalStorage('biografia')">Actualizar</button>
+  <button class='elimina' onclick="deleteKey('biografia')">Eliminar</button>
+
+  <h2>Relatos</h2>
+  <textarea id="relatos" rows="5" cols="50"></textarea>
+  <button class="actualiza" onclick="updateLocalStorage('relatos')">Actualizar</button>
+  <button class='elimina' onclick="deleteKey('relatos')">Eliminar</button>
+
+
+  <button id="btnRecarga" onclick="location.reload()">Recargar</button>
+</body>
+</html>
+
+
+
+
